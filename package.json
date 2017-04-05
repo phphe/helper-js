@@ -1,0 +1,24 @@
+{
+  "name": "helper-js",
+  "version": "1.0.2",
+  "description": "",
+  "main": "dist/helper-js.common.js",
+  "module": "dist/helper-js.esm.js",
+  "scripts": {
+    "build": "node build/build.js"
+  },
+  "author": "phphe <phphe@outlook.com> (https://github.com/phphe)",
+  "unpkg": "dist/helper-js.js",
+  "bugs": {
+    "url": "https://github.com/phphe/helper-js/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/phphe/helper-js.git"
+  },
+  "devDependencies": {
+    "rollup-helper": "^1.0.3"
+  },
+  "dependencies": {},
+  "license": "MIT"
+}
