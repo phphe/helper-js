@@ -60,6 +60,15 @@ export function numPad (num, n) {
 export function studlyCase (str) {
   return str && (str[0].toUpperCase() + str.substr(1))
 }
+export function snakeCase (str) {
+  return str
+  .replace(/ /g, '-')
+  .replace(/_/g, '-')
+  .replace(/([^A-Z])([A-Z])/g, '$1-$2')
+  .replace(/--+/g, '-')
+  .replace(/^-|-$|/g, '')
+  .toLowerCase()
+}
 export function camelCase (str) {
   const temp = str.toString().split(/[-_]/)
   for (let i = 1; i < temp.length; i++) {

@@ -1,7 +1,7 @@
 /*!
- * helper-js v1.0.0
+ * helper-js v1.0.3
  * phphe <phphe@outlook.com> (https://github.com/phphe)
- * undefined
+ * https://github.com/phphe/helper-js.git
  * Released under the MIT License.
  */
 
@@ -66,6 +66,9 @@ function numPad(num, n) {
 // str 字符
 function studlyCase(str) {
   return str && str[0].toUpperCase() + str.substr(1);
+}
+function snakeCase(str) {
+  return str.replace(/ /g, '-').replace(/_/g, '-').replace(/([^A-Z])([A-Z])/g, '$1-$2').replace(/--+/g, '-').replace(/^-|-$|/g, '').toLowerCase();
 }
 function camelCase(str) {
   var temp = str.toString().split(/[-_]/);
@@ -343,4 +346,4 @@ function waitFor(name, condition) {
   });
 }
 
-export { isset, isArray, isBool, isNumber, isNumeric, isString, isObject, isFunction, isPromise, empty, numRand, numPad, studlyCase, camelCase, camelToWords, titleCase, strRand, replaceMultiple, arrayRemove, arrayFirst, arrayLast, arrayDiff, assignIfDifferent, objectMerge, objectMap, objectOnly, objectExcept, getUrlParam, uniqueId, isDescendantOf, getOffset, findParent, hasClass, isOffsetInEl, getBorder, binarySearch, waitFor };
+export { isset, isArray, isBool, isNumber, isNumeric, isString, isObject, isFunction, isPromise, empty, numRand, numPad, studlyCase, snakeCase, camelCase, camelToWords, titleCase, strRand, replaceMultiple, arrayRemove, arrayFirst, arrayLast, arrayDiff, assignIfDifferent, objectMerge, objectMap, objectOnly, objectExcept, getUrlParam, uniqueId, isDescendantOf, getOffset, findParent, hasClass, isOffsetInEl, getBorder, binarySearch, waitFor };

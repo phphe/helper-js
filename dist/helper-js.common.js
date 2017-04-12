@@ -1,7 +1,7 @@
 /*!
- * helper-js v1.0.0
+ * helper-js v1.0.3
  * phphe <phphe@outlook.com> (https://github.com/phphe)
- * undefined
+ * https://github.com/phphe/helper-js.git
  * Released under the MIT License.
  */
 
@@ -70,6 +70,9 @@ function numPad(num, n) {
 // str 字符
 function studlyCase(str) {
   return str && str[0].toUpperCase() + str.substr(1);
+}
+function snakeCase(str) {
+  return str.replace(/ /g, '-').replace(/_/g, '-').replace(/([^A-Z])([A-Z])/g, '$1-$2').replace(/--+/g, '-').replace(/^-|-$|/g, '').toLowerCase();
 }
 function camelCase(str) {
   var temp = str.toString().split(/[-_]/);
@@ -360,6 +363,7 @@ exports.empty = empty;
 exports.numRand = numRand;
 exports.numPad = numPad;
 exports.studlyCase = studlyCase;
+exports.snakeCase = snakeCase;
 exports.camelCase = camelCase;
 exports.camelToWords = camelToWords;
 exports.titleCase = titleCase;
