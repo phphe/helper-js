@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.0.3
+ * helper-js v1.0.5
  * phphe <phphe@outlook.com> (https://github.com/phphe)
  * https://github.com/phphe/helper-js.git
  * Released under the MIT License.
@@ -167,6 +167,32 @@ function objectExcept(obj, keys) {
     }
   }
   return r;
+}
+// source: http://stackoverflow.com/questions/8817394/javascript-get-deep-value-from-object-by-passing-path-to-it-as-string
+function objectGet(obj, path) {
+  var paths = path.split('.');
+  var current = obj;
+
+  for (var i = 0; i < paths.length; i++) {
+    if (current[paths[i]] === undefined) {
+      return undefined;
+    } else {
+      current = current[paths[i]];
+    }
+  }
+  return current;
+}
+// source http://stackoverflow.com/questions/10253307/setting-a-depth-in-an-object-literal-by-a-string-of-dot-notation
+function objectSet(obj, path, value) {
+  var tags = path.split('.');
+  var len = tags.length - 1;
+  for (var i = 0; i < len; i++) {
+    if (obj[tags[i]] == null) {
+      obj[tags[i]] = {};
+    }
+    obj = obj[tags[i]];
+  }
+  obj[tags[len]] = value;
 }
 
 // url
@@ -346,4 +372,4 @@ function waitFor(name, condition) {
   });
 }
 
-export { isset, isArray, isBool, isNumber, isNumeric, isString, isObject, isFunction, isPromise, empty, numRand, numPad, studlyCase, snakeCase, camelCase, camelToWords, titleCase, strRand, replaceMultiple, arrayRemove, arrayFirst, arrayLast, arrayDiff, assignIfDifferent, objectMerge, objectMap, objectOnly, objectExcept, getUrlParam, uniqueId, isDescendantOf, getOffset, findParent, hasClass, isOffsetInEl, getBorder, binarySearch, waitFor };
+export { isset, isArray, isBool, isNumber, isNumeric, isString, isObject, isFunction, isPromise, empty, numRand, numPad, studlyCase, snakeCase, camelCase, camelToWords, titleCase, strRand, replaceMultiple, arrayRemove, arrayFirst, arrayLast, arrayDiff, assignIfDifferent, objectMerge, objectMap, objectOnly, objectExcept, objectGet, objectSet, getUrlParam, uniqueId, isDescendantOf, getOffset, findParent, hasClass, isOffsetInEl, getBorder, binarySearch, waitFor };

@@ -164,6 +164,32 @@ export function objectExcept(obj, keys) {
   }
   return r
 }
+// source: http://stackoverflow.com/questions/8817394/javascript-get-deep-value-from-object-by-passing-path-to-it-as-string
+export function objectGet(obj, path) {
+  const paths = path.split('.')
+  let current = obj
+
+  for (let i = 0; i < paths.length; i++) {
+    if (current[paths[i]] === undefined) {
+      return undefined
+    } else {
+      current = current[paths[i]]
+    }
+  }
+  return current
+}
+// source http://stackoverflow.com/questions/10253307/setting-a-depth-in-an-object-literal-by-a-string-of-dot-notation
+export function objectSet(obj, path, value) {
+  const tags = path.split('.')
+  const len = tags.length - 1
+  for (var i = 0; i < len; i++) {
+    if (obj[tags[i]] == null) {
+      obj[tags[i]] = {}
+    }
+    obj = obj[tags[i]]
+  }
+  obj[tags[len]] = value
+}
 
 // url
 /* eslint-disable */
