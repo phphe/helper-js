@@ -234,23 +234,29 @@ export function isDescendantOf (el, parent) {
   }
 }
 export function getOffset(el) {
-  var elOffset = {
-    x: el.offsetLeft,
-    y: el.offsetTop
-  }
-  var parentOffset = {x: 0, y: 0}
-  if (el.offsetParent != null) parentOffset = getOffset(el.offsetParent)
-  return {
-    x: elOffset.x + parentOffset.x,
-    y: elOffset.y + parentOffset.y
+  return doGetOffset(el)
+  function doGetOffset(el) {
+    var elOffset = {
+      x: el.offsetLeft,
+      y: el.offsetTop
+    }
+    var parentOffset = {x: 0, y: 0}
+    if (el.offsetParent != null) parentOffset = doGetOffset(el.offsetParent)
+    return {
+      x: elOffset.x + parentOffset.x,
+      y: elOffset.y + parentOffset.y
+    }
   }
 }
 export function findParent(el, callback) {
-  if (el.parentElement) {
-    if (callback(el.parentElement)) {
-      return el.parentElement
-    } else {
-      return findParent(el.parentElement, callback)
+  return doFindParent(el, callback)
+  function doFindParent(el, callback) {
+    if (el.parentElement) {
+      if (callback(el.parentElement)) {
+        return el.parentElement
+      } else {
+        return doFindParent(el.parentElement, callback)
+      }
     }
   }
 }
@@ -309,6 +315,7 @@ export function binarySearch(arr, callback, max = 1000) {
   }
   return null
 }
+export const storeOfWaitFor = {}
 // overload waitFor(condition, time = 100, maxCount = 1000))
 export function waitFor(name, condition, time = 100, maxCount = 1000) {
   if (isFunction(name)) {
@@ -317,10 +324,7 @@ export function waitFor(name, condition, time = 100, maxCount = 1000) {
     condition = name
     name = null
   }
-  if (!waitFor._waits) {
-    waitFor._waits = {}
-  }
-  const waits = waitFor._waits
+  const waits = storeOfWaitFor
   if (name && isset(waits[name])) {
     window.clearInterval(waits[name])
     delete waits[name]

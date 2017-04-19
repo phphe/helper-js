@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.0.5
+ * helper-js v1.0.6
  * phphe <phphe@outlook.com> (https://github.com/phphe)
  * https://github.com/phphe/helper-js.git
  * Released under the MIT License.
@@ -244,23 +244,29 @@ function isDescendantOf(el, parent) {
   }
 }
 function getOffset(el) {
-  var elOffset = {
-    x: el.offsetLeft,
-    y: el.offsetTop
-  };
-  var parentOffset = { x: 0, y: 0 };
-  if (el.offsetParent != null) parentOffset = getOffset(el.offsetParent);
-  return {
-    x: elOffset.x + parentOffset.x,
-    y: elOffset.y + parentOffset.y
-  };
+  return doGetOffset(el);
+  function doGetOffset(el) {
+    var elOffset = {
+      x: el.offsetLeft,
+      y: el.offsetTop
+    };
+    var parentOffset = { x: 0, y: 0 };
+    if (el.offsetParent != null) parentOffset = doGetOffset(el.offsetParent);
+    return {
+      x: elOffset.x + parentOffset.x,
+      y: elOffset.y + parentOffset.y
+    };
+  }
 }
 function findParent(el, callback) {
-  if (el.parentElement) {
-    if (callback(el.parentElement)) {
-      return el.parentElement;
-    } else {
-      return findParent(el.parentElement, callback);
+  return doFindParent(el, callback);
+  function doFindParent(el, callback) {
+    if (el.parentElement) {
+      if (callback(el.parentElement)) {
+        return el.parentElement;
+      } else {
+        return doFindParent(el.parentElement, callback);
+      }
     }
   }
 }
@@ -323,6 +329,7 @@ function binarySearch(arr, callback) {
   }
   return null;
 }
+var storeOfWaitFor = {};
 // overload waitFor(condition, time = 100, maxCount = 1000))
 function waitFor(name, condition) {
   var time = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 100;
@@ -334,10 +341,7 @@ function waitFor(name, condition) {
     condition = name;
     name = null;
   }
-  if (!waitFor._waits) {
-    waitFor._waits = {};
-  }
-  var waits = waitFor._waits;
+  var waits = storeOfWaitFor;
   if (name && isset(waits[name])) {
     window.clearInterval(waits[name]);
     delete waits[name];
@@ -415,4 +419,5 @@ exports.hasClass = hasClass;
 exports.isOffsetInEl = isOffsetInEl;
 exports.getBorder = getBorder;
 exports.binarySearch = binarySearch;
+exports.storeOfWaitFor = storeOfWaitFor;
 exports.waitFor = waitFor;
