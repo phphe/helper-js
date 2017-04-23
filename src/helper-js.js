@@ -190,7 +190,12 @@ export function objectSet(obj, path, value) {
   }
   obj[tags[len]] = value
 }
-
+export function unset(obj, prop) {
+  obj[prop] = undefined
+  try {
+    delete obj[prop]
+  } catch (e) {}
+}
 // url
 /* eslint-disable */
 export function getUrlParam(par) {

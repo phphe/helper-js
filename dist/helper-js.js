@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.0.7
+ * helper-js v1.0.8
  * phphe <phphe@outlook.com> (https://github.com/phphe)
  * https://github.com/phphe/helper-js.git
  * Released under the MIT License.
@@ -200,7 +200,12 @@ function objectSet(obj, path, value) {
   }
   obj[tags[len]] = value;
 }
-
+function unset(obj, prop) {
+  obj[prop] = undefined;
+  try {
+    delete obj[prop];
+  } catch (e) {}
+}
 // url
 /* eslint-disable */
 function getUrlParam(par) {
@@ -425,6 +430,7 @@ exports.objectOnly = objectOnly;
 exports.objectExcept = objectExcept;
 exports.objectGet = objectGet;
 exports.objectSet = objectSet;
+exports.unset = unset;
 exports.getUrlParam = getUrlParam;
 exports.uniqueId = uniqueId;
 exports.isDescendantOf = isDescendantOf;
