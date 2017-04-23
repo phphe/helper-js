@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.0.6
+ * helper-js v1.0.7
  * phphe <phphe@outlook.com> (https://github.com/phphe)
  * https://github.com/phphe/helper-js.git
  * Released under the MIT License.
@@ -325,6 +325,19 @@ function binarySearch(arr, callback) {
   }
   return null;
 }
+//
+function windowLoaded() {
+  return new Promise(function (resolve, reject) {
+    if (document && document.readyState === 'complete') {
+      resolve();
+    } else {
+      window.addEventListener('load', function once() {
+        resolve();
+        window.removeEventListener('load', once);
+      });
+    }
+  });
+}
 var storeOfWaitFor = {};
 // overload waitFor(condition, time = 100, maxCount = 1000))
 function waitFor(name, condition) {
@@ -376,4 +389,4 @@ function waitFor(name, condition) {
   });
 }
 
-export { isset, isArray, isBool, isNumber, isNumeric, isString, isObject, isFunction, isPromise, empty, numRand, numPad, studlyCase, snakeCase, camelCase, camelToWords, titleCase, strRand, replaceMultiple, arrayRemove, arrayFirst, arrayLast, arrayDiff, assignIfDifferent, objectMerge, objectMap, objectOnly, objectExcept, objectGet, objectSet, getUrlParam, uniqueId, isDescendantOf, getOffset, findParent, hasClass, isOffsetInEl, getBorder, binarySearch, storeOfWaitFor, waitFor };
+export { isset, isArray, isBool, isNumber, isNumeric, isString, isObject, isFunction, isPromise, empty, numRand, numPad, studlyCase, snakeCase, camelCase, camelToWords, titleCase, strRand, replaceMultiple, arrayRemove, arrayFirst, arrayLast, arrayDiff, assignIfDifferent, objectMerge, objectMap, objectOnly, objectExcept, objectGet, objectSet, getUrlParam, uniqueId, isDescendantOf, getOffset, findParent, hasClass, isOffsetInEl, getBorder, binarySearch, windowLoaded, storeOfWaitFor, waitFor };

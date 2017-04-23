@@ -315,6 +315,19 @@ export function binarySearch(arr, callback, max = 1000) {
   }
   return null
 }
+//
+export function windowLoaded() {
+  return new Promise(function(resolve, reject) {
+    if (document && document.readyState === 'complete') {
+      resolve()
+    } else {
+      window.addEventListener('load', function once() {
+        resolve()
+        window.removeEventListener('load', once)
+      })
+    }
+  })
+}
 export const storeOfWaitFor = {}
 // overload waitFor(condition, time = 100, maxCount = 1000))
 export function waitFor(name, condition, time = 100, maxCount = 1000) {

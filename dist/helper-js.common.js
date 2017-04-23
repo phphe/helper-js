@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.0.6
+ * helper-js v1.0.7
  * phphe <phphe@outlook.com> (https://github.com/phphe)
  * https://github.com/phphe/helper-js.git
  * Released under the MIT License.
@@ -329,6 +329,19 @@ function binarySearch(arr, callback) {
   }
   return null;
 }
+//
+function windowLoaded() {
+  return new Promise(function (resolve, reject) {
+    if (document && document.readyState === 'complete') {
+      resolve();
+    } else {
+      window.addEventListener('load', function once() {
+        resolve();
+        window.removeEventListener('load', once);
+      });
+    }
+  });
+}
 var storeOfWaitFor = {};
 // overload waitFor(condition, time = 100, maxCount = 1000))
 function waitFor(name, condition) {
@@ -419,5 +432,6 @@ exports.hasClass = hasClass;
 exports.isOffsetInEl = isOffsetInEl;
 exports.getBorder = getBorder;
 exports.binarySearch = binarySearch;
+exports.windowLoaded = windowLoaded;
 exports.storeOfWaitFor = storeOfWaitFor;
 exports.waitFor = waitFor;
