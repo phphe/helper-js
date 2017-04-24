@@ -272,6 +272,16 @@ export function hasClass(el, className) {
     return new RegExp('(^| )' + className + '( |$)', 'gi').test(el.className)
   }
 }
+export function getElSize(el) {
+  const originDisplay = el.style.display
+  el.style.display = 'block'
+  const size = {
+    width: el.offsetWidth,
+    height: el.offsetHeight
+  }
+  el.style.display = originDisplay
+  return size
+}
 /**
  * [isOffsetInEl]
  * @param {Number} x
