@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.0.8
+ * helper-js v1.0.9
  * phphe <phphe@outlook.com> (https://github.com/phphe)
  * https://github.com/phphe/helper-js.git
  * Released under the MIT License.
@@ -282,6 +282,16 @@ function hasClass(el, className) {
     return new RegExp('(^| )' + className + '( |$)', 'gi').test(el.className);
   }
 }
+function getElSize(el) {
+  var originDisplay = el.style.display;
+  el.style.display = 'block';
+  var size = {
+    width: el.offsetWidth,
+    height: el.offsetHeight
+  };
+  el.style.display = originDisplay;
+  return size;
+}
 /**
  * [isOffsetInEl]
  * @param {Number} x
@@ -435,6 +445,7 @@ exports.isDescendantOf = isDescendantOf;
 exports.getOffset = getOffset;
 exports.findParent = findParent;
 exports.hasClass = hasClass;
+exports.getElSize = getElSize;
 exports.isOffsetInEl = isOffsetInEl;
 exports.getBorder = getBorder;
 exports.binarySearch = binarySearch;
