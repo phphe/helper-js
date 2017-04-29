@@ -272,6 +272,14 @@ export function hasClass(el, className) {
     return new RegExp('(^| )' + className + '( |$)', 'gi').test(el.className)
   }
 }
+export function addClass(el, className) {
+  if (!hasClass(el, className)) {
+    if (el.classList)
+      { el.classList.add(className) }
+    else
+    { el.className += ' ' + className }
+  }
+}
 export function getElSize(el) {
   const originDisplay = el.style.display
   el.style.display = 'block'
