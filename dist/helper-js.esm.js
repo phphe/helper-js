@@ -271,6 +271,8 @@ function findParent(el, callback) {
     }
   }
 }
+
+// source: http://youmightnotneedjquery.com/
 function hasClass(el, className) {
   if (el.classList) {
     return el.classList.contains(className);
@@ -278,6 +280,8 @@ function hasClass(el, className) {
     return new RegExp('(^| )' + className + '( |$)', 'gi').test(el.className);
   }
 }
+
+// source: http://youmightnotneedjquery.com/
 function addClass(el, className) {
   if (!hasClass(el, className)) {
     if (el.classList) {
@@ -285,6 +289,14 @@ function addClass(el, className) {
     } else {
       el.className += ' ' + className;
     }
+  }
+}
+// source: http://youmightnotneedjquery.com/
+function removeClass(el, className) {
+  if (el.classList) {
+    el.classList.remove(className);
+  } else {
+    el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
   }
 }
 function getElSize(el) {
@@ -413,4 +425,4 @@ function waitFor(name, condition) {
   });
 }
 
-export { isset, isArray, isBool, isNumber, isNumeric, isString, isObject, isFunction, isPromise, empty, numRand, numPad, studlyCase, snakeCase, camelCase, camelToWords, titleCase, strRand, replaceMultiple, arrayRemove, arrayFirst, arrayLast, arrayDiff, assignIfDifferent, objectMerge, objectMap, objectOnly, objectExcept, objectGet, objectSet, unset, getUrlParam, uniqueId, isDescendantOf, getOffset, findParent, hasClass, addClass, getElSize, isOffsetInEl, getBorder, binarySearch, windowLoaded, storeOfWaitFor, waitFor };
+export { isset, isArray, isBool, isNumber, isNumeric, isString, isObject, isFunction, isPromise, empty, numRand, numPad, studlyCase, snakeCase, camelCase, camelToWords, titleCase, strRand, replaceMultiple, arrayRemove, arrayFirst, arrayLast, arrayDiff, assignIfDifferent, objectMerge, objectMap, objectOnly, objectExcept, objectGet, objectSet, unset, getUrlParam, uniqueId, isDescendantOf, getOffset, findParent, hasClass, addClass, removeClass, getElSize, isOffsetInEl, getBorder, binarySearch, windowLoaded, storeOfWaitFor, waitFor };

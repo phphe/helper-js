@@ -265,6 +265,8 @@ export function findParent(el, callback) {
     }
   }
 }
+
+// source: http://youmightnotneedjquery.com/
 export function hasClass(el, className) {
   if (el.classList) {
     return el.classList.contains(className)
@@ -272,6 +274,8 @@ export function hasClass(el, className) {
     return new RegExp('(^| )' + className + '( |$)', 'gi').test(el.className)
   }
 }
+
+// source: http://youmightnotneedjquery.com/
 export function addClass(el, className) {
   if (!hasClass(el, className)) {
     if (el.classList)
@@ -279,6 +283,13 @@ export function addClass(el, className) {
     else
     { el.className += ' ' + className }
   }
+}
+// source: http://youmightnotneedjquery.com/
+export function removeClass(el, className) {
+  if (el.classList)
+    { el.classList.remove(className) }
+  else
+  { el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ') }
 }
 export function getElSize(el) {
   const originDisplay = el.style.display

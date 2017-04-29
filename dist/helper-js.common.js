@@ -275,6 +275,8 @@ function findParent(el, callback) {
     }
   }
 }
+
+// source: http://youmightnotneedjquery.com/
 function hasClass(el, className) {
   if (el.classList) {
     return el.classList.contains(className);
@@ -282,6 +284,8 @@ function hasClass(el, className) {
     return new RegExp('(^| )' + className + '( |$)', 'gi').test(el.className);
   }
 }
+
+// source: http://youmightnotneedjquery.com/
 function addClass(el, className) {
   if (!hasClass(el, className)) {
     if (el.classList) {
@@ -289,6 +293,14 @@ function addClass(el, className) {
     } else {
       el.className += ' ' + className;
     }
+  }
+}
+// source: http://youmightnotneedjquery.com/
+function removeClass(el, className) {
+  if (el.classList) {
+    el.classList.remove(className);
+  } else {
+    el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
   }
 }
 function getElSize(el) {
@@ -455,6 +467,7 @@ exports.getOffset = getOffset;
 exports.findParent = findParent;
 exports.hasClass = hasClass;
 exports.addClass = addClass;
+exports.removeClass = removeClass;
 exports.getElSize = getElSize;
 exports.isOffsetInEl = isOffsetInEl;
 exports.getBorder = getBorder;
