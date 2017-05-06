@@ -1,3 +1,5 @@
+// local store
+export const store = {}
 // is 各种判断
 export function isset (v) {
   return typeof v !== 'undefined'
@@ -217,13 +219,14 @@ export function getUrlParam(par) {
 }
 /* eslint-enable */
 // dom
-const _generatedIds = []
 export function uniqueId (prefix = 'id_') {
   const id = prefix + strRand()
-  if (document.getElementById(id) || _generatedIds.includes(id)) {
+  if (!store.uniqueId) store.uniqueId = {}
+  const generatedIds = store.uniqueId
+  if (document.getElementById(id) || generatedIds.includes(id)) {
     return uniqueId(prefix)
   } else {
-    _generatedIds.push(id)
+    generatedIds.push(id)
     return id
   }
 }
@@ -362,7 +365,6 @@ export function windowLoaded() {
     }
   })
 }
-export const storeOfWaitFor = {}
 // overload waitFor(condition, time = 100, maxCount = 1000))
 export function waitFor(name, condition, time = 100, maxCount = 1000) {
   if (isFunction(name)) {
@@ -371,7 +373,8 @@ export function waitFor(name, condition, time = 100, maxCount = 1000) {
     condition = name
     name = null
   }
-  const waits = storeOfWaitFor
+  if (!store.waitFor) store.waitFor = {}
+  const waits = store.waitFor
   if (name && isset(waits[name])) {
     window.clearInterval(waits[name])
     delete waits[name]
@@ -408,4 +411,34 @@ export function waitFor(name, condition, time = 100, maxCount = 1000) {
     }
     judge()
   })
+}
+
+export function retry(func, limitTimes = 3) {
+  if (!store.retry) store.retry = {}
+  const counters = retry
+  const name = generateName()
+  counters[name] = 0
+  return doFunc
+  function doFunc(arg1, arg2, arg3) {
+    return func(arg1, arg2, arg3).then((data) => {
+      delete counters[name]
+      return data
+    }).catch((e) => {
+      counters[name]++
+      if (counters[name] >= limitTimes) {
+        delete counters[name]
+        return Promise.reject(e)
+      } else {
+        return doFunc(arg1, arg2, arg3)
+      }
+    })
+  }
+  function generateName() {
+    const name = Math.random() + ''
+    if (counters[name]) {
+      return generateName()
+    } else {
+      return name
+    }
+  }
 }

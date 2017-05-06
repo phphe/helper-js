@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.0.10
+ * helper-js v1.0.11
  * phphe <phphe@outlook.com> (https://github.com/phphe)
  * https://github.com/phphe/helper-js.git
  * Released under the MIT License.
@@ -9,6 +9,8 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
+// local store
+var store = {};
 // is 各种判断
 function isset(v) {
   return typeof v !== 'undefined';
@@ -225,15 +227,16 @@ function getUrlParam(par) {
 }
 /* eslint-enable */
 // dom
-var _generatedIds = [];
 function uniqueId() {
   var prefix = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'id_';
 
   var id = prefix + strRand();
-  if (document.getElementById(id) || _generatedIds.includes(id)) {
+  if (!store.uniqueId) store.uniqueId = {};
+  var generatedIds = store.uniqueId;
+  if (document.getElementById(id) || generatedIds.includes(id)) {
     return uniqueId(prefix);
   } else {
-    _generatedIds.push(id);
+    generatedIds.push(id);
     return id;
   }
 }
@@ -378,7 +381,6 @@ function windowLoaded() {
     }
   });
 }
-var storeOfWaitFor = {};
 // overload waitFor(condition, time = 100, maxCount = 1000))
 function waitFor(name, condition) {
   var time = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 100;
@@ -390,7 +392,8 @@ function waitFor(name, condition) {
     condition = name;
     name = null;
   }
-  var waits = storeOfWaitFor;
+  if (!store.waitFor) store.waitFor = {};
+  var waits = store.waitFor;
   if (name && isset(waits[name])) {
     window.clearInterval(waits[name]);
     delete waits[name];
@@ -429,6 +432,39 @@ function waitFor(name, condition) {
   });
 }
 
+function retry(func) {
+  var limitTimes = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 3;
+
+  if (!store.retry) store.retry = {};
+  var counters = retry;
+  var name = generateName();
+  counters[name] = 0;
+  return doFunc;
+  function doFunc(arg1, arg2, arg3) {
+    return func(arg1, arg2, arg3).then(function (data) {
+      delete counters[name];
+      return data;
+    }).catch(function (e) {
+      counters[name]++;
+      if (counters[name] >= limitTimes) {
+        delete counters[name];
+        return Promise.reject(e);
+      } else {
+        return doFunc(arg1, arg2, arg3);
+      }
+    });
+  }
+  function generateName() {
+    var name = Math.random() + '';
+    if (counters[name]) {
+      return generateName();
+    } else {
+      return name;
+    }
+  }
+}
+
+exports.store = store;
 exports.isset = isset;
 exports.isArray = isArray;
 exports.isBool = isBool;
@@ -473,5 +509,5 @@ exports.isOffsetInEl = isOffsetInEl;
 exports.getBorder = getBorder;
 exports.binarySearch = binarySearch;
 exports.windowLoaded = windowLoaded;
-exports.storeOfWaitFor = storeOfWaitFor;
 exports.waitFor = waitFor;
+exports.retry = retry;
