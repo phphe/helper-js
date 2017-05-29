@@ -110,11 +110,13 @@ function replaceMultiple(mapObj, str) {
 }
 // array
 function arrayRemove(arr, v) {
-  var index = arr.indexOf(v);
-  if (index > -1) {
+  var index = void 0;
+  var count = 0;
+  while ((index = arr.indexOf(v)) > -1) {
     arr.splice(index, 1);
+    count++;
   }
-  return arr;
+  return count;
 }
 function arrayFirst(arr) {
   return arr[0];

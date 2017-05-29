@@ -100,11 +100,13 @@ export function replaceMultiple(mapObj, str) {
 }
 // array
 export function arrayRemove(arr, v) {
-  const index = arr.indexOf(v)
-  if (index > -1) {
+  let index
+  let count = 0
+  while ((index = arr.indexOf(v)) > -1) {
     arr.splice(index, 1)
+    count++
   }
-  return arr
+  return count
 }
 export function arrayFirst(arr) {
   return arr[0]
