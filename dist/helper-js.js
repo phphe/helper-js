@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.0.13
+ * helper-js v1.0.15
  * phphe <phphe@outlook.com> (https://github.com/phphe)
  * https://github.com/phphe/helper-js.git
  * Released under the MIT License.
@@ -134,6 +134,9 @@ function arrayDiff(arr1, arr2) {
   }
   return arr;
 }
+function toArrayIfNot(arrOrNot) {
+  return isArray(arrOrNot) ? arrOrNot : [arrOrNot];
+}
 
 // object
 function assignIfDifferent(obj, key, val) {
@@ -184,26 +187,29 @@ function objectGet(obj, path) {
   var current = obj;
 
   for (var i = 0; i < paths.length; i++) {
-    if (current[paths[i]] === undefined) {
-      return undefined;
+    if (current[paths[i]] == null) {
+      return null;
     } else {
       current = current[paths[i]];
     }
   }
   return current;
 }
-// source http://stackoverflow.com/questions/10253307/setting-a-depth-in-an-object-literal-by-a-string-of-dot-notation
+
 function objectSet(obj, path, value) {
-  var tags = path.split('.');
-  var len = tags.length - 1;
-  for (var i = 0; i < len; i++) {
-    if (obj[tags[i]] == null) {
-      obj[tags[i]] = {};
-    }
-    obj = obj[tags[i]];
+  var lastDotIndex = path.lastIndexOf('.');
+  var parent = void 0,
+      lastKey = void 0;
+  if (lastDotIndex === -1) {
+    parent = obj;
+    lastKey = path;
+  } else {
+    parent = objectGet(obj, path.substring(0, lastDotIndex));
+    lastKey = path.substr(lastDotIndex);
   }
-  obj[tags[len]] = value;
+  parent[lastKey] = value;
 }
+
 function unset(obj, prop) {
   obj[prop] = undefined;
   try {
@@ -492,6 +498,7 @@ exports.arrayRemove = arrayRemove;
 exports.arrayFirst = arrayFirst;
 exports.arrayLast = arrayLast;
 exports.arrayDiff = arrayDiff;
+exports.toArrayIfNot = toArrayIfNot;
 exports.assignIfDifferent = assignIfDifferent;
 exports.objectMerge = objectMerge;
 exports.objectMap = objectMap;

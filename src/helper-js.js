@@ -124,6 +124,9 @@ export function arrayDiff(arr1, arr2) {
   }
   return arr
 }
+export function toArrayIfNot(arrOrNot) {
+  return isArray(arrOrNot) ? arrOrNot : [arrOrNot]
+}
 
 // object
 export function assignIfDifferent(obj, key, val) {
@@ -174,26 +177,28 @@ export function objectGet(obj, path) {
   let current = obj
 
   for (let i = 0; i < paths.length; i++) {
-    if (current[paths[i]] === undefined) {
-      return undefined
+    if (current[paths[i]] == null) {
+      return null
     } else {
       current = current[paths[i]]
     }
   }
   return current
 }
-// source http://stackoverflow.com/questions/10253307/setting-a-depth-in-an-object-literal-by-a-string-of-dot-notation
+
 export function objectSet(obj, path, value) {
-  const tags = path.split('.')
-  const len = tags.length - 1
-  for (var i = 0; i < len; i++) {
-    if (obj[tags[i]] == null) {
-      obj[tags[i]] = {}
-    }
-    obj = obj[tags[i]]
+  const lastDotIndex = path.lastIndexOf('.')
+  let parent, lastKey
+  if (lastDotIndex === -1) {
+    parent = obj
+    lastKey = path
+  } else {
+    parent = objectGet(obj, path.substring(0, lastDotIndex))
+    lastKey = path.substr(lastDotIndex)
   }
-  obj[tags[len]] = value
+  parent[lastKey] = value
 }
+
 export function unset(obj, prop) {
   obj[prop] = undefined
   try {
