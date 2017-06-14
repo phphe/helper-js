@@ -333,6 +333,21 @@ export function getBorder(el) {
     bottom: body.offsetHeight < window.innerHeight ? window.innerHeight : body.offsetHeight
   }
 }
+// dom event
+export function onDOM(el, name, handler) {
+  if (el.addEventListener) {                    // 所有主流浏览器，除了 IE 8 及更早 IE版本
+    el.addEventListener(name, handler)
+  } else if (el.attachEvent) {                  // IE 8 及更早 IE 版本
+    el.attachEvent(`on${name}`, handler)
+  }
+}
+export function offDOM(el, name, handler) {
+  if (el.removeEventListener) {                    // 所有主流浏览器，除了 IE 8 及更早 IE版本
+    el.removeEventListener(name, handler)
+  } else if (el.detachEvent) {                  // IE 8 及更早 IE 版本
+    el.detachEvent(`on${name}`, handler)
+  }
+}
 // advance
 // binarySearch 二分查找
 export function binarySearch(arr, callback, max = 1000) {

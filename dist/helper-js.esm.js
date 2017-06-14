@@ -344,6 +344,25 @@ function getBorder(el) {
     bottom: body.offsetHeight < window.innerHeight ? window.innerHeight : body.offsetHeight
   };
 }
+// dom event
+function onDOM(el, name, handler) {
+  if (el.addEventListener) {
+    // 所有主流浏览器，除了 IE 8 及更早 IE版本
+    el.addEventListener(name, handler);
+  } else if (el.attachEvent) {
+    // IE 8 及更早 IE 版本
+    el.attachEvent('on' + name, handler);
+  }
+}
+function offDOM(el, name, handler) {
+  if (el.removeEventListener) {
+    // 所有主流浏览器，除了 IE 8 及更早 IE版本
+    el.removeEventListener(name, handler);
+  } else if (el.detachEvent) {
+    // IE 8 及更早 IE 版本
+    el.detachEvent('on' + name, handler);
+  }
+}
 // advance
 // binarySearch 二分查找
 function binarySearch(arr, callback) {
@@ -468,4 +487,4 @@ function retry(func) {
   }
 }
 
-export { store, isset, isArray, isBool, isNumber, isNumeric, isString, isObject, isFunction, isPromise, empty, numRand, numPad, studlyCase, snakeCase, camelCase, camelToWords, titleCase, strRand, replaceMultiple, arrayRemove, arrayFirst, arrayLast, arrayDiff, toArrayIfNot, assignIfDifferent, objectMerge, objectMap, objectOnly, objectExcept, objectGet, objectSet, unset, getUrlParam, uniqueId, isDescendantOf, getOffset, findParent, hasClass, addClass, removeClass, getElSize, isOffsetInEl, getBorder, binarySearch, windowLoaded, waitFor, retry };
+export { store, isset, isArray, isBool, isNumber, isNumeric, isString, isObject, isFunction, isPromise, empty, numRand, numPad, studlyCase, snakeCase, camelCase, camelToWords, titleCase, strRand, replaceMultiple, arrayRemove, arrayFirst, arrayLast, arrayDiff, toArrayIfNot, assignIfDifferent, objectMerge, objectMap, objectOnly, objectExcept, objectGet, objectSet, unset, getUrlParam, uniqueId, isDescendantOf, getOffset, findParent, hasClass, addClass, removeClass, getElSize, isOffsetInEl, getBorder, onDOM, offDOM, binarySearch, windowLoaded, waitFor, retry };
