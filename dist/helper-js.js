@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.0.15
+ * helper-js v1.0.16
  * phphe <phphe@outlook.com> (https://github.com/phphe)
  * https://github.com/phphe/helper-js.git
  * Released under the MIT License.
@@ -243,10 +243,10 @@ function uniqueId() {
   var id = prefix + strRand();
   if (!store.uniqueId) store.uniqueId = {};
   var generatedIds = store.uniqueId;
-  if (document.getElementById(id) || generatedIds.includes(id)) {
+  if (document.getElementById(id) || generatedIds[id]) {
     return uniqueId(prefix);
   } else {
-    generatedIds.push(id);
+    generatedIds[id] = true;
     return id;
   }
 }

@@ -230,10 +230,10 @@ export function uniqueId (prefix = 'id_') {
   const id = prefix + strRand()
   if (!store.uniqueId) store.uniqueId = {}
   const generatedIds = store.uniqueId
-  if (document.getElementById(id) || generatedIds.includes(id)) {
+  if (document.getElementById(id) || generatedIds[id]) {
     return uniqueId(prefix)
   } else {
-    generatedIds.push(id)
+    generatedIds[id] = true
     return id
   }
 }
