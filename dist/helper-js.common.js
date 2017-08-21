@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.0.16
+ * helper-js v1.0.17
  * phphe <phphe@outlook.com> (https://github.com/phphe)
  * https://github.com/phphe/helper-js.git
  * Released under the MIT License.
@@ -68,6 +68,13 @@ function numPad(num, n) {
     len++;
   }
   return num;
+}
+function min(n, min) {
+  return n < min ? min : n;
+}
+
+function max(n, max) {
+  return n < max ? n : max;
 }
 // str 字符
 function studlyCase(str) {
@@ -348,6 +355,33 @@ function getBorder(el) {
     bottom: body.offsetHeight < window.innerHeight ? window.innerHeight : body.offsetHeight
   };
 }
+function setElChildByIndex(el, index, child) {
+  child.childComponentIndex = index;
+  var len = el.childNodes.length;
+  if (len === 0) {
+    el.appendChild(child);
+  } else if (index === 0) {
+    el.insertBefore(child, el.childNodes[0]);
+  } else {
+    var _binarySearch = binarySearch(el.childNodes, function (el) {
+      return el.childComponentIndex - index;
+    }, 0, max(index, len - 1), true),
+        nearestIndex = _binarySearch.index,
+        nearest = _binarySearch.value,
+        bigger = _binarySearch.bigger;
+
+    if (bigger) {
+      el.insertBefore(child, nearest);
+    } else {
+      var next = el.childNodes[nearestIndex + 1];
+      if (next) {
+        el.insertBefore(child, next);
+      } else {
+        el.appendChild(child);
+      }
+    }
+  }
+}
 // dom event
 function onDOM(el, name, handler) {
   if (el.addEventListener) {
@@ -369,31 +403,34 @@ function offDOM(el, name, handler) {
 }
 // advance
 // binarySearch 二分查找
-function binarySearch(arr, callback) {
-  var max = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 1000;
+function binarySearch(arr, callback, start, end, returnNearestIfNoHit) {
+  var max = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : 1000;
 
   var midNum;
   var mid;
-  var start = 0;
-  var end = arr.length - 1;
+  if (start == null) {
+    start = 0;
+    end = arr.length - 1;
+  }
   var i = 0;
+  var r = void 0;
   while (start >= 0 && start <= end) {
     if (i >= max) {
       throw Error('binarySearch: loop times is over ' + max + ', you can increase the limit.');
     }
     midNum = Math.floor((end - start) / 2 + start);
     mid = arr[midNum];
-    var r = callback(mid, arr, i);
-    if (r < 0) {
+    r = callback(mid, i);
+    if (r > 0) {
       end = midNum - 1;
-    } else if (r > 0) {
+    } else if (r < 0) {
       start = midNum + 1;
     } else {
-      return mid;
+      return { index: midNum, value: mid, count: i + 1 };
     }
     i++;
   }
-  return null;
+  return returnNearestIfNoHit ? { index: midNum, value: mid, count: i + 1, bigger: r > 0 } : null;
 }
 //
 function windowLoaded() {
@@ -504,6 +541,8 @@ exports.isPromise = isPromise;
 exports.empty = empty;
 exports.numRand = numRand;
 exports.numPad = numPad;
+exports.min = min;
+exports.max = max;
 exports.studlyCase = studlyCase;
 exports.snakeCase = snakeCase;
 exports.camelCase = camelCase;
@@ -535,6 +574,7 @@ exports.removeClass = removeClass;
 exports.getElSize = getElSize;
 exports.isOffsetInEl = isOffsetInEl;
 exports.getBorder = getBorder;
+exports.setElChildByIndex = setElChildByIndex;
 exports.onDOM = onDOM;
 exports.offDOM = offDOM;
 exports.binarySearch = binarySearch;

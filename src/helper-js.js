@@ -58,6 +58,13 @@ export function numPad (num, n) {
   }
   return num
 }
+export function min (n, min) {
+  return n < min ? min : n
+}
+
+export function max (n, max) {
+  return n < max ? n : max
+}
 // str 字符
 export function studlyCase (str) {
   return str && (str[0].toUpperCase() + str.substr(1))
@@ -333,6 +340,29 @@ export function getBorder(el) {
     bottom: body.offsetHeight < window.innerHeight ? window.innerHeight : body.offsetHeight
   }
 }
+export function setElChildByIndex(el, index, child) {
+  child.childComponentIndex = index
+  const len = el.childNodes.length
+  if (len === 0) {
+    el.appendChild(child)
+  } else if (index === 0) {
+    el.insertBefore(child, el.childNodes[0])
+  } else {
+    const {index: nearestIndex, value: nearest, bigger} = binarySearch(el.childNodes, el => {
+      return el.childComponentIndex - index
+    }, 0, max(index, len - 1), true)
+    if (bigger) {
+      el.insertBefore(child, nearest)
+    } else {
+      const next = el.childNodes[nearestIndex + 1]
+      if (next) {
+        el.insertBefore(child, next)
+      } else {
+        el.appendChild(child)
+      }
+    }
+  }
+}
 // dom event
 export function onDOM(el, name, handler) {
   if (el.addEventListener) {                    // 所有主流浏览器，除了 IE 8 及更早 IE版本
@@ -350,29 +380,32 @@ export function offDOM(el, name, handler) {
 }
 // advance
 // binarySearch 二分查找
-export function binarySearch(arr, callback, max = 1000) {
+export function binarySearch(arr, callback, start, end, returnNearestIfNoHit, max = 1000) {
   var midNum
   var mid
-  var start = 0
-  var end = arr.length - 1
+  if (start == null) {
+    start = 0
+    end = arr.length - 1
+  }
   var i = 0
+  let r
   while (start >= 0 && start <= end) {
     if (i >= max) {
       throw Error(`binarySearch: loop times is over ${max}, you can increase the limit.`)
     }
     midNum = Math.floor((end - start) / 2 + start)
     mid = arr[midNum]
-    const r = callback(mid, arr, i)
-    if (r < 0) {
+    r = callback(mid, i)
+    if (r > 0) {
       end = midNum - 1
-    } else if (r > 0) {
+    } else if (r < 0) {
       start = midNum + 1
     } else {
-      return mid
+      return { index: midNum, value: mid, count: i + 1 }
     }
     i++
   }
-  return null
+  return returnNearestIfNoHit ? { index: midNum, value: mid, count: i + 1, bigger: r > 0 } : null
 }
 //
 export function windowLoaded() {
