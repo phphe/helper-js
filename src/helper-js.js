@@ -71,12 +71,12 @@ export function studlyCase (str) {
 }
 export function snakeCase (str) {
   return str
-  .replace(/ /g, '-')
-  .replace(/_/g, '-')
-  .replace(/([^A-Z])([A-Z])/g, '$1-$2')
-  .replace(/--+/g, '-')
-  .replace(/^-|-$|/g, '')
-  .toLowerCase()
+    .replace(/ /g, '-')
+    .replace(/_/g, '-')
+    .replace(/([^A-Z])([A-Z])/g, '$1-$2')
+    .replace(/--+/g, '-')
+    .replace(/^-|-$|/g, '')
+    .toLowerCase()
 }
 export function camelCase (str) {
   const temp = str.toString().split(/[-_]/)
@@ -212,6 +212,13 @@ export function unset(obj, prop) {
     delete obj[prop]
   } catch (e) {}
 }
+// function
+export function executeWithCount(func, context) {
+  let count = 0
+  return (...args) => {
+    return func.apply(context, args.concat(count++))
+  }
+}
 // url
 /* eslint-disable */
 export function getUrlParam(par) {
@@ -296,7 +303,7 @@ export function hasClass(el, className) {
 export function addClass(el, className) {
   if (!hasClass(el, className)) {
     if (el.classList)
-      { el.classList.add(className) }
+    { el.classList.add(className) }
     else
     { el.className += ' ' + className }
   }
@@ -304,7 +311,7 @@ export function addClass(el, className) {
 // source: http://youmightnotneedjquery.com/
 export function removeClass(el, className) {
   if (el.classList)
-    { el.classList.remove(className) }
+  { el.classList.remove(className) }
   else
   { el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ') }
 }
@@ -365,16 +372,16 @@ export function setElChildByIndex(el, index, child) {
 }
 // dom event
 export function onDOM(el, name, handler) {
-  if (el.addEventListener) {                    // 所有主流浏览器，除了 IE 8 及更早 IE版本
+  if (el.addEventListener) { // 所有主流浏览器，除了 IE 8 及更早 IE版本
     el.addEventListener(name, handler)
-  } else if (el.attachEvent) {                  // IE 8 及更早 IE 版本
+  } else if (el.attachEvent) { // IE 8 及更早 IE 版本
     el.attachEvent(`on${name}`, handler)
   }
 }
 export function offDOM(el, name, handler) {
-  if (el.removeEventListener) {                    // 所有主流浏览器，除了 IE 8 及更早 IE版本
+  if (el.removeEventListener) { // 所有主流浏览器，除了 IE 8 及更早 IE版本
     el.removeEventListener(name, handler)
-  } else if (el.detachEvent) {                  // IE 8 及更早 IE 版本
+  } else if (el.detachEvent) { // IE 8 及更早 IE 版本
     el.detachEvent(`on${name}`, handler)
   }
 }
