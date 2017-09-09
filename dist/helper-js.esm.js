@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.0.17
+ * helper-js v1.0.19
  * phphe <phphe@outlook.com> (https://github.com/phphe)
  * https://github.com/phphe/helper-js.git
  * Released under the MIT License.
@@ -216,6 +216,17 @@ function unset(obj, prop) {
   try {
     delete obj[prop];
   } catch (e) {}
+}
+// function
+function executeWithCount(func, context) {
+  var count = 0;
+  return function () {
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return func.apply(context, args.concat(count++));
+  };
 }
 // url
 /* eslint-disable */
@@ -524,4 +535,4 @@ function retry(func) {
   }
 }
 
-export { store, isset, isArray, isBool, isNumber, isNumeric, isString, isObject, isFunction, isPromise, empty, numRand, numPad, min, max, studlyCase, snakeCase, camelCase, camelToWords, titleCase, strRand, replaceMultiple, arrayRemove, arrayFirst, arrayLast, arrayDiff, toArrayIfNot, assignIfDifferent, objectMerge, objectMap, objectOnly, objectExcept, objectGet, objectSet, unset, getUrlParam, uniqueId, isDescendantOf, getOffset, findParent, hasClass, addClass, removeClass, getElSize, isOffsetInEl, getBorder, setElChildByIndex, onDOM, offDOM, binarySearch, windowLoaded, waitFor, retry };
+export { store, isset, isArray, isBool, isNumber, isNumeric, isString, isObject, isFunction, isPromise, empty, numRand, numPad, min, max, studlyCase, snakeCase, camelCase, camelToWords, titleCase, strRand, replaceMultiple, arrayRemove, arrayFirst, arrayLast, arrayDiff, toArrayIfNot, assignIfDifferent, objectMerge, objectMap, objectOnly, objectExcept, objectGet, objectSet, unset, executeWithCount, getUrlParam, uniqueId, isDescendantOf, getOffset, findParent, hasClass, addClass, removeClass, getElSize, isOffsetInEl, getBorder, setElChildByIndex, onDOM, offDOM, binarySearch, windowLoaded, waitFor, retry };

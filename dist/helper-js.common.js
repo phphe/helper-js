@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.0.17
+ * helper-js v1.0.19
  * phphe <phphe@outlook.com> (https://github.com/phphe)
  * https://github.com/phphe/helper-js.git
  * Released under the MIT License.
@@ -220,6 +220,17 @@ function unset(obj, prop) {
   try {
     delete obj[prop];
   } catch (e) {}
+}
+// function
+function executeWithCount(func, context) {
+  var count = 0;
+  return function () {
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return func.apply(context, args.concat(count++));
+  };
 }
 // url
 /* eslint-disable */
@@ -563,6 +574,7 @@ exports.objectExcept = objectExcept;
 exports.objectGet = objectGet;
 exports.objectSet = objectSet;
 exports.unset = unset;
+exports.executeWithCount = executeWithCount;
 exports.getUrlParam = getUrlParam;
 exports.uniqueId = uniqueId;
 exports.isDescendantOf = isDescendantOf;
