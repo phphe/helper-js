@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.0.20
+ * helper-js v1.0.21
  * phphe <phphe@outlook.com> (https://github.com/phphe)
  * https://github.com/phphe/helper-js.git
  * Released under the MIT License.
@@ -76,6 +76,7 @@ function min(n, min) {
 function max(n, max) {
   return n < max ? n : max;
 }
+
 // str 字符
 function studlyCase(str) {
   return str && str[0].toUpperCase() + str.substr(1);
@@ -437,11 +438,11 @@ function binarySearch(arr, callback, start, end, returnNearestIfNoHit) {
     } else if (r < 0) {
       start = midNum + 1;
     } else {
-      return { index: midNum, value: mid, count: i + 1 };
+      return { index: midNum, value: mid, count: i + 1, hit: true };
     }
     i++;
   }
-  return returnNearestIfNoHit ? { index: midNum, value: mid, count: i + 1, bigger: r > 0 } : null;
+  return returnNearestIfNoHit ? { index: midNum, value: mid, count: i + 1, hit: false, bigger: r > 0 } : null;
 }
 //
 function windowLoaded() {

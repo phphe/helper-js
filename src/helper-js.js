@@ -65,6 +65,7 @@ export function min (n, min) {
 export function max (n, max) {
   return n < max ? n : max
 }
+
 // str 字符
 export function studlyCase (str) {
   return str && (str[0].toUpperCase() + str.substr(1))
@@ -408,11 +409,11 @@ export function binarySearch(arr, callback, start, end, returnNearestIfNoHit, ma
     } else if (r < 0) {
       start = midNum + 1
     } else {
-      return { index: midNum, value: mid, count: i + 1 }
+      return { index: midNum, value: mid, count: i + 1, hit: true }
     }
     i++
   }
-  return returnNearestIfNoHit ? { index: midNum, value: mid, count: i + 1, bigger: r > 0 } : null
+  return returnNearestIfNoHit ? { index: midNum, value: mid, count: i + 1, hit: false, bigger: r > 0 } : null
 }
 //
 export function windowLoaded() {
