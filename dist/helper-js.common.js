@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.0.21
+ * helper-js v1.0.22
  * phphe <phphe@outlook.com> (https://github.com/phphe)
  * https://github.com/phphe/helper-js.git
  * Released under the MIT License.
@@ -230,7 +230,8 @@ function executeWithCount(func, context) {
       args[_key] = arguments[_key];
     }
 
-    return func.apply(context, args.concat(count++));
+    args.unshift(count++);
+    return func.apply(context, args);
   };
 }
 // url

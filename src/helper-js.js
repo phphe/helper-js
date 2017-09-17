@@ -217,7 +217,8 @@ export function unset(obj, prop) {
 export function executeWithCount(func, context) {
   let count = 0
   return (...args) => {
-    return func.apply(context, args.concat(count++))
+    args.unshift(count++)
+    return func.apply(context, args)
   }
 }
 // url
