@@ -562,3 +562,85 @@ export function copyTextToClipboard(text) {
 
   document.body.removeChild(textArea)
 }
+
+// jquery
+export function jqFixedSize(sel) {
+  const $ = window.jQuery
+  $(sel).each(function () {
+    const t = $(this)
+    t.css({
+      width: t.width() + 'px',
+      height: t.height() + 'px',
+    })
+  })
+}
+export function jqMakeCarousel(wrapperSel, listSel, itemSel, speed = 1000, space = 16, dir = 'left', top = 0) {
+  if (space.toString().match(/^\d+$/)) {
+    space = space + 'px'
+  }
+  const spaceNumber = parseFloat(space)
+  const $ = window.jQuery
+  const wrapper = $(wrapperSel)
+  const list = wrapper.find(listSel)
+  wrapper.css({
+    position: 'relative',
+    height: wrapper.height() + 'px',
+  })
+  const items0 = list.find(itemSel)
+  items0.css({
+    margin: '0',
+    marginRight: space
+  })
+  const width = (Math.ceil(items0.width()) + spaceNumber) * items0.length
+  list.css({
+    position: 'absolute',
+    margin: '0',
+    width: width + 'px',
+  })
+  const height = list.height()
+  const list2 = list.clone()
+  const list3 = list.clone()
+  list.css({
+    left: 0,
+  })
+  list2.css({
+    left: width + 'px',
+  })
+  list3.css({
+    left: width * 2 + 'px',
+  })
+  const lists = $('<div></div>')
+  lists.css({
+    position: 'absolute',
+    width: width * 3 + 'px',
+    height: height + 'px',
+    left: 0,
+    top,
+  })
+  lists.append(list).append(list2).append(list3)
+  wrapper.append(lists)
+  let left = 0
+  function animateLoop() {
+    if (dir === 'left') {
+      left -= 100
+    } else {
+      left += 100
+    }
+    lists.animate({
+      left: `${left}px`,
+    }, speed, 'linear', () => {
+      if (Math.abs(left) > width) {
+        if (dir === 'left') {
+          left += width
+        } else {
+          left -= width
+        }
+        lists.css({
+          left: left + 'px'
+        })
+      }
+      animateLoop()
+    })
+  }
+  animateLoop()
+}
