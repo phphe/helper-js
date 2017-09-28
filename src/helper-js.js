@@ -14,8 +14,7 @@ export function isNumber (v) {
   return Object.prototype.toString.call(v) === '[object Number]'
 }
 export function isNumeric (v) {
-  const num = parseFloat(v)
-  return !isNaN(num) && isNumber(num)
+  return isFinite(v)
 }
 export function isString (v) {
   return Object.prototype.toString.call(v) === '[object String]'

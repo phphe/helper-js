@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.0.23
+ * helper-js v1.0.24
  * phphe <phphe@outlook.com> (https://github.com/phphe)
  * https://github.com/phphe/helper-js.git
  * Released under the MIT License.
@@ -25,8 +25,7 @@ function isNumber(v) {
   return Object.prototype.toString.call(v) === '[object Number]';
 }
 function isNumeric(v) {
-  var num = parseFloat(v);
-  return !isNaN(num) && isNumber(num);
+  return isFinite(v);
 }
 function isString(v) {
   return Object.prototype.toString.call(v) === '[object String]';
@@ -597,6 +596,93 @@ function copyTextToClipboard(text) {
   document.body.removeChild(textArea);
 }
 
+// jquery
+function jqFixedSize(sel) {
+  var $ = window.jQuery;
+  $(sel).each(function () {
+    var t = $(this);
+    t.css({
+      width: t.width() + 'px',
+      height: t.height() + 'px'
+    });
+  });
+}
+function jqMakeCarousel(wrapperSel, listSel, itemSel) {
+  var speed = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 1000;
+  var space = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 16;
+  var dir = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : 'left';
+  var top = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : 0;
+
+  if (space.toString().match(/^\d+$/)) {
+    space = space + 'px';
+  }
+  var spaceNumber = parseFloat(space);
+  var $ = window.jQuery;
+  var wrapper = $(wrapperSel);
+  var list = wrapper.find(listSel);
+  wrapper.css({
+    position: 'relative',
+    height: wrapper.height() + 'px'
+  });
+  var items0 = list.find(itemSel);
+  items0.css({
+    margin: '0',
+    marginRight: space
+  });
+  var width = (Math.ceil(items0.width()) + spaceNumber) * items0.length;
+  list.css({
+    position: 'absolute',
+    margin: '0',
+    width: width + 'px'
+  });
+  var height = list.height();
+  var list2 = list.clone();
+  var list3 = list.clone();
+  list.css({
+    left: 0
+  });
+  list2.css({
+    left: width + 'px'
+  });
+  list3.css({
+    left: width * 2 + 'px'
+  });
+  var lists = $('<div></div>');
+  lists.css({
+    position: 'absolute',
+    width: width * 3 + 'px',
+    height: height + 'px',
+    left: 0,
+    top: top
+  });
+  lists.append(list).append(list2).append(list3);
+  wrapper.append(lists);
+  var left = 0;
+  function animateLoop() {
+    if (dir === 'left') {
+      left -= 100;
+    } else {
+      left += 100;
+    }
+    lists.animate({
+      left: left + 'px'
+    }, speed, 'linear', function () {
+      if (Math.abs(left) > width) {
+        if (dir === 'left') {
+          left += width;
+        } else {
+          left -= width;
+        }
+        lists.css({
+          left: left + 'px'
+        });
+      }
+      animateLoop();
+    });
+  }
+  animateLoop();
+}
+
 exports.store = store;
 exports.isset = isset;
 exports.isArray = isArray;
@@ -652,3 +738,5 @@ exports.windowLoaded = windowLoaded;
 exports.waitFor = waitFor;
 exports.retry = retry;
 exports.copyTextToClipboard = copyTextToClipboard;
+exports.jqFixedSize = jqFixedSize;
+exports.jqMakeCarousel = jqMakeCarousel;
