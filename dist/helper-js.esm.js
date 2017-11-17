@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.0.24
+ * helper-js v1.0.25
  * phphe <phphe@outlook.com> (https://github.com/phphe)
  * https://github.com/phphe/helper-js.git
  * Released under the MIT License.
@@ -76,9 +76,15 @@ function max(n, max) {
 function studlyCase(str) {
   return str && str[0].toUpperCase() + str.substr(1);
 }
-function snakeCase(str) {
-  return str.replace(/ /g, '-').replace(/_/g, '-').replace(/([^A-Z])([A-Z])/g, '$1-$2').replace(/--+/g, '-').replace(/^-|-$|/g, '').toLowerCase();
+
+function kebabCase(str) {
+  return str.replace(/ /g, '-').replace(/_/g, '-').replace(/([A-Z])/g, '-$1').replace(/--+/g, '-').replace(/^-|-$|/g, '').toLowerCase();
 }
+
+function snakeCase(str) {
+  return kebabCase(str).replace(/-/g, '_');
+}
+
 function camelCase(str) {
   var temp = str.toString().split(/[-_]/);
   for (var i = 1; i < temp.length; i++) {
@@ -679,4 +685,4 @@ function jqMakeCarousel(wrapperSel, listSel, itemSel) {
   animateLoop();
 }
 
-export { store, isset, isArray, isBool, isNumber, isNumeric, isString, isObject, isFunction, isPromise, empty, numRand, numPad, min, max, studlyCase, snakeCase, camelCase, camelToWords, titleCase, strRand, replaceMultiple, arrayRemove, arrayFirst, arrayLast, arrayDiff, toArrayIfNot, assignIfDifferent, objectMerge, objectMap, objectOnly, objectExcept, objectGet, objectSet, unset, executeWithCount, getUrlParam, uniqueId, isDescendantOf, getOffset, findParent, hasClass, addClass, removeClass, getElSize, isOffsetInEl, getBorder, setElChildByIndex, onDOM, offDOM, binarySearch, windowLoaded, waitFor, retry, copyTextToClipboard, jqFixedSize, jqMakeCarousel };
+export { store, isset, isArray, isBool, isNumber, isNumeric, isString, isObject, isFunction, isPromise, empty, numRand, numPad, min, max, studlyCase, kebabCase, snakeCase, camelCase, camelToWords, titleCase, strRand, replaceMultiple, arrayRemove, arrayFirst, arrayLast, arrayDiff, toArrayIfNot, assignIfDifferent, objectMerge, objectMap, objectOnly, objectExcept, objectGet, objectSet, unset, executeWithCount, getUrlParam, uniqueId, isDescendantOf, getOffset, findParent, hasClass, addClass, removeClass, getElSize, isOffsetInEl, getBorder, setElChildByIndex, onDOM, offDOM, binarySearch, windowLoaded, waitFor, retry, copyTextToClipboard, jqFixedSize, jqMakeCarousel };

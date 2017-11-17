@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.0.24
+ * helper-js v1.0.25
  * phphe <phphe@outlook.com> (https://github.com/phphe)
  * https://github.com/phphe/helper-js.git
  * Released under the MIT License.
@@ -80,9 +80,15 @@ function max(n, max) {
 function studlyCase(str) {
   return str && str[0].toUpperCase() + str.substr(1);
 }
-function snakeCase(str) {
-  return str.replace(/ /g, '-').replace(/_/g, '-').replace(/([^A-Z])([A-Z])/g, '$1-$2').replace(/--+/g, '-').replace(/^-|-$|/g, '').toLowerCase();
+
+function kebabCase(str) {
+  return str.replace(/ /g, '-').replace(/_/g, '-').replace(/([A-Z])/g, '-$1').replace(/--+/g, '-').replace(/^-|-$|/g, '').toLowerCase();
 }
+
+function snakeCase(str) {
+  return kebabCase(str).replace(/-/g, '_');
+}
+
 function camelCase(str) {
   var temp = str.toString().split(/[-_]/);
   for (var i = 1; i < temp.length; i++) {
@@ -699,6 +705,7 @@ exports.numPad = numPad;
 exports.min = min;
 exports.max = max;
 exports.studlyCase = studlyCase;
+exports.kebabCase = kebabCase;
 exports.snakeCase = snakeCase;
 exports.camelCase = camelCase;
 exports.camelToWords = camelToWords;
