@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.0.25
+ * helper-js v1.0.26
  * phphe <phphe@outlook.com> (https://github.com/phphe)
  * https://github.com/phphe/helper-js.git
  * Released under the MIT License.
@@ -10,6 +10,8 @@
   typeof define === 'function' && define.amd ? define(['exports'], factory) :
   (factory((global.helperJs = global.helperJs || {})));
 }(this, (function (exports) { 'use strict';
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 // local store
 var store = {};
@@ -196,17 +198,23 @@ function objectExcept(obj, keys) {
 }
 // source: http://stackoverflow.com/questions/8817394/javascript-get-deep-value-from-object-by-passing-path-to-it-as-string
 function objectGet(obj, path) {
+  var defaultValue = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+
   var paths = path.split('.');
   var current = obj;
+  var parent = null;
 
   for (var i = 0; i < paths.length; i++) {
     if (current[paths[i]] == null) {
-      return null;
+      return defaultValue;
     } else {
+      parent = current;
       current = current[paths[i]];
     }
   }
-  return current;
+
+  var lastPath = arrayLast(paths);
+  return parent.hasOwnProperty(lastPath) ? current : defaultValue;
 }
 
 function objectSet(obj, path, value) {
@@ -228,6 +236,85 @@ function unset(obj, prop) {
   try {
     delete obj[prop];
   } catch (e) {}
+}
+
+function cloneObj(obj, exclude) {
+  var type = typeof obj === 'undefined' ? 'undefined' : _typeof(obj);
+  switch (type) {
+    case 'undefined':
+    case 'boolean':
+    case 'nuber':
+    case 'string':
+    case 'function':
+      return obj;
+      break;
+    case 'object':
+      if (obj === null) {
+        // null is object
+        return obj;
+      }
+      var r = void 0;
+      if (isArray(obj)) {
+        r = [];
+        var _iteratorNormalCompletion = true;
+        var _didIteratorError = false;
+        var _iteratorError = undefined;
+
+        try {
+          for (var _iterator = obj[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var item = _step.value;
+
+            r.push(cloneObj(item, exclude));
+          }
+        } catch (err) {
+          _didIteratorError = true;
+          _iteratorError = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion && _iterator.return) {
+              _iterator.return();
+            }
+          } finally {
+            if (_didIteratorError) {
+              throw _iteratorError;
+            }
+          }
+        }
+      } else {
+        r = {};
+        var _iteratorNormalCompletion2 = true;
+        var _didIteratorError2 = false;
+        var _iteratorError2 = undefined;
+
+        try {
+          for (var _iterator2 = Object.keys(obj)[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+            var key = _step2.value;
+
+            if (!exclude || !exclude.includes(key)) {
+              r[key] = cloneObj(obj[key], exclude);
+            }
+          }
+        } catch (err) {
+          _didIteratorError2 = true;
+          _iteratorError2 = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion2 && _iterator2.return) {
+              _iterator2.return();
+            }
+          } finally {
+            if (_didIteratorError2) {
+              throw _iteratorError2;
+            }
+          }
+        }
+      }
+      return r;
+      break;
+    default:
+      return obj;
+      break;
+  }
 }
 // function
 function executeWithCount(func, context) {
@@ -312,6 +399,15 @@ function findParent(el, callback) {
       }
     }
   }
+}
+function backupAttr(el, name) {
+  var key = 'original_' + name;
+  el[key] = el.getAttribute(name);
+}
+
+function restoreAttr(el, name) {
+  var key = 'original_' + name;
+  el.setAttribute(name, el[key]);
 }
 
 // source: http://youmightnotneedjquery.com/
@@ -727,12 +823,15 @@ exports.objectExcept = objectExcept;
 exports.objectGet = objectGet;
 exports.objectSet = objectSet;
 exports.unset = unset;
+exports.cloneObj = cloneObj;
 exports.executeWithCount = executeWithCount;
 exports.getUrlParam = getUrlParam;
 exports.uniqueId = uniqueId;
 exports.isDescendantOf = isDescendantOf;
 exports.getOffset = getOffset;
 exports.findParent = findParent;
+exports.backupAttr = backupAttr;
+exports.restoreAttr = restoreAttr;
 exports.hasClass = hasClass;
 exports.addClass = addClass;
 exports.removeClass = removeClass;

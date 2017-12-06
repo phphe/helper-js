@@ -185,18 +185,22 @@ export function objectExcept(obj, keys) {
   return r
 }
 // source: http://stackoverflow.com/questions/8817394/javascript-get-deep-value-from-object-by-passing-path-to-it-as-string
-export function objectGet(obj, path) {
+export function objectGet(obj, path, defaultValue = null) {
   const paths = path.split('.')
   let current = obj
+  let parent = null
 
   for (let i = 0; i < paths.length; i++) {
     if (current[paths[i]] == null) {
-      return null
+      return defaultValue
     } else {
+      parent = current
       current = current[paths[i]]
     }
   }
-  return current
+
+  const lastPath = arrayLast(paths)
+  return parent.hasOwnProperty(lastPath) ? current : defaultValue
 }
 
 export function objectSet(obj, path, value) {
@@ -217,6 +221,43 @@ export function unset(obj, prop) {
   try {
     delete obj[prop]
   } catch (e) {}
+}
+
+export function cloneObj(obj, exclude) {
+  const type = typeof(obj)
+  switch (type) {
+    case 'undefined':
+    case 'boolean':
+    case 'nuber':
+    case 'string':
+    case 'function':
+        return obj
+      break;
+    case 'object':
+        if (obj === null) {
+          // null is object
+          return obj
+        }
+        let r
+        if (isArray(obj)) {
+          r = []
+          for (const item of obj) {
+            r.push(cloneObj(item, exclude))
+          }
+        } else {
+          r = {}
+          for (const key of Object.keys(obj)) {
+            if (!exclude || !exclude.includes(key)) {
+              r[key] = cloneObj(obj[key], exclude)
+            }
+          }
+        }
+        return r
+      break;
+    default:
+        return obj
+      break;
+  }
 }
 // function
 export function executeWithCount(func, context) {
@@ -295,6 +336,15 @@ export function findParent(el, callback) {
       }
     }
   }
+}
+export function backupAttr(el, name) {
+  const key = `original_${name}`
+  el[key] = el.getAttribute(name)
+}
+
+export function restoreAttr(el, name) {
+  const key = `original_${name}`
+  el.setAttribute(name, el[key])
 }
 
 // source: http://youmightnotneedjquery.com/
