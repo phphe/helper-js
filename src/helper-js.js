@@ -223,6 +223,7 @@ export function unset(obj, prop) {
   } catch (e) {}
 }
 
+// exclude: array or function
 export function cloneObj(obj, exclude) {
   const type = typeof(obj)
   switch (type) {
@@ -247,7 +248,7 @@ export function cloneObj(obj, exclude) {
         } else {
           r = {}
           for (const key of Object.keys(obj)) {
-            if (!exclude || !exclude.includes(key)) {
+            if (!exclude || (isArray(exclude) && !exclude.includes(key)) || !exclude(key, obj[key], obj)) {
               r[key] = cloneObj(obj[key], exclude)
             }
           }

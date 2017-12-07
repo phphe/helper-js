@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.0.28
+ * helper-js v1.0.29
  * phphe <phphe@outlook.com> (https://github.com/phphe)
  * https://github.com/phphe/helper-js.git
  * Released under the MIT License.
@@ -232,6 +232,7 @@ function unset(obj, prop) {
   } catch (e) {}
 }
 
+// exclude: array or function
 function cloneObj(obj, exclude) {
   var type = typeof obj === 'undefined' ? 'undefined' : _typeof(obj);
   switch (type) {
@@ -284,7 +285,7 @@ function cloneObj(obj, exclude) {
           for (var _iterator2 = Object.keys(obj)[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
             var key = _step2.value;
 
-            if (!exclude || !exclude.includes(key)) {
+            if (!exclude || isArray(exclude) && !exclude.includes(key) || !exclude(key, obj[key], obj)) {
               r[key] = cloneObj(obj[key], exclude);
             }
           }
