@@ -339,8 +339,8 @@ export function getOffset(el) {
   const offfset = getOffsetWithoutScroll(el)
   let el2 = el
   while (el2) {
-    offfset.x += el2.scrollLeft
-    offfset.y += el2.scrollTop
+    offfset.x -= el2.scrollLeft
+    offfset.y -= el2.scrollTop
     el2 = el2.parentElement
   }
   return offfset
