@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.0.26
+ * helper-js v1.0.27
  * phphe <phphe@outlook.com> (https://github.com/phphe)
  * https://github.com/phphe/helper-js.git
  * Released under the MIT License.
@@ -322,6 +322,21 @@ function executeWithCount(func, context) {
     return func.apply(context, args);
   };
 }
+function watchChange(getVal, handler) {
+  var oldVal = void 0;
+  var update = function update() {
+    for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+      args[_key2] = arguments[_key2];
+    }
+
+    var newVal = getVal.apply(undefined, args);
+    if (oldVal !== newVal) {
+      handler.apply(undefined, [newVal].concat(args));
+    }
+    oldVal = newVal;
+  };
+  return update;
+}
 // url
 /* eslint-disable */
 function getUrlParam(par) {
@@ -367,21 +382,31 @@ function isDescendantOf(el, parent) {
     }
   }
 }
-function getOffset(el) {
-  return doGetOffset(el);
-  function doGetOffset(el) {
-    var elOffset = {
-      x: el.offsetLeft,
-      y: el.offsetTop
-    };
-    var parentOffset = { x: 0, y: 0 };
-    if (el.offsetParent != null) parentOffset = doGetOffset(el.offsetParent);
-    return {
-      x: elOffset.x + parentOffset.x,
-      y: elOffset.y + parentOffset.y
-    };
-  }
+
+function getOffsetWithoutScroll(el) {
+  var elOffset = {
+    x: el.offsetLeft,
+    y: el.offsetTop
+  };
+  var parentOffset = { x: 0, y: 0 };
+  if (el.offsetParent != null) parentOffset = getOffsetWithoutScroll(el.offsetParent);
+  return {
+    x: elOffset.x + parentOffset.x,
+    y: elOffset.y + parentOffset.y
+  };
 }
+
+function getOffset(el) {
+  var offfset = getOffsetWithoutScroll(el);
+  var el2 = el;
+  while (el2) {
+    offfset.x += el2.scrollLeft;
+    offfset.y += el2.scrollTop;
+    el2 = el2.parentElement;
+  }
+  return offfset;
+}
+
 function findParent(el, callback) {
   return doFindParent(el, callback);
   function doFindParent(el, callback) {
@@ -781,4 +806,4 @@ function jqMakeCarousel(wrapperSel, listSel, itemSel) {
   animateLoop();
 }
 
-export { store, isset, isArray, isBool, isNumber, isNumeric, isString, isObject, isFunction, isPromise, empty, numRand, numPad, min, max, studlyCase, kebabCase, snakeCase, camelCase, camelToWords, titleCase, strRand, replaceMultiple, arrayRemove, arrayFirst, arrayLast, arrayDiff, toArrayIfNot, assignIfDifferent, objectMerge, objectMap, objectOnly, objectExcept, objectGet, objectSet, unset, cloneObj, executeWithCount, getUrlParam, uniqueId, isDescendantOf, getOffset, findParent, backupAttr, restoreAttr, hasClass, addClass, removeClass, getElSize, isOffsetInEl, getBorder, setElChildByIndex, onDOM, offDOM, binarySearch, windowLoaded, waitFor, retry, copyTextToClipboard, jqFixedSize, jqMakeCarousel };
+export { store, isset, isArray, isBool, isNumber, isNumeric, isString, isObject, isFunction, isPromise, empty, numRand, numPad, min, max, studlyCase, kebabCase, snakeCase, camelCase, camelToWords, titleCase, strRand, replaceMultiple, arrayRemove, arrayFirst, arrayLast, arrayDiff, toArrayIfNot, assignIfDifferent, objectMerge, objectMap, objectOnly, objectExcept, objectGet, objectSet, unset, cloneObj, executeWithCount, watchChange, getUrlParam, uniqueId, isDescendantOf, getOffsetWithoutScroll, getOffset, findParent, backupAttr, restoreAttr, hasClass, addClass, removeClass, getElSize, isOffsetInEl, getBorder, setElChildByIndex, onDOM, offDOM, binarySearch, windowLoaded, waitFor, retry, copyTextToClipboard, jqFixedSize, jqMakeCarousel };

@@ -267,6 +267,17 @@ export function executeWithCount(func, context) {
     return func.apply(context, args)
   }
 }
+export function watchChange(getVal, handler) {
+  let oldVal
+  const update = (...args) => {
+    const newVal = getVal(...args)
+    if (oldVal !== newVal) {
+      handler(newVal, ...args)
+    }
+    oldVal = newVal
+  }
+  return update
+}
 // url
 /* eslint-disable */
 export function getUrlParam(par) {
@@ -310,21 +321,31 @@ export function isDescendantOf (el, parent) {
     }
   }
 }
-export function getOffset(el) {
-  return doGetOffset(el)
-  function doGetOffset(el) {
-    var elOffset = {
-      x: el.offsetLeft,
-      y: el.offsetTop
-    }
-    var parentOffset = {x: 0, y: 0}
-    if (el.offsetParent != null) parentOffset = doGetOffset(el.offsetParent)
-    return {
-      x: elOffset.x + parentOffset.x,
-      y: elOffset.y + parentOffset.y
-    }
+
+export function getOffsetWithoutScroll(el) {
+  var elOffset = {
+    x: el.offsetLeft,
+    y: el.offsetTop
+  }
+  var parentOffset = {x: 0, y: 0}
+  if (el.offsetParent != null) parentOffset = getOffsetWithoutScroll(el.offsetParent)
+  return {
+    x: elOffset.x + parentOffset.x,
+    y: elOffset.y + parentOffset.y
   }
 }
+
+export function getOffset(el) {
+  const offfset = getOffsetWithoutScroll(el)
+  let el2 = el
+  while (el2) {
+    offfset.x += el2.scrollLeft
+    offfset.y += el2.scrollTop
+    el2 = el2.parentElement
+  }
+  return offfset
+}
+
 export function findParent(el, callback) {
   return doFindParent(el, callback)
   function doFindParent(el, callback) {
