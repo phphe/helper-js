@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.0.29
+ * helper-js v1.0.30
  * phphe <phphe@outlook.com> (https://github.com/phphe)
  * https://github.com/phphe/helper-js.git
  * Released under the MIT License.
@@ -404,7 +404,8 @@ function getOffsetWithoutScroll(el) {
 function getOffset(el) {
   var offfset = getOffsetWithoutScroll(el);
   var el2 = el;
-  while (el2) {
+  var body = document.body;
+  while (el2 && el2 !== body) {
     offfset.x -= el2.scrollLeft;
     offfset.y -= el2.scrollTop;
     el2 = el2.parentElement;

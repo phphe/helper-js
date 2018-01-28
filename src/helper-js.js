@@ -339,7 +339,8 @@ export function getOffsetWithoutScroll(el) {
 export function getOffset(el) {
   const offfset = getOffsetWithoutScroll(el)
   let el2 = el
-  while (el2) {
+  const body = document.body
+  while (el2 && el2 !== body) {
     offfset.x -= el2.scrollLeft
     offfset.y -= el2.scrollTop
     el2 = el2.parentElement
