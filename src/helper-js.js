@@ -211,7 +211,7 @@ export function objectSet(obj, path, value) {
     lastKey = path
   } else {
     parent = objectGet(obj, path.substring(0, lastDotIndex))
-    lastKey = path.substr(lastDotIndex)
+    lastKey = path.substr(lastDotIndex + 1)
   }
   parent[lastKey] = value
 }

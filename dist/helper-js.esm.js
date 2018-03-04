@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.0.30
+ * helper-js v1.0.31
  * phphe <phphe@outlook.com> (https://github.com/phphe)
  * https://github.com/phphe/helper-js.git
  * Released under the MIT License.
@@ -220,7 +220,7 @@ function objectSet(obj, path, value) {
     lastKey = path;
   } else {
     parent = objectGet(obj, path.substring(0, lastDotIndex));
-    lastKey = path.substr(lastDotIndex);
+    lastKey = path.substr(lastDotIndex + 1);
   }
   parent[lastKey] = value;
 }
