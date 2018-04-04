@@ -1,11 +1,12 @@
 {
   "name": "helper-js",
-  "version": "1.0.34",
+  "version": "1.0.35",
   "description": "",
-  "main": "dist/helper-js.common.js",
-  "module": "dist/helper-js.esm.js",
+  "main": "dist/helper-js.cjs.js",
+  "module": "dist/helper-js.es.js",
   "scripts": {
-    "build": "node build/build.js"
+    "build": "bili --format cjs,umd,umd-min,es",
+    "dev": "bili --format cjs,umd --watch"
   },
   "author": "phphe <phphe@outlook.com> (https://github.com/phphe)",
   "unpkg": "dist/helper-js.js",
@@ -17,7 +18,7 @@
     "url": "https://github.com/phphe/helper-js.git"
   },
   "devDependencies": {
-    "rollup-helper": "^1.0.3"
+    "bili": "^3.0.14"
   },
   "dependencies": {},
   "license": "MIT"

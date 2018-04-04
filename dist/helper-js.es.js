@@ -1,29 +1,119 @@
-/*!
- * helper-js v1.0.33
- * phphe <phphe@outlook.com> (https://github.com/phphe)
- * https://github.com/phphe/helper-js.git
- * Released under the MIT License.
- */
+function _typeof(obj) {
+  if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
+    _typeof = function (obj) {
+      return typeof obj;
+    };
+  } else {
+    _typeof = function (obj) {
+      return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+    };
+  }
 
-var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+  return _typeof(obj);
+}
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+function _defineProperties(target, props) {
+  for (var i = 0; i < props.length; i++) {
+    var descriptor = props[i];
+    descriptor.enumerable = descriptor.enumerable || false;
+    descriptor.configurable = true;
+    if ("value" in descriptor) descriptor.writable = true;
+    Object.defineProperty(target, descriptor.key, descriptor);
+  }
+}
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+function _createClass(Constructor, protoProps, staticProps) {
+  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+  if (staticProps) _defineProperties(Constructor, staticProps);
+  return Constructor;
+}
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+function _get(object, property, receiver) {
+  if (object === null) object = Function.prototype;
+  var desc = Object.getOwnPropertyDescriptor(object, property);
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+  if (desc === undefined) {
+    var parent = Object.getPrototypeOf(object);
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+    if (parent === null) {
+      return undefined;
+    } else {
+      return _get(parent, property, receiver);
+    }
+  } else if ("value" in desc) {
+    return desc.value;
+  } else {
+    var getter = desc.get;
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+    if (getter === undefined) {
+      return undefined;
+    }
+
+    return getter.call(receiver);
+  }
+}
+
+function _inherits(subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function");
+  }
+
+  subClass.prototype = Object.create(superClass && superClass.prototype, {
+    constructor: {
+      value: subClass,
+      enumerable: false,
+      writable: true,
+      configurable: true
+    }
+  });
+  if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
+
+function _assertThisInitialized(self) {
+  if (self === void 0) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }
+
+  return self;
+}
+
+function _possibleConstructorReturn(self, call) {
+  if (call && (typeof call === "object" || typeof call === "function")) {
+    return call;
+  }
+
+  return _assertThisInitialized(self);
+}
+
+function _toConsumableArray(arr) {
+  return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();
+}
+
+function _arrayWithoutHoles(arr) {
+  if (Array.isArray(arr)) {
+    for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
+
+    return arr2;
+  }
+}
+
+function _iterableToArray(iter) {
+  if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);
+}
+
+function _nonIterableSpread() {
+  throw new TypeError("Invalid attempt to spread non-iterable instance");
+}
 
 // local store
-var store = {};
-// is 各种判断
+var store = {}; // is 各种判断
+
 function isset(v) {
   return typeof v !== 'undefined';
 }
@@ -63,49 +153,49 @@ function empty(v) {
   } else if (isObject(v)) {
     return Object.keys(v).length === 0;
   }
-}
-// num
+} // num
+
 function numRand(min, max) {
   if (arguments.length === 1) {
     max = min;
     min = 0;
   }
+
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 function numPad(num, n) {
   var len = num.toString().length;
+
   while (len < n) {
     num = '0' + num;
     len++;
   }
+
   return num;
 }
 function min(n, min) {
   return n < min ? min : n;
 }
-
 function max(n, max) {
   return n < max ? n : max;
-}
+} // str 字符
 
-// str 字符
 function studlyCase(str) {
   return str && str[0].toUpperCase() + str.substr(1);
 }
-
 function kebabCase(str) {
   return str.replace(/ /g, '-').replace(/_/g, '-').replace(/([A-Z])/g, '-$1').replace(/--+/g, '-').replace(/^-|-$|/g, '').toLowerCase();
 }
-
 function snakeCase(str) {
   return kebabCase(str).replace(/-/g, '_');
 }
-
 function camelCase(str) {
   var temp = str.toString().split(/[-_]/);
+
   for (var i = 1; i < temp.length; i++) {
     temp[i] = studlyCase(temp[i]);
   }
+
   return temp.join('');
 }
 function camelToWords(str) {
@@ -117,12 +207,13 @@ function titleCase(str) {
 function strRand() {
   var len = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 8;
   var prefix = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
-
   var r = '';
   var seeds = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
   for (var i = 0; i < len; i++) {
     r += seeds[numRand(seeds.length - 1)];
   }
+
   return prefix + r;
 }
 function replaceMultiple(mapObj, str) {
@@ -130,15 +221,17 @@ function replaceMultiple(mapObj, str) {
   return str.replace(reg, function (matchedKey) {
     return mapObj[matchedKey];
   });
-}
-// array
+} // array
+
 function arrayRemove(arr, v) {
-  var index = void 0;
+  var index;
   var count = 0;
+
   while ((index = arr.indexOf(v)) > -1) {
     arr.splice(index, 1);
     count++;
   }
+
   return count;
 }
 function arrayFirst(arr) {
@@ -150,18 +243,19 @@ function arrayLast(arr) {
 function arrayDiff(arr1, arr2) {
   var len = arr1.length;
   var arr = [];
+
   while (len--) {
     if (arr2.indexOf(arr1[len]) < 0) {
       arr.push(arr1[len]);
     }
   }
+
   return arr;
 }
 function toArrayIfNot(arrOrNot) {
   return isArray(arrOrNot) ? arrOrNot : [arrOrNot];
-}
+} // object
 
-// object
 function assignIfDifferent(obj, key, val) {
   if (obj[key] !== val) {
     obj[key] = val;
@@ -177,37 +271,43 @@ function objectMerge(o1, o2) {
       o1[k] = o2[k];
     }
   }
+
   return o1;
 }
 function objectMap(obj, func) {
   var r = {};
+
   for (var key in obj) {
     r[key] = func(obj[key], key, obj);
   }
+
   return r;
 }
 function objectOnly(obj, keys) {
   var r = {};
+
   for (var key in obj) {
     if (keys.indexOf(key) > -1) {
       r[key] = obj[key];
     }
   }
+
   return r;
 }
 function objectExcept(obj, keys) {
   var r = {};
+
   for (var key in obj) {
     if (keys.indexOf(key) === -1) {
       r[key] = obj[key];
     }
   }
+
   return r;
-}
-// source: http://stackoverflow.com/questions/8817394/javascript-get-deep-value-from-object-by-passing-path-to-it-as-string
+} // source: http://stackoverflow.com/questions/8817394/javascript-get-deep-value-from-object-by-passing-path-to-it-as-string
+
 function objectGet(obj, path) {
   var defaultValue = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
-
   var paths = path.split('.');
   var current = obj;
   var parent = null;
@@ -224,11 +324,10 @@ function objectGet(obj, path) {
   var lastPath = arrayLast(paths);
   return parent.hasOwnProperty(lastPath) ? current : defaultValue;
 }
-
 function objectSet(obj, path, value) {
   var lastDotIndex = path.lastIndexOf('.');
-  var parent = void 0,
-      lastKey = void 0;
+  var parent, lastKey;
+
   if (lastDotIndex === -1) {
     parent = obj;
     lastKey = path;
@@ -236,19 +335,20 @@ function objectSet(obj, path, value) {
     parent = objectGet(obj, path.substring(0, lastDotIndex));
     lastKey = path.substr(lastDotIndex + 1);
   }
+
   parent[lastKey] = value;
 }
-
 function unset(obj, prop) {
   obj[prop] = undefined;
+
   try {
     delete obj[prop];
   } catch (e) {}
-}
+} // exclude: array or function
 
-// exclude: array or function
 function cloneObj(obj, exclude) {
-  var type = typeof obj === 'undefined' ? 'undefined' : _typeof(obj);
+  var type = _typeof(obj);
+
   switch (type) {
     case 'undefined':
     case 'boolean':
@@ -257,12 +357,15 @@ function cloneObj(obj, exclude) {
     case 'function':
       return obj;
       break;
+
     case 'object':
       if (obj === null) {
         // null is object
         return obj;
       }
-      var r = void 0;
+
+      var r;
+
       if (isArray(obj)) {
         r = [];
         var _iteratorNormalCompletion = true;
@@ -272,7 +375,6 @@ function cloneObj(obj, exclude) {
         try {
           for (var _iterator = obj[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
             var item = _step.value;
-
             r.push(cloneObj(item, exclude));
           }
         } catch (err) {
@@ -280,7 +382,7 @@ function cloneObj(obj, exclude) {
           _iteratorError = err;
         } finally {
           try {
-            if (!_iteratorNormalCompletion && _iterator.return) {
+            if (!_iteratorNormalCompletion && _iterator.return != null) {
               _iterator.return();
             }
           } finally {
@@ -291,45 +393,31 @@ function cloneObj(obj, exclude) {
         }
       } else {
         r = {};
-        var _iteratorNormalCompletion2 = true;
-        var _didIteratorError2 = false;
-        var _iteratorError2 = undefined;
 
-        try {
-          for (var _iterator2 = Object.keys(obj)[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-            var key = _step2.value;
+        var _arr = Object.keys(obj);
 
-            if (!exclude || isArray(exclude) && !exclude.includes(key) || !exclude(key, obj[key], obj)) {
-              r[key] = cloneObj(obj[key], exclude);
-            }
-          }
-        } catch (err) {
-          _didIteratorError2 = true;
-          _iteratorError2 = err;
-        } finally {
-          try {
-            if (!_iteratorNormalCompletion2 && _iterator2.return) {
-              _iterator2.return();
-            }
-          } finally {
-            if (_didIteratorError2) {
-              throw _iteratorError2;
-            }
+        for (var _i = 0; _i < _arr.length; _i++) {
+          var key = _arr[_i];
+
+          if (!exclude || isArray(exclude) && !exclude.includes(key) || !exclude(key, obj[key], obj)) {
+            r[key] = cloneObj(obj[key], exclude);
           }
         }
       }
+
       return r;
       break;
+
     default:
       return obj;
       break;
   }
-}
-// function
+} // function
+
 function executeWithCount(func, context) {
   var count = 0;
   return function () {
-    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
       args[_key] = arguments[_key];
     }
 
@@ -338,47 +426,57 @@ function executeWithCount(func, context) {
   };
 }
 function watchChange(getVal, handler) {
-  var oldVal = void 0;
+  var oldVal;
+
   var update = function update() {
-    for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+    for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
       args[_key2] = arguments[_key2];
     }
 
-    var newVal = getVal.apply(undefined, args);
+    var newVal = getVal.apply(void 0, args);
+
     if (oldVal !== newVal) {
-      handler.apply(undefined, [newVal].concat(args));
+      handler.apply(void 0, [newVal].concat(args));
     }
+
     oldVal = newVal;
   };
+
   return update;
-}
-// url
+} // url
+
 /* eslint-disable */
+
 function getUrlParam(par) {
   // 获取当前URL
-  var local_url = document.location.href;
-  // 获取要取得的get参数位置
-  var get = local_url.indexOf(par + '=');
-  if (get == -1) {
+  var local_url = document.location.href; // 获取要取得的get参数位置
+
+  var get$$1 = local_url.indexOf(par + '=');
+
+  if (get$$1 == -1) {
     return false;
-  }
-  // 截取字符串
-  var get_par = local_url.slice(par.length + get + 1);
-  // 判断截取后的字符串是否还有其他get参数
+  } // 截取字符串
+
+
+  var get_par = local_url.slice(par.length + get$$1 + 1); // 判断截取后的字符串是否还有其他get参数
+
   var nextPar = get_par.indexOf('&');
+
   if (nextPar != -1) {
     get_par = get_par.slice(0, nextPar);
   }
+
   return get_par;
 }
 /* eslint-enable */
 // dom
+
 function uniqueId() {
   var prefix = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'id_';
-
   var id = prefix + strRand();
   if (!store.uniqueId) store.uniqueId = {};
   var generatedIds = store.uniqueId;
+
   if (document.getElementById(id) || generatedIds[id]) {
     return uniqueId(prefix);
   } else {
@@ -397,34 +495,37 @@ function isDescendantOf(el, parent) {
     }
   }
 }
-
 function getOffsetWithoutScroll(el) {
   var elOffset = {
     x: el.offsetLeft,
     y: el.offsetTop
   };
-  var parentOffset = { x: 0, y: 0 };
+  var parentOffset = {
+    x: 0,
+    y: 0
+  };
   if (el.offsetParent != null) parentOffset = getOffsetWithoutScroll(el.offsetParent);
   return {
     x: elOffset.x + parentOffset.x,
     y: elOffset.y + parentOffset.y
   };
 }
-
 function getOffset(el) {
   var offfset = getOffsetWithoutScroll(el);
   var el2 = el;
   var body = document.body;
+
   while (el2 && el2 !== body) {
     offfset.x -= el2.scrollLeft;
     offfset.y -= el2.scrollTop;
     el2 = el2.parentElement;
   }
+
   return offfset;
 }
-
 function findParent(el, callback) {
   return doFindParent(el, callback);
+
   function doFindParent(el, callback) {
     if (el.parentElement) {
       if (callback(el.parentElement)) {
@@ -436,25 +537,22 @@ function findParent(el, callback) {
   }
 }
 function backupAttr(el, name) {
-  var key = 'original_' + name;
+  var key = "original_".concat(name);
   el[key] = el.getAttribute(name);
 }
-
 function restoreAttr(el, name) {
-  var key = 'original_' + name;
+  var key = "original_".concat(name);
   el.setAttribute(name, el[key]);
-}
+} // source: http://youmightnotneedjquery.com/
 
-// source: http://youmightnotneedjquery.com/
 function hasClass(el, className) {
   if (el.classList) {
     return el.classList.contains(className);
   } else {
     return new RegExp('(^| )' + className + '( |$)', 'gi').test(el.className);
   }
-}
+} // source: http://youmightnotneedjquery.com/
 
-// source: http://youmightnotneedjquery.com/
 function addClass(el, className) {
   if (!hasClass(el, className)) {
     if (el.classList) {
@@ -463,8 +561,8 @@ function addClass(el, className) {
       el.className += ' ' + className;
     }
   }
-}
-// source: http://youmightnotneedjquery.com/
+} // source: http://youmightnotneedjquery.com/
+
 function removeClass(el, className) {
   if (el.classList) {
     el.classList.remove(className);
@@ -488,11 +586,12 @@ function getElSize(el) {
  * @param {Number} y
  * @param {Object} el HTML Element
  */
+
 function isOffsetInEl(x, y, el) {
   var offset = getOffset(el);
   return offset.x <= x && offset.x + el.offsetWidth >= x && offset.y <= y && offset.y + el.offsetHeight >= y;
-}
-// get border
+} // get border
+
 function getBorder(el) {
   var body = document.body;
   var workArea = findParent(el, function (v) {
@@ -509,6 +608,7 @@ function getBorder(el) {
 function setElChildByIndex(el, index, child) {
   child.childComponentIndex = index;
   var len = el.childNodes.length;
+
   if (len === 0) {
     el.appendChild(child);
   } else if (index === 0) {
@@ -525,6 +625,7 @@ function setElChildByIndex(el, index, child) {
       el.insertBefore(child, nearest);
     } else {
       var next = el.childNodes[nearestIndex + 1];
+
       if (next) {
         el.insertBefore(child, next);
       } else {
@@ -532,15 +633,15 @@ function setElChildByIndex(el, index, child) {
       }
     }
   }
-}
-// dom event
+} // dom event
+
 function onDOM(el, name, handler) {
   if (el.addEventListener) {
     // 所有主流浏览器，除了 IE 8 及更早 IE版本
     el.addEventListener(name, handler);
   } else if (el.attachEvent) {
     // IE 8 及更早 IE 版本
-    el.attachEvent('on' + name, handler);
+    el.attachEvent("on".concat(name), handler);
   }
 }
 function offDOM(el, name, handler) {
@@ -549,41 +650,58 @@ function offDOM(el, name, handler) {
     el.removeEventListener(name, handler);
   } else if (el.detachEvent) {
     // IE 8 及更早 IE 版本
-    el.detachEvent('on' + name, handler);
+    el.detachEvent("on".concat(name), handler);
   }
-}
-// advance
+} // advance
 // binarySearch 二分查找
+
 function binarySearch(arr, callback, start, end, returnNearestIfNoHit) {
   var max = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : 1000;
-
   var midNum;
   var mid;
+
   if (start == null) {
     start = 0;
     end = arr.length - 1;
   }
+
   var i = 0;
-  var r = void 0;
+  var r;
+
   while (start >= 0 && start <= end) {
     if (i >= max) {
-      throw Error('binarySearch: loop times is over ' + max + ', you can increase the limit.');
+      throw Error("binarySearch: loop times is over ".concat(max, ", you can increase the limit."));
     }
+
     midNum = Math.floor((end - start) / 2 + start);
     mid = arr[midNum];
     r = callback(mid, i);
+
     if (r > 0) {
       end = midNum - 1;
     } else if (r < 0) {
       start = midNum + 1;
     } else {
-      return { index: midNum, value: mid, count: i + 1, hit: true };
+      return {
+        index: midNum,
+        value: mid,
+        count: i + 1,
+        hit: true
+      };
     }
+
     i++;
   }
-  return returnNearestIfNoHit ? { index: midNum, value: mid, count: i + 1, hit: false, bigger: r > 0 } : null;
-}
-//
+
+  return returnNearestIfNoHit ? {
+    index: midNum,
+    value: mid,
+    count: i + 1,
+    hit: false,
+    bigger: r > 0
+  } : null;
+} //
+
 function windowLoaded() {
   return new Promise(function (resolve, reject) {
     if (document && document.readyState === 'complete') {
@@ -595,8 +713,8 @@ function windowLoaded() {
       });
     }
   });
-}
-// overload waitFor(condition, time = 100, maxCount = 1000))
+} // overload waitFor(condition, time = 100, maxCount = 1000))
+
 function waitFor(name, condition) {
   var time = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 100;
   var maxCount = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 1000;
@@ -607,14 +725,18 @@ function waitFor(name, condition) {
     condition = name;
     name = null;
   }
+
   if (!store.waitFor) store.waitFor = {};
   var waits = store.waitFor;
+
   if (name && isset(waits[name])) {
     window.clearInterval(waits[name]);
     delete waits[name];
   }
+
   return new Promise(function (resolve, reject) {
     var count = 0;
+
     function judge(interval) {
       if (count <= maxCount) {
         if (condition()) {
@@ -625,8 +747,10 @@ function waitFor(name, condition) {
         stop(interval, name);
         reject(new Error('waitFor: Limit is reached'));
       }
+
       count++;
     }
+
     function stop(interval, name) {
       if (interval) {
         if (name && isset(waits[name])) {
@@ -637,30 +761,33 @@ function waitFor(name, condition) {
         }
       }
     }
+
     var interval = window.setInterval(function () {
       judge(interval);
     }, time);
+
     if (name) {
       waits[name] = interval;
     }
+
     judge();
   });
 }
-
 function retry(func) {
   var limitTimes = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 3;
-
   if (!store.retry) store.retry = {};
   var counters = retry;
   var name = generateName();
   counters[name] = 0;
   return doFunc;
+
   function doFunc(arg1, arg2, arg3) {
     return func(arg1, arg2, arg3).then(function (data) {
       delete counters[name];
       return data;
     }).catch(function (e) {
       counters[name]++;
+
       if (counters[name] >= limitTimes) {
         delete counters[name];
         return Promise.reject(e);
@@ -669,20 +796,20 @@ function retry(func) {
       }
     });
   }
+
   function generateName() {
     var name = Math.random() + '';
+
     if (counters[name]) {
       return generateName();
     } else {
       return name;
     }
   }
-}
-// 复制文字到剪贴板
-function copyTextToClipboard(text) {
-  var textArea = document.createElement('textarea');
+} // 复制文字到剪贴板
 
-  //
+function copyTextToClipboard(text) {
+  var textArea = document.createElement('textarea'); //
   // *** This styling is an extra step which is likely not required. ***
   //
   // Why is it here? To ensure:
@@ -696,32 +823,25 @@ function copyTextToClipboard(text) {
   // is visible whilst the popup box asking the user for permission for
   // the web page to copy to the clipboard.
   //
-
   // Place in top-left corner of screen regardless of scroll position.
+
   textArea.style.position = 'fixed';
   textArea.style.top = 0;
-  textArea.style.left = 0;
-
-  // Ensure it has a small width and height. Setting to 1px / 1em
+  textArea.style.left = 0; // Ensure it has a small width and height. Setting to 1px / 1em
   // doesn't work as this gives a negative w/h on some browsers.
+
   textArea.style.width = '2em';
-  textArea.style.height = '2em';
+  textArea.style.height = '2em'; // We don't need padding, reducing the size if it does flash render.
 
-  // We don't need padding, reducing the size if it does flash render.
-  textArea.style.padding = 0;
+  textArea.style.padding = 0; // Clean up any borders.
 
-  // Clean up any borders.
   textArea.style.border = 'none';
   textArea.style.outline = 'none';
-  textArea.style.boxShadow = 'none';
+  textArea.style.boxShadow = 'none'; // Avoid flash of white box if rendered for any reason.
 
-  // Avoid flash of white box if rendered for any reason.
   textArea.style.background = 'transparent';
-
   textArea.value = text;
-
   document.body.appendChild(textArea);
-
   textArea.select();
 
   try {
@@ -733,9 +853,8 @@ function copyTextToClipboard(text) {
   }
 
   document.body.removeChild(textArea);
-}
+} // jquery
 
-// jquery
 function jqFixedSize(sel) {
   var $ = window.jQuery;
   $(sel).each(function () {
@@ -755,6 +874,7 @@ function jqMakeCarousel(wrapperSel, listSel, itemSel) {
   if (space.toString().match(/^\d+$/)) {
     space = space + 'px';
   }
+
   var spaceNumber = parseFloat(space);
   var $ = window.jQuery;
   var wrapper = $(wrapperSel);
@@ -797,14 +917,16 @@ function jqMakeCarousel(wrapperSel, listSel, itemSel) {
   lists.append(list).append(list2).append(list3);
   wrapper.append(lists);
   var left = 0;
+
   function animateLoop() {
     if (dir === 'left') {
       left -= 100;
     } else {
       left += 100;
     }
+
     lists.animate({
-      left: left + 'px'
+      left: "".concat(left, "px")
     }, speed, 'linear', function () {
       if (Math.abs(left) > width) {
         if (dir === 'left') {
@@ -812,82 +934,97 @@ function jqMakeCarousel(wrapperSel, listSel, itemSel) {
         } else {
           left -= width;
         }
+
         lists.css({
           left: left + 'px'
         });
       }
+
       animateLoop();
     });
   }
+
   animateLoop();
-}
-// https://developer.mozilla.org/docs/Web/API/Window/open
+} // https://developer.mozilla.org/docs/Web/API/Window/open
 // http://www.w3school.com.cn/htmldom/met_win_open.asp#windowfeatures
+
 function openWindow(url, name) {
   var opt = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-
   window.open(url, name, Object.keys(opt).map(function (k) {
-    return k + '=' + opt[k];
+    return "".concat(k, "=").concat(opt[k]);
   }).join(','));
 }
-
 function openCenterWindow(url, name, width, height) {
   var opt = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : {};
-
-  openWindow(url, name, _extends({
+  var t = {
     width: width,
     height: height,
     top: (window.screen.availHeight - 30 - height) / 2,
     left: (window.screen.availWidth - 30 - width) / 2
-  }, opt));
+  };
+  Object.assign(t, opt);
+  openWindow(url, name, t);
 }
-var URLHelper = function () {
+var URLHelper =
+/*#__PURE__*/
+function () {
+  // protocol, hostname, port, pastname
   function URLHelper(baseUrl) {
     var _this = this;
 
     _classCallCheck(this, URLHelper);
 
-    this.baseUrl = '';
-    this.search = {};
-
+    Object.defineProperty(this, "baseUrl", {
+      configurable: true,
+      enumerable: true,
+      writable: true,
+      value: ''
+    });
+    Object.defineProperty(this, "search", {
+      configurable: true,
+      enumerable: true,
+      writable: true,
+      value: {}
+    });
     var t = decodeURI(baseUrl).split('?');
     this.baseUrl = t[0];
+
     if (t[1]) {
       t[1].split('&').forEach(function (v) {
         var t2 = v.split('=');
         _this.search[t2[0]] = t2[1] == null ? '' : decodeURIComponent(t2[1]);
       });
     }
-  } // protocol, hostname, port, pastname
-
+  }
 
   _createClass(URLHelper, [{
-    key: 'getHref',
+    key: "getHref",
     value: function getHref() {
       var _this2 = this;
 
       var t = [this.baseUrl];
       var searchStr = Object.keys(this.search).map(function (k) {
-        return k + '=' + encodeURIComponent(_this2.search[k]);
+        return "".concat(k, "=").concat(encodeURIComponent(_this2.search[k]));
       }).join('&');
+
       if (searchStr) {
         t.push(searchStr);
       }
+
       return t.join('?');
     }
   }]);
 
   return URLHelper;
-}();
-
-// 解析函数参数, 帮助重载
+}(); // 解析函数参数, 帮助重载
 // types eg: ['Object', (i) => i > 3, ['Number', default] ]
+
 function resolveArgsByType(args, types) {
   var argIndex = 0;
   return types.map(function (v) {
     // make rule
-    var rule = void 0,
-        dft = void 0;
+    var rule, dft;
+
     if (isArray(v)) {
       rule = v[0];
       dft = v[1];
@@ -895,6 +1032,7 @@ function resolveArgsByType(args, types) {
       rule = v;
       dft = null;
     }
+
     if (!isFunction(rule)) {
       if (rule == null) {
         rule = function rule() {
@@ -902,20 +1040,23 @@ function resolveArgsByType(args, types) {
         };
       } else {
         var t = rule;
+
         rule = function rule(x) {
-          return Object.prototype.toString.call(x) === '[object ' + t + ']';
+          return Object.prototype.toString.call(x) === "[object ".concat(t, "]");
         };
       }
     }
+
     var arg = args[argIndex];
+
     if (rule(arg)) {
       argIndex++;
     }
+
     return arg || dft;
   });
-}
+} // set null can remove a item
 
-// set null can remove a item
 function makeStorageHelper(storage) {
   return {
     storage: storage,
@@ -929,16 +1070,19 @@ function makeStorageHelper(storage) {
         }));
       }
     },
-    get: function get(name) {
+    get: function get$$1(name) {
       var t = this.storage.getItem(name);
+
       if (t) {
         t = JSON.parse(t);
+
         if (!t.expired_at || t.expired_at > new Date().getTime()) {
           return t.value;
         } else {
           this.storage.removeItem(name);
         }
       }
+
       return null;
     },
     clear: function clear() {
@@ -947,149 +1091,132 @@ function makeStorageHelper(storage) {
   };
 }
 var localStorage2 = makeStorageHelper(window.localStorage);
-var sessionStorage2 = makeStorageHelper(window.sessionStorage);
+var sessionStorage2 = makeStorageHelper(window.sessionStorage); // 事件处理
 
-// 事件处理
-var EventProcessor = function () {
+var EventProcessor =
+/*#__PURE__*/
+function () {
   function EventProcessor() {
     _classCallCheck(this, EventProcessor);
 
-    this.eventStore = [];
+    Object.defineProperty(this, "eventStore", {
+      configurable: true,
+      enumerable: true,
+      writable: true,
+      value: []
+    });
   }
 
   _createClass(EventProcessor, [{
-    key: 'on',
+    key: "on",
     value: function on(name, handler) {
-      this.eventStore.push({ name: name, handler: handler });
+      this.eventStore.push({
+        name: name,
+        handler: handler
+      });
     }
   }, {
-    key: 'once',
+    key: "once",
     value: function once(name, handler) {
       var _this3 = this;
 
       var off = function off() {
         _this3.off(name, wrappedHandler);
       };
+
       var wrappedHandler = function wrappedHandler() {
         handler();
         off();
       };
+
       this.on(name, wrappedHandler);
       return off;
     }
   }, {
-    key: 'off',
+    key: "off",
     value: function off(name, handler) {
       var indexes = []; // to remove indexes; reverse; 倒序的
+
       var len = this.eventStore.length;
+
       for (var i = 0; i < len; i++) {
         var item = this.eventStore[i];
+
         if (item.name === name && item.handler === handler) {
           indexes.unshift(i);
         }
       }
-      var _iteratorNormalCompletion3 = true;
-      var _didIteratorError3 = false;
-      var _iteratorError3 = undefined;
 
-      try {
-        for (var _iterator3 = indexes[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-          var index = _step3.value;
-
-          this.eventStore.splice(index, 1);
-        }
-      } catch (err) {
-        _didIteratorError3 = true;
-        _iteratorError3 = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion3 && _iterator3.return) {
-            _iterator3.return();
-          }
-        } finally {
-          if (_didIteratorError3) {
-            throw _iteratorError3;
-          }
-        }
+      for (var _i2 = 0; _i2 < indexes.length; _i2++) {
+        var index = indexes[_i2];
+        this.eventStore.splice(index, 1);
       }
     }
   }, {
-    key: 'emit',
+    key: "emit",
     value: function emit(name) {
       // 重要: 先找到要执行的项放在新数组里, 因为执行项会改变事件项存储数组
       var items = [];
-      var _iteratorNormalCompletion4 = true;
-      var _didIteratorError4 = false;
-      var _iteratorError4 = undefined;
+      var _iteratorNormalCompletion2 = true;
+      var _didIteratorError2 = false;
+      var _iteratorError2 = undefined;
 
       try {
-        for (var _iterator4 = this.eventStore[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
-          var item = _step4.value;
+        for (var _iterator2 = this.eventStore[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+          var item = _step2.value;
 
           if (item.name === name) {
             items.push(item);
           }
         }
       } catch (err) {
-        _didIteratorError4 = true;
-        _iteratorError4 = err;
+        _didIteratorError2 = true;
+        _iteratorError2 = err;
       } finally {
         try {
-          if (!_iteratorNormalCompletion4 && _iterator4.return) {
-            _iterator4.return();
+          if (!_iteratorNormalCompletion2 && _iterator2.return != null) {
+            _iterator2.return();
           }
         } finally {
-          if (_didIteratorError4) {
-            throw _iteratorError4;
+          if (_didIteratorError2) {
+            throw _iteratorError2;
           }
         }
       }
 
-      for (var _len3 = arguments.length, args = Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
+      for (var _len3 = arguments.length, args = new Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
         args[_key3 - 1] = arguments[_key3];
       }
 
-      var _iteratorNormalCompletion5 = true;
-      var _didIteratorError5 = false;
-      var _iteratorError5 = undefined;
+      for (var _i3 = 0; _i3 < items.length; _i3++) {
+        var _item = items[_i3];
 
-      try {
-        for (var _iterator5 = items[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
-          var _item = _step5.value;
-
-          _item.handler.apply(_item, args);
-        }
-      } catch (err) {
-        _didIteratorError5 = true;
-        _iteratorError5 = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion5 && _iterator5.return) {
-            _iterator5.return();
-          }
-        } finally {
-          if (_didIteratorError5) {
-            throw _iteratorError5;
-          }
-        }
+        _item.handler.apply(_item, args);
       }
     }
   }]);
 
   return EventProcessor;
 }();
-
-var CrossWindow = function (_EventProcessor) {
+var CrossWindow =
+/*#__PURE__*/
+function (_EventProcessor) {
   _inherits(CrossWindow, _EventProcessor);
 
   function CrossWindow() {
+    var _this4;
+
     _classCallCheck(this, CrossWindow);
 
-    var _this4 = _possibleConstructorReturn(this, (CrossWindow.__proto__ || Object.getPrototypeOf(CrossWindow)).call(this));
-
-    _this4.storageName = '_crossWindow';
-
+    _this4 = _possibleConstructorReturn(this, (CrossWindow.__proto__ || Object.getPrototypeOf(CrossWindow)).call(this));
+    Object.defineProperty(_assertThisInitialized(_this4), "storageName", {
+      configurable: true,
+      enumerable: true,
+      writable: true,
+      value: '_crossWindow'
+    });
     var cls = CrossWindow;
+
     if (!cls._listen) {
       cls._listen = true;
       onDOM(window, 'storage', function (ev) {
@@ -1097,23 +1224,26 @@ var CrossWindow = function (_EventProcessor) {
           var _get2;
 
           var event = JSON.parse(ev.newValue);
-          (_get2 = _get(CrossWindow.prototype.__proto__ || Object.getPrototypeOf(CrossWindow.prototype), 'emit', _this4)).call.apply(_get2, [_this4, event.name].concat(_toConsumableArray(event.args)));
+
+          (_get2 = _get(CrossWindow.prototype.__proto__ || Object.getPrototypeOf(CrossWindow.prototype), "emit", _assertThisInitialized(_this4))).call.apply(_get2, [_this4, event.name].concat(_toConsumableArray(event.args)));
         }
       });
     }
+
     return _this4;
   }
 
   _createClass(CrossWindow, [{
-    key: 'emit',
+    key: "emit",
     value: function emit(name) {
       var _get3;
 
-      for (var _len4 = arguments.length, args = Array(_len4 > 1 ? _len4 - 1 : 0), _key4 = 1; _key4 < _len4; _key4++) {
+      for (var _len4 = arguments.length, args = new Array(_len4 > 1 ? _len4 - 1 : 0), _key4 = 1; _key4 < _len4; _key4++) {
         args[_key4 - 1] = arguments[_key4];
       }
 
-      (_get3 = _get(CrossWindow.prototype.__proto__ || Object.getPrototypeOf(CrossWindow.prototype), 'emit', this)).call.apply(_get3, [this, name].concat(args));
+      (_get3 = _get(CrossWindow.prototype.__proto__ || Object.getPrototypeOf(CrossWindow.prototype), "emit", this)).call.apply(_get3, [this, name].concat(args));
+
       window.localStorage.setItem(this.storageName, JSON.stringify({
         name: name,
         args: args,
@@ -1125,17 +1255,18 @@ var CrossWindow = function (_EventProcessor) {
   }]);
 
   return CrossWindow;
-}(EventProcessor);
+}(EventProcessor); // arr, idKey/getId
 
-// arr, idKey/getId
 function mapObjects(arr, idKey) {
   var r = {};
   var len = arr.length;
+
   for (var i = 0; i < len; i++) {
     var item = arr[i];
     var id = isFunction(idKey) ? idKey(item, i) : item[idKey];
     r[id] = item;
   }
+
   return r;
 }
 

@@ -731,13 +731,14 @@ export function openWindow(url, name, opt = {})
 
 export function openCenterWindow(url, name, width, height, opt = {})
 {
-  openWindow(url, name, {
+  const t = {
     width,
     height,
     top: (window.screen.availHeight-30-height) / 2,
     left: (window.screen.availWidth-30-width) / 2,
-    ...opt,
-  })
+  }
+  Object.assign(t, opt)
+  openWindow(url, name, t)
 }
 export class URLHelper {
   baseUrl = ''; // protocol, hostname, port, pastname
