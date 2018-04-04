@@ -722,3 +722,189 @@ export function jqMakeCarousel(wrapperSel, listSel, itemSel, speed = 1000, space
   }
   animateLoop()
 }
+// https://developer.mozilla.org/docs/Web/API/Window/open
+// http://www.w3school.com.cn/htmldom/met_win_open.asp#windowfeatures
+export function openWindow(url, name, opt = {})
+{
+  window.open(url, name, Object.keys(opt).map(k => `${k}=${opt[k]}`).join(','));
+}
+
+export function openCenterWindow(url, name, width, height, opt = {})
+{
+  openWindow(url, name, {
+    width,
+    height,
+    top: (window.screen.availHeight-30-height) / 2,
+    left: (window.screen.availWidth-30-width) / 2,
+    ...opt,
+  })
+}
+export class URLHelper {
+  baseUrl = ''; // protocol, hostname, port, pastname
+  search = {};
+  constructor(baseUrl) {
+    let t = decodeURI(baseUrl).split('?')
+    this.baseUrl = t[0]
+    if (t[1]) {
+      t[1].split('&').forEach(v => {
+        let t2 = v.split('=')
+        this.search[t2[0]] = t2[1] == null ? '' : decodeURIComponent(t2[1])
+      })
+    }
+  }
+  getHref() {
+    const t = [this.baseUrl]
+    let searchStr = Object.keys(this.search).map(k => `${k}=${encodeURIComponent(this.search[k])}`).join('&')
+    if (searchStr) {
+      t.push(searchStr)
+    }
+    return t.join('?')
+  }
+}
+
+// 解析函数参数, 帮助重载
+// types eg: ['Object', (i) => i > 3, ['Number', default] ]
+export function resolveArgsByType(args, types) {
+  let argIndex = 0
+  return types.map(v => {
+    // make rule
+    let rule, dft
+    if (isArray(v)) {
+      rule = v[0]
+      dft = v[1]
+    } else {
+      rule = v
+      dft = null
+    }
+    if (!isFunction(rule)) {
+      if (rule == null) {
+        rule = () => true
+      } else {
+        const t = rule
+        rule = x => Object.prototype.toString.call(x) === `[object ${t}]`
+      }
+    }
+    const arg = args[argIndex]
+    if (rule(arg)) {
+      argIndex++
+    }
+    return arg || dft
+  })
+}
+
+// set null can remove a item
+export function makeStorageHelper(storage) {
+  return {
+    storage,
+    set(name, value, minutes) {
+      if (value == null) {
+        this.storage.removeItem(name)
+      } else {
+        this.storage.setItem(name, JSON.stringify({
+          value,
+          expired_at: minutes && new Date().getTime() / 1000 + minutes * 60,
+        }))
+      }
+    },
+    get(name) {
+      let t = this.storage.getItem(name)
+      if (t) {
+        t = JSON.parse(t)
+        if (!t.expired_at || t.expired_at > new Date().getTime()) {
+          return t.value
+        } else {
+          this.storage.removeItem(name)
+        }
+      }
+      return null
+    },
+    clear() {
+      this.storage.clear()
+    },
+  }
+}
+export const localStorage2 = makeStorageHelper(window.localStorage)
+export const sessionStorage2 = makeStorageHelper(window.sessionStorage)
+
+// 事件处理
+export class EventProcessor {
+  eventStore = [];
+  on(name, handler) {
+    this.eventStore.push({ name, handler })
+  }
+  once(name, handler) {
+    const off = () => {
+      this.off(name, wrappedHandler)
+    }
+    const wrappedHandler = () => {
+      handler()
+      off()
+    }
+    this.on(name, wrappedHandler)
+    return off
+  }
+  off(name, handler) {
+    const indexes = [] // to remove indexes; reverse; 倒序的
+    const len = this.eventStore.length
+    for (let i = 0; i < len; i++) {
+      const item = this.eventStore[i]
+      if (item.name === name && item.handler === handler) {
+        indexes.unshift(i)
+      }
+    }
+    for (const index of indexes) {
+      this.eventStore.splice(index, 1)
+    }
+  }
+  emit(name, ...args) {
+    // 重要: 先找到要执行的项放在新数组里, 因为执行项会改变事件项存储数组
+    const items = []
+    for (const item of this.eventStore) {
+      if (item.name === name) {
+        items.push(item)
+      }
+    }
+    for (const item of items) {
+      item.handler(...args)
+    }
+  }
+}
+
+export class CrossWindow extends EventProcessor{
+  storageName = '_crossWindow';
+  constructor() {
+     super()
+     const cls = CrossWindow
+     if (!cls._listen) {
+       cls._listen = true
+       onDOM(window, 'storage', (ev) => {
+         if (ev.key === this.storageName) {
+           const event = JSON.parse(ev.newValue)
+           super.emit(event.name, ...event.args)
+         }
+       })
+     }
+  }
+  emit(name, ...args) {
+     super.emit(name, ...args)
+     window.localStorage.setItem(this.storageName, JSON.stringify({
+       name,
+       args,
+       // use random make storage event triggered every time
+       // 加入随机保证触发storage事件
+       random: Math.random(),
+     }))
+  }
+}
+
+// arr, idKey/getId
+export function mapObjects(arr, idKey) {
+  const r = {}
+  const len = arr.length
+  for (let i = 0; i < len; i++) {
+    const item = arr[i]
+    const id = isFunction(idKey) ? idKey(item, i) : item[idKey]
+    r[id] = item
+  }
+  return r
+}

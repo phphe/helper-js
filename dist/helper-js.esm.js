@@ -1,11 +1,25 @@
 /*!
- * helper-js v1.0.31
+ * helper-js v1.0.33
  * phphe <phphe@outlook.com> (https://github.com/phphe)
  * https://github.com/phphe/helper-js.git
  * Released under the MIT License.
  */
 
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 // local store
 var store = {};
@@ -807,5 +821,322 @@ function jqMakeCarousel(wrapperSel, listSel, itemSel) {
   }
   animateLoop();
 }
+// https://developer.mozilla.org/docs/Web/API/Window/open
+// http://www.w3school.com.cn/htmldom/met_win_open.asp#windowfeatures
+function openWindow(url, name) {
+  var opt = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
-export { store, isset, isArray, isBool, isNumber, isNumeric, isString, isObject, isFunction, isPromise, empty, numRand, numPad, min, max, studlyCase, kebabCase, snakeCase, camelCase, camelToWords, titleCase, strRand, replaceMultiple, arrayRemove, arrayFirst, arrayLast, arrayDiff, toArrayIfNot, assignIfDifferent, objectMerge, objectMap, objectOnly, objectExcept, objectGet, objectSet, unset, cloneObj, executeWithCount, watchChange, getUrlParam, uniqueId, isDescendantOf, getOffsetWithoutScroll, getOffset, findParent, backupAttr, restoreAttr, hasClass, addClass, removeClass, getElSize, isOffsetInEl, getBorder, setElChildByIndex, onDOM, offDOM, binarySearch, windowLoaded, waitFor, retry, copyTextToClipboard, jqFixedSize, jqMakeCarousel };
+  window.open(url, name, Object.keys(opt).map(function (k) {
+    return k + '=' + opt[k];
+  }).join(','));
+}
+
+function openCenterWindow(url, name, width, height) {
+  var opt = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : {};
+
+  openWindow(url, name, _extends({
+    width: width,
+    height: height,
+    top: (window.screen.availHeight - 30 - height) / 2,
+    left: (window.screen.availWidth - 30 - width) / 2
+  }, opt));
+}
+var URLHelper = function () {
+  function URLHelper(baseUrl) {
+    var _this = this;
+
+    _classCallCheck(this, URLHelper);
+
+    this.baseUrl = '';
+    this.search = {};
+
+    var t = decodeURI(baseUrl).split('?');
+    this.baseUrl = t[0];
+    if (t[1]) {
+      t[1].split('&').forEach(function (v) {
+        var t2 = v.split('=');
+        _this.search[t2[0]] = t2[1] == null ? '' : decodeURIComponent(t2[1]);
+      });
+    }
+  } // protocol, hostname, port, pastname
+
+
+  _createClass(URLHelper, [{
+    key: 'getHref',
+    value: function getHref() {
+      var _this2 = this;
+
+      var t = [this.baseUrl];
+      var searchStr = Object.keys(this.search).map(function (k) {
+        return k + '=' + encodeURIComponent(_this2.search[k]);
+      }).join('&');
+      if (searchStr) {
+        t.push(searchStr);
+      }
+      return t.join('?');
+    }
+  }]);
+
+  return URLHelper;
+}();
+
+// 解析函数参数, 帮助重载
+// types eg: ['Object', (i) => i > 3, ['Number', default] ]
+function resolveArgsByType(args, types) {
+  var argIndex = 0;
+  return types.map(function (v) {
+    // make rule
+    var rule = void 0,
+        dft = void 0;
+    if (isArray(v)) {
+      rule = v[0];
+      dft = v[1];
+    } else {
+      rule = v;
+      dft = null;
+    }
+    if (!isFunction(rule)) {
+      if (rule == null) {
+        rule = function rule() {
+          return true;
+        };
+      } else {
+        var t = rule;
+        rule = function rule(x) {
+          return Object.prototype.toString.call(x) === '[object ' + t + ']';
+        };
+      }
+    }
+    var arg = args[argIndex];
+    if (rule(arg)) {
+      argIndex++;
+    }
+    return arg || dft;
+  });
+}
+
+// set null can remove a item
+function makeStorageHelper(storage) {
+  return {
+    storage: storage,
+    set: function set(name, value, minutes) {
+      if (value == null) {
+        this.storage.removeItem(name);
+      } else {
+        this.storage.setItem(name, JSON.stringify({
+          value: value,
+          expired_at: minutes && new Date().getTime() / 1000 + minutes * 60
+        }));
+      }
+    },
+    get: function get(name) {
+      var t = this.storage.getItem(name);
+      if (t) {
+        t = JSON.parse(t);
+        if (!t.expired_at || t.expired_at > new Date().getTime()) {
+          return t.value;
+        } else {
+          this.storage.removeItem(name);
+        }
+      }
+      return null;
+    },
+    clear: function clear() {
+      this.storage.clear();
+    }
+  };
+}
+var localStorage2 = makeStorageHelper(window.localStorage);
+var sessionStorage2 = makeStorageHelper(window.sessionStorage);
+
+// 事件处理
+var EventProcessor = function () {
+  function EventProcessor() {
+    _classCallCheck(this, EventProcessor);
+
+    this.eventStore = [];
+  }
+
+  _createClass(EventProcessor, [{
+    key: 'on',
+    value: function on(name, handler) {
+      this.eventStore.push({ name: name, handler: handler });
+    }
+  }, {
+    key: 'once',
+    value: function once(name, handler) {
+      var _this3 = this;
+
+      var off = function off() {
+        _this3.off(name, wrappedHandler);
+      };
+      var wrappedHandler = function wrappedHandler() {
+        handler();
+        off();
+      };
+      this.on(name, wrappedHandler);
+      return off;
+    }
+  }, {
+    key: 'off',
+    value: function off(name, handler) {
+      var indexes = []; // to remove indexes; reverse; 倒序的
+      var len = this.eventStore.length;
+      for (var i = 0; i < len; i++) {
+        var item = this.eventStore[i];
+        if (item.name === name && item.handler === handler) {
+          indexes.unshift(i);
+        }
+      }
+      var _iteratorNormalCompletion3 = true;
+      var _didIteratorError3 = false;
+      var _iteratorError3 = undefined;
+
+      try {
+        for (var _iterator3 = indexes[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+          var index = _step3.value;
+
+          this.eventStore.splice(index, 1);
+        }
+      } catch (err) {
+        _didIteratorError3 = true;
+        _iteratorError3 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion3 && _iterator3.return) {
+            _iterator3.return();
+          }
+        } finally {
+          if (_didIteratorError3) {
+            throw _iteratorError3;
+          }
+        }
+      }
+    }
+  }, {
+    key: 'emit',
+    value: function emit(name) {
+      // 重要: 先找到要执行的项放在新数组里, 因为执行项会改变事件项存储数组
+      var items = [];
+      var _iteratorNormalCompletion4 = true;
+      var _didIteratorError4 = false;
+      var _iteratorError4 = undefined;
+
+      try {
+        for (var _iterator4 = this.eventStore[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+          var item = _step4.value;
+
+          if (item.name === name) {
+            items.push(item);
+          }
+        }
+      } catch (err) {
+        _didIteratorError4 = true;
+        _iteratorError4 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion4 && _iterator4.return) {
+            _iterator4.return();
+          }
+        } finally {
+          if (_didIteratorError4) {
+            throw _iteratorError4;
+          }
+        }
+      }
+
+      for (var _len3 = arguments.length, args = Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
+        args[_key3 - 1] = arguments[_key3];
+      }
+
+      var _iteratorNormalCompletion5 = true;
+      var _didIteratorError5 = false;
+      var _iteratorError5 = undefined;
+
+      try {
+        for (var _iterator5 = items[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+          var _item = _step5.value;
+
+          _item.handler.apply(_item, args);
+        }
+      } catch (err) {
+        _didIteratorError5 = true;
+        _iteratorError5 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion5 && _iterator5.return) {
+            _iterator5.return();
+          }
+        } finally {
+          if (_didIteratorError5) {
+            throw _iteratorError5;
+          }
+        }
+      }
+    }
+  }]);
+
+  return EventProcessor;
+}();
+
+var CrossWindow = function (_EventProcessor) {
+  _inherits(CrossWindow, _EventProcessor);
+
+  function CrossWindow() {
+    _classCallCheck(this, CrossWindow);
+
+    var _this4 = _possibleConstructorReturn(this, (CrossWindow.__proto__ || Object.getPrototypeOf(CrossWindow)).call(this));
+
+    _this4.storageName = '_crossWindow';
+
+    var cls = CrossWindow;
+    if (!cls._listen) {
+      cls._listen = true;
+      onDOM(window, 'storage', function (ev) {
+        if (ev.key === _this4.storageName) {
+          var _get2;
+
+          var event = JSON.parse(ev.newValue);
+          (_get2 = _get(CrossWindow.prototype.__proto__ || Object.getPrototypeOf(CrossWindow.prototype), 'emit', _this4)).call.apply(_get2, [_this4, event.name].concat(_toConsumableArray(event.args)));
+        }
+      });
+    }
+    return _this4;
+  }
+
+  _createClass(CrossWindow, [{
+    key: 'emit',
+    value: function emit(name) {
+      var _get3;
+
+      for (var _len4 = arguments.length, args = Array(_len4 > 1 ? _len4 - 1 : 0), _key4 = 1; _key4 < _len4; _key4++) {
+        args[_key4 - 1] = arguments[_key4];
+      }
+
+      (_get3 = _get(CrossWindow.prototype.__proto__ || Object.getPrototypeOf(CrossWindow.prototype), 'emit', this)).call.apply(_get3, [this, name].concat(args));
+      window.localStorage.setItem(this.storageName, JSON.stringify({
+        name: name,
+        args: args,
+        // use random make storage event triggered every time
+        // 加入随机保证触发storage事件
+        random: Math.random()
+      }));
+    }
+  }]);
+
+  return CrossWindow;
+}(EventProcessor);
+
+// arr, idKey/getId
+function mapObjects(arr, idKey) {
+  var r = {};
+  var len = arr.length;
+  for (var i = 0; i < len; i++) {
+    var item = arr[i];
+    var id = isFunction(idKey) ? idKey(item, i) : item[idKey];
+    r[id] = item;
+  }
+  return r;
+}
+
+export { store, isset, isArray, isBool, isNumber, isNumeric, isString, isObject, isFunction, isPromise, empty, numRand, numPad, min, max, studlyCase, kebabCase, snakeCase, camelCase, camelToWords, titleCase, strRand, replaceMultiple, arrayRemove, arrayFirst, arrayLast, arrayDiff, toArrayIfNot, assignIfDifferent, objectMerge, objectMap, objectOnly, objectExcept, objectGet, objectSet, unset, cloneObj, executeWithCount, watchChange, getUrlParam, uniqueId, isDescendantOf, getOffsetWithoutScroll, getOffset, findParent, backupAttr, restoreAttr, hasClass, addClass, removeClass, getElSize, isOffsetInEl, getBorder, setElChildByIndex, onDOM, offDOM, binarySearch, windowLoaded, waitFor, retry, copyTextToClipboard, jqFixedSize, jqMakeCarousel, openWindow, openCenterWindow, URLHelper, resolveArgsByType, makeStorageHelper, localStorage2, sessionStorage2, EventProcessor, CrossWindow, mapObjects };
