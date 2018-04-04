@@ -1,11 +1,11 @@
 {
   "name": "helper-js",
-  "version": "1.0.35",
+  "version": "1.0.36",
   "description": "",
   "main": "dist/helper-js.cjs.js",
   "module": "dist/helper-js.es.js",
   "scripts": {
-    "build": "bili --format cjs,umd,umd-min,es",
+    "build": "bili --format cjs,umd,umd-min,es --banner",
     "dev": "bili --format cjs,umd --watch"
   },
   "author": "phphe <phphe@outlook.com> (https://github.com/phphe)",

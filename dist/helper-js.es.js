@@ -1,3 +1,8 @@
+/*!
+ * helper-js v1.0.35
+ * (c) 2017-present phphe <phphe@outlook.com> (https://github.com/phphe)
+ * Released under the MIT License.
+ */
 function _typeof(obj) {
   if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
     _typeof = function (obj) {

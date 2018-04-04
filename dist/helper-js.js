@@ -1,3 +1,8 @@
+/*!
+ * helper-js v1.0.35
+ * (c) 2017-present phphe <phphe@outlook.com> (https://github.com/phphe)
+ * Released under the MIT License.
+ */
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
   typeof define === 'function' && define.amd ? define(['exports'], factory) :
