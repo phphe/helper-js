@@ -824,8 +824,8 @@ export function makeStorageHelper(storage) {
     },
   }
 }
-export const localStorage2 = makeStorageHelper(window.localStorage)
-export const sessionStorage2 = makeStorageHelper(window.sessionStorage)
+export const localStorage2 = makeStorageHelper(global.localStorage)
+export const sessionStorage2 = makeStorageHelper(global.sessionStorage)
 
 // 事件处理
 export class EventProcessor {

@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.0.35
+ * helper-js v1.0.36
  * (c) 2017-present phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -1101,8 +1101,8 @@
       }
     };
   }
-  var localStorage2 = makeStorageHelper(window.localStorage);
-  var sessionStorage2 = makeStorageHelper(window.sessionStorage); // 事件处理
+  var localStorage2 = makeStorageHelper(global.localStorage);
+  var sessionStorage2 = makeStorageHelper(global.sessionStorage); // 事件处理
 
   var EventProcessor =
   /*#__PURE__*/
