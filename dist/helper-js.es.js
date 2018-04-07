@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.0.39
+ * helper-js v1.0.40
  * (c) 2017-present phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -450,14 +450,14 @@ function mapObjectTree(obj, handler) {
     var val = void 0;
 
     var assign = function assign(value, key, canPush) {
-      if (hp.isArray(value)) {
+      if (isArray(value)) {
         value = value.slice();
-      } else if (hp.isObject(value)) {
+      } else if (isObject(value)) {
         value = Object.assign({}, value);
       }
 
       if (parent) {
-        if (hp.isArray(parent) && canPush) {
+        if (isArray(parent) && canPush) {
           parent.push(value);
         } else {
           parent[key] = value;
@@ -487,7 +487,7 @@ function mapObjectTree(obj, handler) {
       }
     }
 
-    if (hp.isArray(val)) {
+    if (isArray(val)) {
       val.forEach(function (v, i) {
         stack.push({
           value: v,
@@ -495,7 +495,7 @@ function mapObjectTree(obj, handler) {
           parent: val
         });
       });
-    } else if (hp.isObject(val)) {
+    } else if (isObject(val)) {
       for (var _key in val) {
         stack.push({
           value: val[_key],

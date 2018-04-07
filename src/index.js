@@ -281,13 +281,13 @@ export function mapObjectTree(obj, handler, limit=10000) {
     const t = handler(value, key, parent)
     let val
     const assign = (value, key, canPush) => {
-      if (hp.isArray(value)) {
+      if (isArray(value)) {
         value = value.slice()
-      } else if (hp.isObject(value)) {
+      } else if (isObject(value)) {
         value = Object.assign({}, value)
       }
       if (parent) {
-        if (hp.isArray(parent) && canPush) {
+        if (isArray(parent) && canPush) {
           parent.push(value)
         } else {
           parent[key] = value
@@ -314,11 +314,11 @@ export function mapObjectTree(obj, handler, limit=10000) {
       }
     }
 
-    if (hp.isArray(val)) {
+    if (isArray(val)) {
       val.forEach((v, i) => {
         stack.push({value: v, key: i, parent: val})
       })
-    } else if (hp.isObject(val)) {
+    } else if (isObject(val)) {
       for (const key in val) {
         stack.push({value: val[key], key, parent: val})
       }
