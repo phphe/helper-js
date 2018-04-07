@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.0.43
+ * helper-js v1.0.44
  * (c) 2017-present phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -450,33 +450,39 @@
       var _stack$shift = stack.shift(),
           value = _stack$shift.value,
           key = _stack$shift.key,
-          parent = _stack$shift.parent;
+          parent = _stack$shift.parent,
+          newParent = _stack$shift.newParent;
 
       var t = handler(value, key, parent);
-      var val = void 0;
 
       var assign = function assign(value, key, canPush) {
         if (isArray(value)) {
-          value = value.slice();
+          value = [];
         } else if (isObject(value)) {
-          value = Object.assign({}, value);
+          value = {};
         }
 
         if (parent) {
-          if (isArray(parent) && canPush) {
-            parent.push(value);
+          if (isArray(newParent) && canPush) {
+            newParent.push(value);
           } else {
-            parent[key] = value;
+            newParent[key] = value;
           }
         } else {
           r = value;
-        }
+        } // value may changed
+
+
+        return value;
       };
+
+      var newVal = void 0,
+          val = void 0;
 
       if (!t) {
         // no change
-        assign(value, key);
         val = value;
+        newVal = assign(value, key);
       } else {
         var key2 = t.key,
             _value = t.value;
@@ -487,9 +493,9 @@
           return "continue";
         } else if (key2 == null) {
           // don't change key
-          assign(_value, key, true);
+          newVal = assign(_value, key, true);
         } else {
-          assign(_value, key2);
+          newVal = assign(_value, key2);
         }
       }
 
@@ -500,7 +506,8 @@
           stack.push({
             value: val[i],
             key: i,
-            parent: val
+            parent: val,
+            newParent: newVal
           });
         }
       } else if (isObject(val)) {
@@ -508,7 +515,8 @@
           stack.push({
             value: val[key],
             key: key,
-            parent: val
+            parent: val,
+            newParent: newVal
           });
         });
       }

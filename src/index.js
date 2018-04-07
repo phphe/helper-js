@@ -277,29 +277,31 @@ export function mapObjectTree(obj, handler, limit=10000) {
       throw `mapObjectTree: limit(${limit}) reached, object may has circular reference`
     }
     count++
-    const {value, key, parent} = stack.shift()
+    const {value, key, parent, newParent} = stack.shift()
     const t = handler(value, key, parent)
-    let val
     const assign = (value, key, canPush) => {
       if (isArray(value)) {
-        value = value.slice()
+        value = []
       } else if (isObject(value)) {
-        value = Object.assign({}, value)
+        value = {}
       }
       if (parent) {
-        if (isArray(parent) && canPush) {
-          parent.push(value)
+        if (isArray(newParent) && canPush) {
+          newParent.push(value)
         } else {
-          parent[key] = value
+          newParent[key] = value
         }
       } else {
         r = value
       }
+      // value may changed
+      return value
     }
+    let newVal, val
     if (!t) {
       // no change
-      assign(value, key)
       val = value
+      newVal = assign(value, key)
     } else {
       const {key: key2, value} = t
       val = value
@@ -308,20 +310,20 @@ export function mapObjectTree(obj, handler, limit=10000) {
         continue
       } else if (key2 == null) {
         // don't change key
-        assign(value, key, true)
+        newVal = assign(value, key, true)
       } else {
-        assign(value, key2)
+        newVal = assign(value, key2)
       }
     }
 
     if (isArray(val)) {
       const len = val.length
       for (let i = 0; i < len; i++) {
-        stack.push({value: val[i], key: i, parent: val})
+        stack.push({value: val[i], key: i, parent: val, newParent: newVal})
       }
     } else if (isObject(val)) {
       Object.keys(val).forEach(key => {
-        stack.push({value: val[key], key, parent: val})
+        stack.push({value: val[key], key, parent: val, newParent: newVal})
       })
     }
   }
