@@ -59,7 +59,23 @@ helloWorldNice => Hello World Nice
 ({a:{b:1}}, 'a.b') => 1
 ###### objectSet   (obj, path, value)
 ###### unset (obj, prop)
-###### cloneObj  (obj, exclude) // exclude: array or function
+###### cloneObj  (obj, exclude) // can clone one-level object. exclude: array or function
+###### mapObjectTree(obj, handler, limit=10000) // can clone whole object tree, can traverse every node, can exclude nodes
+```
+handler(value, key, parent)
+handler can return follow:
+ null: don't change anything
+ {key: false}: delete
+ {value}: change value
+ {key, value}. change key and value
+limit: to prevent circular reference.
+```
+###### mapObjects(arr, idKey) // idKey can be function which return a key
+```
+idKey(item, i)
+eg: mapObjects([{id: 1}, {id:2}], 'id') -> {'1':{id:1},'2':{id:2}}
+eg: mapObjects([{id: 1}, {id:2}], (item, i) => item.id + 100 ) -> {'101':{id:1},'102':{id:2}}
+```
 ###### executeWithCount (func, context = null) // wrap function, last arg of new function is excuted count
 ###### watchChange   (getVal, handler) // wrap getter function, when use getter to get value, it will check value if changed
 ###### getUrlParam   // get current url param by name
@@ -88,3 +104,18 @@ helloWorldNice => Hello World Nice
 ### jquery
 ###### jqFixedSize   
 ###### jqMakeCarousel
+###### openWindow(url, name, opt = {})
+###### openCenterWindow(url, name, width, height, opt = {})
+###### class URLHelper // now just for generate url
+##### [recommend]resolveArgsByType(args, types) // for function overload
+```
+types eg: ['Object', (i) => i > 3, ['Number', default] ]
+resolveArgsByType([1,'str'], ['Number', 'Boolean' ,'String']) -> [1, null, 'str']
+resolveArgsByType([1,'str'], ['Number', ['Boolean', true] ,'String']) -> [1, true, 'str']
+check source code to learn more
+```
+###### makeStorageHelper(storage) // make localStorage or sessionStorage can use json as value and has expiry
+###### localStorage2 // made by makeStorageHelper
+###### sessionStorage2 // made by makeStorageHelper
+###### class EventProcessor
+###### class CrossWindow // cross window(same domain) event processor

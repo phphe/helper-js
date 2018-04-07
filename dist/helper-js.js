@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.0.38
+ * helper-js v1.0.39
  * (c) 2017-present phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -430,6 +430,7 @@
   //  {key: false}: delete
   //  {value}: change value
   //  {key, value}. change key and value
+  // limit: to prevent circular reference.
 
   function mapObjectTree(obj, handler) {
     var limit = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 10000;
@@ -515,6 +516,19 @@
       var _ret = _loop();
 
       if (_ret === "continue") continue;
+    }
+
+    return r;
+  } // arr, idKey/getId
+
+  function mapObjects(arr, idKey) {
+    var r = {};
+    var len = arr.length;
+
+    for (var i = 0; i < len; i++) {
+      var item = arr[i];
+      var id = isFunction(idKey) ? idKey(item, i) : item[idKey];
+      r[id] = item;
     }
 
     return r;
@@ -1361,20 +1375,7 @@
     }]);
 
     return CrossWindow;
-  }(EventProcessor); // arr, idKey/getId
-
-  function mapObjects(arr, idKey) {
-    var r = {};
-    var len = arr.length;
-
-    for (var i = 0; i < len; i++) {
-      var item = arr[i];
-      var id = isFunction(idKey) ? idKey(item, i) : item[idKey];
-      r[id] = item;
-    }
-
-    return r;
-  }
+  }(EventProcessor);
 
   exports.store = store;
   exports.isset = isset;
@@ -1414,6 +1415,7 @@
   exports.unset = unset;
   exports.cloneObj = cloneObj;
   exports.mapObjectTree = mapObjectTree;
+  exports.mapObjects = mapObjects;
   exports.executeWithCount = executeWithCount;
   exports.watchChange = watchChange;
   exports.getUrlParam = getUrlParam;
@@ -1449,7 +1451,6 @@
   exports.sessionStorage2 = sessionStorage2;
   exports.EventProcessor = EventProcessor;
   exports.CrossWindow = CrossWindow;
-  exports.mapObjects = mapObjects;
 
   Object.defineProperty(exports, '__esModule', { value: true });
 

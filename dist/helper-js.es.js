@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.0.38
+ * helper-js v1.0.39
  * (c) 2017-present phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -424,6 +424,7 @@ function cloneObj(obj, exclude) {
 //  {key: false}: delete
 //  {value}: change value
 //  {key, value}. change key and value
+// limit: to prevent circular reference.
 
 function mapObjectTree(obj, handler) {
   var limit = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 10000;
@@ -509,6 +510,19 @@ function mapObjectTree(obj, handler) {
     var _ret = _loop();
 
     if (_ret === "continue") continue;
+  }
+
+  return r;
+} // arr, idKey/getId
+
+function mapObjects(arr, idKey) {
+  var r = {};
+  var len = arr.length;
+
+  for (var i = 0; i < len; i++) {
+    var item = arr[i];
+    var id = isFunction(idKey) ? idKey(item, i) : item[idKey];
+    r[id] = item;
   }
 
   return r;
@@ -1355,19 +1369,6 @@ function (_EventProcessor) {
   }]);
 
   return CrossWindow;
-}(EventProcessor); // arr, idKey/getId
+}(EventProcessor);
 
-function mapObjects(arr, idKey) {
-  var r = {};
-  var len = arr.length;
-
-  for (var i = 0; i < len; i++) {
-    var item = arr[i];
-    var id = isFunction(idKey) ? idKey(item, i) : item[idKey];
-    r[id] = item;
-  }
-
-  return r;
-}
-
-export { store, isset, isArray, isBool, isNumber, isNumeric, isString, isObject, isFunction, isPromise, empty, numRand, numPad, min, max, studlyCase, kebabCase, snakeCase, camelCase, camelToWords, titleCase, strRand, replaceMultiple, arrayRemove, arrayFirst, arrayLast, arrayDiff, toArrayIfNot, assignIfDifferent, objectMerge, objectMap, objectOnly, objectExcept, objectGet, objectSet, unset, cloneObj, mapObjectTree, executeWithCount, watchChange, getUrlParam, uniqueId, isDescendantOf, getOffsetWithoutScroll, getOffset, findParent, backupAttr, restoreAttr, hasClass, addClass, removeClass, getElSize, isOffsetInEl, getBorder, setElChildByIndex, onDOM, offDOM, binarySearch, windowLoaded, waitFor, retry, copyTextToClipboard, jqFixedSize, jqMakeCarousel, openWindow, openCenterWindow, URLHelper, resolveArgsByType, makeStorageHelper, localStorage2, sessionStorage2, EventProcessor, CrossWindow, mapObjects };
+export { store, isset, isArray, isBool, isNumber, isNumeric, isString, isObject, isFunction, isPromise, empty, numRand, numPad, min, max, studlyCase, kebabCase, snakeCase, camelCase, camelToWords, titleCase, strRand, replaceMultiple, arrayRemove, arrayFirst, arrayLast, arrayDiff, toArrayIfNot, assignIfDifferent, objectMerge, objectMap, objectOnly, objectExcept, objectGet, objectSet, unset, cloneObj, mapObjectTree, mapObjects, executeWithCount, watchChange, getUrlParam, uniqueId, isDescendantOf, getOffsetWithoutScroll, getOffset, findParent, backupAttr, restoreAttr, hasClass, addClass, removeClass, getElSize, isOffsetInEl, getBorder, setElChildByIndex, onDOM, offDOM, binarySearch, windowLoaded, waitFor, retry, copyTextToClipboard, jqFixedSize, jqMakeCarousel, openWindow, openCenterWindow, URLHelper, resolveArgsByType, makeStorageHelper, localStorage2, sessionStorage2, EventProcessor, CrossWindow };

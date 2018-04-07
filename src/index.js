@@ -267,6 +267,7 @@ export function cloneObj(obj, exclude) {
 //  {key: false}: delete
 //  {value}: change value
 //  {key, value}. change key and value
+// limit: to prevent circular reference.
 export function mapObjectTree(obj, handler, limit=10000) {
   let r
   let count = 0
@@ -325,6 +326,18 @@ export function mapObjectTree(obj, handler, limit=10000) {
   }
   return r
 }
+// arr, idKey/getId
+export function mapObjects(arr, idKey) {
+  const r = {}
+  const len = arr.length
+  for (let i = 0; i < len; i++) {
+    const item = arr[i]
+    const id = isFunction(idKey) ? idKey(item, i) : item[idKey]
+    r[id] = item
+  }
+  return r
+}
+
 // function
 export function executeWithCount(func, context) {
   let count = 0
@@ -961,16 +974,4 @@ export class CrossWindow extends EventProcessor{
        random: Math.random(),
      }))
   }
-}
-
-// arr, idKey/getId
-export function mapObjects(arr, idKey) {
-  const r = {}
-  const len = arr.length
-  for (let i = 0; i < len; i++) {
-    const item = arr[i]
-    const id = isFunction(idKey) ? idKey(item, i) : item[idKey]
-    r[id] = item
-  }
-  return r
 }
