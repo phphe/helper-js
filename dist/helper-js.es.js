@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.0.37
+ * helper-js v1.0.38
  * (c) 2017-present phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -418,7 +418,101 @@ function cloneObj(obj, exclude) {
       break;
   }
 } // return cloned obj
+// handler(value, key, parent)
+// handler can return follow:
+//  null: don't change anything
+//  {key: false}: delete
+//  {value}: change value
+//  {key, value}. change key and value
 
+function mapObjectTree(obj, handler) {
+  var limit = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 10000;
+  var r;
+  var count = 0;
+  var stack = [{
+    value: obj
+  }];
+
+  var _loop = function _loop() {
+    if (count >= limit) {
+      throw "mapObjectTree: limit(".concat(limit, ") reached, object may has circular reference");
+    }
+
+    count++;
+
+    var _stack$shift = stack.shift(),
+        value = _stack$shift.value,
+        key = _stack$shift.key,
+        parent = _stack$shift.parent;
+
+    var t = handler(value, key, parent);
+    var val = void 0;
+
+    var assign = function assign(value, key, canPush) {
+      if (hp.isArray(value)) {
+        value = value.slice();
+      } else if (hp.isObject(value)) {
+        value = Object.assign({}, value);
+      }
+
+      if (parent) {
+        if (hp.isArray(parent) && canPush) {
+          parent.push(value);
+        } else {
+          parent[key] = value;
+        }
+      } else {
+        r = value;
+      }
+    };
+
+    if (!t) {
+      // no change
+      assign(value, key);
+      val = value;
+    } else {
+      var key2 = t.key,
+          _value = t.value;
+      val = _value;
+
+      if (key2 === false) {
+        // del
+        return "continue";
+      } else if (key2 == null) {
+        // don't change key
+        assign(_value, key, true);
+      } else {
+        assign(_value, key2);
+      }
+    }
+
+    if (hp.isArray(val)) {
+      val.forEach(function (v, i) {
+        stack.push({
+          value: v,
+          key: i,
+          parent: val
+        });
+      });
+    } else if (hp.isObject(val)) {
+      for (var _key in val) {
+        stack.push({
+          value: val[_key],
+          key: _key,
+          parent: val
+        });
+      }
+    }
+  };
+
+  while (stack.length > 0) {
+    var _ret = _loop();
+
+    if (_ret === "continue") continue;
+  }
+
+  return r;
+} // function
 
 function executeWithCount(func, context) {
   var count = 0;
@@ -1276,4 +1370,4 @@ function mapObjects(arr, idKey) {
   return r;
 }
 
-export { store, isset, isArray, isBool, isNumber, isNumeric, isString, isObject, isFunction, isPromise, empty, numRand, numPad, min, max, studlyCase, kebabCase, snakeCase, camelCase, camelToWords, titleCase, strRand, replaceMultiple, arrayRemove, arrayFirst, arrayLast, arrayDiff, toArrayIfNot, assignIfDifferent, objectMerge, objectMap, objectOnly, objectExcept, objectGet, objectSet, unset, cloneObj, executeWithCount, watchChange, getUrlParam, uniqueId, isDescendantOf, getOffsetWithoutScroll, getOffset, findParent, backupAttr, restoreAttr, hasClass, addClass, removeClass, getElSize, isOffsetInEl, getBorder, setElChildByIndex, onDOM, offDOM, binarySearch, windowLoaded, waitFor, retry, copyTextToClipboard, jqFixedSize, jqMakeCarousel, openWindow, openCenterWindow, URLHelper, resolveArgsByType, makeStorageHelper, localStorage2, sessionStorage2, EventProcessor, CrossWindow, mapObjects };
+export { store, isset, isArray, isBool, isNumber, isNumeric, isString, isObject, isFunction, isPromise, empty, numRand, numPad, min, max, studlyCase, kebabCase, snakeCase, camelCase, camelToWords, titleCase, strRand, replaceMultiple, arrayRemove, arrayFirst, arrayLast, arrayDiff, toArrayIfNot, assignIfDifferent, objectMerge, objectMap, objectOnly, objectExcept, objectGet, objectSet, unset, cloneObj, mapObjectTree, executeWithCount, watchChange, getUrlParam, uniqueId, isDescendantOf, getOffsetWithoutScroll, getOffset, findParent, backupAttr, restoreAttr, hasClass, addClass, removeClass, getElSize, isOffsetInEl, getBorder, setElChildByIndex, onDOM, offDOM, binarySearch, windowLoaded, waitFor, retry, copyTextToClipboard, jqFixedSize, jqMakeCarousel, openWindow, openCenterWindow, URLHelper, resolveArgsByType, makeStorageHelper, localStorage2, sessionStorage2, EventProcessor, CrossWindow, mapObjects };

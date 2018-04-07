@@ -267,7 +267,7 @@ export function cloneObj(obj, exclude) {
 //  {key: false}: delete
 //  {value}: change value
 //  {key, value}. change key and value
-function mapObjectTree(obj, handler, limit=10000) {
+export function mapObjectTree(obj, handler, limit=10000) {
   let r
   let count = 0
   const stack = [{value: obj}]
