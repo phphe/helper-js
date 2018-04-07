@@ -315,13 +315,14 @@ export function mapObjectTree(obj, handler, limit=10000) {
     }
 
     if (isArray(val)) {
-      val.forEach((v, i) => {
-        stack.push({value: v, key: i, parent: val})
-      })
-    } else if (isObject(val)) {
-      for (const key in val) {
-        stack.push({value: val[key], key, parent: val})
+      const len = val.length
+      for (let i = 0; i < len; i++) {
+        stack.push({value: val[i], key: i, parent: val})
       }
+    } else if (isObject(val)) {
+      Object.keys(val).forEach(key => {
+        stack.push({value: val[key], key, parent: val})
+      })
     }
   }
   return r
@@ -502,7 +503,7 @@ export function getBorder(el) {
     left: of.x,
     right: of.x + workArea.offsetWidth,
     top: of.y + 50,
-    bottom: body.offsetHeight < window.innerHeight ? window.innerHeight : body.offsetHeight
+    bottom: body.offsetHeight < global.innerHeight ? global.innerHeight : body.offsetHeight
   }
 }
 export function setElChildByIndex(el, index, child) {
@@ -578,9 +579,9 @@ export function windowLoaded() {
     if (document && document.readyState === 'complete') {
       resolve()
     } else {
-      window.addEventListener('load', function once() {
+      global.addEventListener('load', function once() {
         resolve()
-        window.removeEventListener('load', once)
+        global.removeEventListener('load', once)
       })
     }
   })
@@ -596,7 +597,7 @@ export function waitFor(name, condition, time = 100, maxCount = 1000) {
   if (!store.waitFor) store.waitFor = {}
   const waits = store.waitFor
   if (name && isset(waits[name])) {
-    window.clearInterval(waits[name])
+    global.clearInterval(waits[name])
     delete waits[name]
   }
   return new Promise(function(resolve, reject) {
@@ -616,14 +617,14 @@ export function waitFor(name, condition, time = 100, maxCount = 1000) {
     function stop(interval, name) {
       if (interval) {
         if (name && isset(waits[name])) {
-          window.clearInterval(waits[name])
+          global.clearInterval(waits[name])
           delete waits[name]
         } else {
-          window.clearInterval(interval)
+          global.clearInterval(interval)
         }
       }
     }
-    const interval = window.setInterval(function () {
+    const interval = global.setInterval(function () {
       judge(interval)
     }, time)
     if (name) {
@@ -721,7 +722,7 @@ export function copyTextToClipboard(text) {
 
 // jquery
 export function jqFixedSize(sel) {
-  const $ = window.jQuery
+  const $ = global.jQuery
   $(sel).each(function () {
     const t = $(this)
     t.css({
@@ -735,7 +736,7 @@ export function jqMakeCarousel(wrapperSel, listSel, itemSel, speed = 1000, space
     space = space + 'px'
   }
   const spaceNumber = parseFloat(space)
-  const $ = window.jQuery
+  const $ = global.jQuery
   const wrapper = $(wrapperSel)
   const list = wrapper.find(listSel)
   wrapper.css({
@@ -804,7 +805,7 @@ export function jqMakeCarousel(wrapperSel, listSel, itemSel, speed = 1000, space
 // http://www.w3school.com.cn/htmldom/met_win_open.asp#windowfeatures
 export function openWindow(url, name, opt = {})
 {
-  window.open(url, name, Object.keys(opt).map(k => `${k}=${opt[k]}`).join(','));
+  global.open(url, name, Object.keys(opt).map(k => `${k}=${opt[k]}`).join(','));
 }
 
 export function openCenterWindow(url, name, width, height, opt = {})
@@ -812,8 +813,8 @@ export function openCenterWindow(url, name, width, height, opt = {})
   const t = {
     width,
     height,
-    top: (window.screen.availHeight-30-height) / 2,
-    left: (window.screen.availWidth-30-width) / 2,
+    top: (global.screen.availHeight-30-height) / 2,
+    left: (global.screen.availWidth-30-width) / 2,
   }
   Object.assign(t, opt)
   openWindow(url, name, t)
@@ -966,7 +967,7 @@ export class CrossWindow extends EventProcessor{
   }
   emit(name, ...args) {
      super.emit(name, ...args)
-     window.localStorage.setItem(this.storageName, JSON.stringify({
+     global.localStorage.setItem(this.storageName, JSON.stringify({
        name,
        args,
        // use random make storage event triggered every time

@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.0.40
+ * helper-js v1.0.41
  * (c) 2017-present phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -492,21 +492,23 @@ function mapObjectTree(obj, handler) {
     }
 
     if (isArray(val)) {
-      val.forEach(function (v, i) {
+      var len = val.length;
+
+      for (var i = 0; i < len; i++) {
         stack.push({
-          value: v,
+          value: val[i],
           key: i,
           parent: val
         });
-      });
+      }
     } else if (isObject(val)) {
-      for (var _key in val) {
+      Object.keys(val).forEach(function (key) {
         stack.push({
-          value: val[_key],
-          key: _key,
+          value: val[key],
+          key: key,
           parent: val
         });
-      }
+      });
     }
   };
 
@@ -535,8 +537,8 @@ function mapObjects(arr, idKey) {
 function executeWithCount(func, context) {
   var count = 0;
   return function () {
-    for (var _len = arguments.length, args = new Array(_len), _key2 = 0; _key2 < _len; _key2++) {
-      args[_key2] = arguments[_key2];
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
     }
 
     args.unshift(count++);
@@ -547,8 +549,8 @@ function watchChange(getVal, handler) {
   var oldVal;
 
   var update = function update() {
-    for (var _len2 = arguments.length, args = new Array(_len2), _key3 = 0; _key3 < _len2; _key3++) {
-      args[_key3] = arguments[_key3];
+    for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+      args[_key2] = arguments[_key2];
     }
 
     var newVal = getVal.apply(void 0, args);
@@ -720,7 +722,7 @@ function getBorder(el) {
     left: of.x,
     right: of.x + workArea.offsetWidth,
     top: of.y + 50,
-    bottom: body.offsetHeight < window.innerHeight ? window.innerHeight : body.offsetHeight
+    bottom: body.offsetHeight < global.innerHeight ? global.innerHeight : body.offsetHeight
   };
 }
 function setElChildByIndex(el, index, child) {
@@ -825,9 +827,9 @@ function windowLoaded() {
     if (document && document.readyState === 'complete') {
       resolve();
     } else {
-      window.addEventListener('load', function once() {
+      global.addEventListener('load', function once() {
         resolve();
-        window.removeEventListener('load', once);
+        global.removeEventListener('load', once);
       });
     }
   });
@@ -848,7 +850,7 @@ function waitFor(name, condition) {
   var waits = store.waitFor;
 
   if (name && isset(waits[name])) {
-    window.clearInterval(waits[name]);
+    global.clearInterval(waits[name]);
     delete waits[name];
   }
 
@@ -872,15 +874,15 @@ function waitFor(name, condition) {
     function stop(interval, name) {
       if (interval) {
         if (name && isset(waits[name])) {
-          window.clearInterval(waits[name]);
+          global.clearInterval(waits[name]);
           delete waits[name];
         } else {
-          window.clearInterval(interval);
+          global.clearInterval(interval);
         }
       }
     }
 
-    var interval = window.setInterval(function () {
+    var interval = global.setInterval(function () {
       judge(interval);
     }, time);
 
@@ -974,7 +976,7 @@ function copyTextToClipboard(text) {
 } // jquery
 
 function jqFixedSize(sel) {
-  var $ = window.jQuery;
+  var $ = global.jQuery;
   $(sel).each(function () {
     var t = $(this);
     t.css({
@@ -994,7 +996,7 @@ function jqMakeCarousel(wrapperSel, listSel, itemSel) {
   }
 
   var spaceNumber = parseFloat(space);
-  var $ = window.jQuery;
+  var $ = global.jQuery;
   var wrapper = $(wrapperSel);
   var list = wrapper.find(listSel);
   wrapper.css({
@@ -1068,7 +1070,7 @@ function jqMakeCarousel(wrapperSel, listSel, itemSel) {
 
 function openWindow(url, name) {
   var opt = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-  window.open(url, name, Object.keys(opt).map(function (k) {
+  global.open(url, name, Object.keys(opt).map(function (k) {
     return "".concat(k, "=").concat(opt[k]);
   }).join(','));
 }
@@ -1077,8 +1079,8 @@ function openCenterWindow(url, name, width, height) {
   var t = {
     width: width,
     height: height,
-    top: (window.screen.availHeight - 30 - height) / 2,
-    left: (window.screen.availWidth - 30 - width) / 2
+    top: (global.screen.availHeight - 30 - height) / 2,
+    left: (global.screen.availWidth - 30 - width) / 2
   };
   Object.assign(t, opt);
   openWindow(url, name, t);
@@ -1302,8 +1304,8 @@ function () {
         }
       }
 
-      for (var _len3 = arguments.length, args = new Array(_len3 > 1 ? _len3 - 1 : 0), _key4 = 1; _key4 < _len3; _key4++) {
-        args[_key4 - 1] = arguments[_key4];
+      for (var _len3 = arguments.length, args = new Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
+        args[_key3 - 1] = arguments[_key3];
       }
 
       for (var _i3 = 0; _i3 < items.length; _i3++) {
@@ -1356,13 +1358,13 @@ function (_EventProcessor) {
     value: function emit(name) {
       var _get3;
 
-      for (var _len4 = arguments.length, args = new Array(_len4 > 1 ? _len4 - 1 : 0), _key5 = 1; _key5 < _len4; _key5++) {
-        args[_key5 - 1] = arguments[_key5];
+      for (var _len4 = arguments.length, args = new Array(_len4 > 1 ? _len4 - 1 : 0), _key4 = 1; _key4 < _len4; _key4++) {
+        args[_key4 - 1] = arguments[_key4];
       }
 
       (_get3 = _get(CrossWindow.prototype.__proto__ || Object.getPrototypeOf(CrossWindow.prototype), "emit", this)).call.apply(_get3, [this, name].concat(args));
 
-      window.localStorage.setItem(this.storageName, JSON.stringify({
+      global.localStorage.setItem(this.storageName, JSON.stringify({
         name: name,
         args: args,
         // use random make storage event triggered every time
