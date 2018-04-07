@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.0.36
+ * helper-js v1.0.37
  * (c) 2017-present phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -423,13 +423,14 @@
         return obj;
         break;
     }
-  } // function
+  } // return cloned obj
+
 
   function executeWithCount(func, context) {
     var count = 0;
     return function () {
-      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-        args[_key] = arguments[_key];
+      for (var _len = arguments.length, args = new Array(_len), _key2 = 0; _key2 < _len; _key2++) {
+        args[_key2] = arguments[_key2];
       }
 
       args.unshift(count++);
@@ -440,8 +441,8 @@
     var oldVal;
 
     var update = function update() {
-      for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-        args[_key2] = arguments[_key2];
+      for (var _len2 = arguments.length, args = new Array(_len2), _key3 = 0; _key3 < _len2; _key3++) {
+        args[_key3] = arguments[_key3];
       }
 
       var newVal = getVal.apply(void 0, args);
@@ -1195,8 +1196,8 @@
           }
         }
 
-        for (var _len3 = arguments.length, args = new Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
-          args[_key3 - 1] = arguments[_key3];
+        for (var _len3 = arguments.length, args = new Array(_len3 > 1 ? _len3 - 1 : 0), _key4 = 1; _key4 < _len3; _key4++) {
+          args[_key4 - 1] = arguments[_key4];
         }
 
         for (var _i3 = 0; _i3 < items.length; _i3++) {
@@ -1249,8 +1250,8 @@
       value: function emit(name) {
         var _get3;
 
-        for (var _len4 = arguments.length, args = new Array(_len4 > 1 ? _len4 - 1 : 0), _key4 = 1; _key4 < _len4; _key4++) {
-          args[_key4 - 1] = arguments[_key4];
+        for (var _len4 = arguments.length, args = new Array(_len4 > 1 ? _len4 - 1 : 0), _key5 = 1; _key5 < _len4; _key5++) {
+          args[_key5 - 1] = arguments[_key5];
         }
 
         (_get3 = _get(CrossWindow.prototype.__proto__ || Object.getPrototypeOf(CrossWindow.prototype), "emit", this)).call.apply(_get3, [this, name].concat(args));

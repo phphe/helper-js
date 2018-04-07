@@ -260,6 +260,71 @@ export function cloneObj(obj, exclude) {
       break;
   }
 }
+// return cloned obj
+// handler(value, key, parent)
+// handler can return follow:
+//  null: don't change anything
+//  {key: false}: delete
+//  {value}: change value
+//  {key, value}. change key and value
+function mapObjectTree(obj, handler, limit=10000) {
+  let r
+  let count = 0
+  const stack = [{value: obj}]
+  while (stack.length > 0) {
+    if (count >= limit) {
+      throw `mapObjectTree: limit(${limit}) reached, object may has circular reference`
+    }
+    count++
+    const {value, key, parent} = stack.shift()
+    const t = handler(value, key, parent)
+    let val
+    const assign = (value, key, canPush) => {
+      if (hp.isArray(value)) {
+        value = value.slice()
+      } else if (hp.isObject(value)) {
+        value = Object.assign({}, value)
+      }
+      if (parent) {
+        if (hp.isArray(parent) && canPush) {
+          parent.push(value)
+        } else {
+          parent[key] = value
+        }
+      } else {
+        r = value
+      }
+    }
+    if (!t) {
+      // no change
+      assign(value, key)
+      val = value
+    } else {
+      const {key: key2, value} = t
+      val = value
+      if (key2 === false) {
+        // del
+        continue
+      } else if (key2 == null) {
+        // don't change key
+        assign(value, key, true)
+      } else {
+        assign(value, key2)
+      }
+    }
+
+    if (hp.isArray(val)) {
+      val.forEach((v, i) => {
+        stack.push({value: v, key: i, parent: val})
+      })
+    } else if (hp.isObject(val)) {
+      for (const key in val) {
+        stack.push({value: val[key], key, parent: val})
+      }
+    }
+  }
+  return r
+}
 // function
 export function executeWithCount(func, context) {
   let count = 0
