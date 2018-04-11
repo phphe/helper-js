@@ -856,7 +856,7 @@ export function resolveArgsByType(args, types) {
       dft = v[1]
     } else {
       rule = v
-      dft = null
+      dft = undefined
     }
     if (!isFunction(rule)) {
       if (rule == null) {
@@ -869,8 +869,10 @@ export function resolveArgsByType(args, types) {
     const arg = args[argIndex]
     if (rule(arg)) {
       argIndex++
+      return arg
+    } else {
+      return dft
     }
-    return arg || dft
   })
 }
 

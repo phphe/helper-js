@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.0.44
+ * helper-js v1.0.45
  * (c) 2017-present phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -1158,7 +1158,7 @@ function resolveArgsByType(args, types) {
       dft = v[1];
     } else {
       rule = v;
-      dft = null;
+      dft = undefined;
     }
 
     if (!isFunction(rule)) {
@@ -1179,9 +1179,10 @@ function resolveArgsByType(args, types) {
 
     if (rule(arg)) {
       argIndex++;
+      return arg;
+    } else {
+      return dft;
     }
-
-    return arg || dft;
   });
 } // set null can remove a item
 
