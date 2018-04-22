@@ -1,3 +1,10 @@
+// resolve global
+let glb
+try {
+  glb = global
+} catch (e) {
+  glb = window
+}
 // local store
 export const store = {}
 // is 各种判断
@@ -505,7 +512,7 @@ export function getBorder(el) {
     left: of.x,
     right: of.x + workArea.offsetWidth,
     top: of.y + 50,
-    bottom: body.offsetHeight < global.innerHeight ? global.innerHeight : body.offsetHeight
+    bottom: body.offsetHeight < glb.innerHeight ? glb.innerHeight : body.offsetHeight
   }
 }
 export function setElChildByIndex(el, index, child) {
@@ -581,9 +588,9 @@ export function windowLoaded() {
     if (document && document.readyState === 'complete') {
       resolve()
     } else {
-      global.addEventListener('load', function once() {
+      glb.addEventListener('load', function once() {
         resolve()
-        global.removeEventListener('load', once)
+        glb.removeEventListener('load', once)
       })
     }
   })
@@ -599,7 +606,7 @@ export function waitFor(name, condition, time = 100, maxCount = 1000) {
   if (!store.waitFor) store.waitFor = {}
   const waits = store.waitFor
   if (name && isset(waits[name])) {
-    global.clearInterval(waits[name])
+    glb.clearInterval(waits[name])
     delete waits[name]
   }
   return new Promise(function(resolve, reject) {
@@ -619,14 +626,14 @@ export function waitFor(name, condition, time = 100, maxCount = 1000) {
     function stop(interval, name) {
       if (interval) {
         if (name && isset(waits[name])) {
-          global.clearInterval(waits[name])
+          glb.clearInterval(waits[name])
           delete waits[name]
         } else {
-          global.clearInterval(interval)
+          glb.clearInterval(interval)
         }
       }
     }
-    const interval = global.setInterval(function () {
+    const interval = glb.setInterval(function () {
       judge(interval)
     }, time)
     if (name) {
@@ -724,7 +731,7 @@ export function copyTextToClipboard(text) {
 
 // jquery
 export function jqFixedSize(sel) {
-  const $ = global.jQuery
+  const $ = glb.jQuery
   $(sel).each(function () {
     const t = $(this)
     t.css({
@@ -738,7 +745,7 @@ export function jqMakeCarousel(wrapperSel, listSel, itemSel, speed = 1000, space
     space = space + 'px'
   }
   const spaceNumber = parseFloat(space)
-  const $ = global.jQuery
+  const $ = glb.jQuery
   const wrapper = $(wrapperSel)
   const list = wrapper.find(listSel)
   wrapper.css({
@@ -807,7 +814,7 @@ export function jqMakeCarousel(wrapperSel, listSel, itemSel, speed = 1000, space
 // http://www.w3school.com.cn/htmldom/met_win_open.asp#windowfeatures
 export function openWindow(url, name, opt = {})
 {
-  global.open(url, name, Object.keys(opt).map(k => `${k}=${opt[k]}`).join(','));
+  glb.open(url, name, Object.keys(opt).map(k => `${k}=${opt[k]}`).join(','));
 }
 
 export function openCenterWindow(url, name, width, height, opt = {})
@@ -815,8 +822,8 @@ export function openCenterWindow(url, name, width, height, opt = {})
   const t = {
     width,
     height,
-    top: (global.screen.availHeight-30-height) / 2,
-    left: (global.screen.availWidth-30-width) / 2,
+    top: (glb.screen.availHeight-30-height) / 2,
+    left: (glb.screen.availWidth-30-width) / 2,
   }
   Object.assign(t, opt)
   openWindow(url, name, t)
@@ -907,8 +914,8 @@ export function makeStorageHelper(storage) {
     },
   }
 }
-export const localStorage2 = makeStorageHelper(global.localStorage)
-export const sessionStorage2 = makeStorageHelper(global.sessionStorage)
+export const localStorage2 = makeStorageHelper(glb.localStorage)
+export const sessionStorage2 = makeStorageHelper(glb.sessionStorage)
 
 // 事件处理
 export class EventProcessor {
@@ -971,7 +978,7 @@ export class CrossWindow extends EventProcessor{
   }
   emit(name, ...args) {
      super.emit(name, ...args)
-     global.localStorage.setItem(this.storageName, JSON.stringify({
+     glb.localStorage.setItem(this.storageName, JSON.stringify({
        name,
        args,
        // use random make storage event triggered every time

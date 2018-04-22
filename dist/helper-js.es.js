@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.0.45
+ * helper-js v1.0.46
  * (c) 2017-present phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -116,7 +116,16 @@ function _nonIterableSpread() {
   throw new TypeError("Invalid attempt to spread non-iterable instance");
 }
 
-// local store
+// resolve global
+var glb;
+
+try {
+  glb = global;
+} catch (e) {
+  glb = window;
+} // local store
+
+
 var store = {}; // is 各种判断
 
 function isset(v) {
@@ -726,7 +735,7 @@ function getBorder(el) {
     left: of.x,
     right: of.x + workArea.offsetWidth,
     top: of.y + 50,
-    bottom: body.offsetHeight < global.innerHeight ? global.innerHeight : body.offsetHeight
+    bottom: body.offsetHeight < glb.innerHeight ? glb.innerHeight : body.offsetHeight
   };
 }
 function setElChildByIndex(el, index, child) {
@@ -831,9 +840,9 @@ function windowLoaded() {
     if (document && document.readyState === 'complete') {
       resolve();
     } else {
-      global.addEventListener('load', function once() {
+      glb.addEventListener('load', function once() {
         resolve();
-        global.removeEventListener('load', once);
+        glb.removeEventListener('load', once);
       });
     }
   });
@@ -854,7 +863,7 @@ function waitFor(name, condition) {
   var waits = store.waitFor;
 
   if (name && isset(waits[name])) {
-    global.clearInterval(waits[name]);
+    glb.clearInterval(waits[name]);
     delete waits[name];
   }
 
@@ -878,15 +887,15 @@ function waitFor(name, condition) {
     function stop(interval, name) {
       if (interval) {
         if (name && isset(waits[name])) {
-          global.clearInterval(waits[name]);
+          glb.clearInterval(waits[name]);
           delete waits[name];
         } else {
-          global.clearInterval(interval);
+          glb.clearInterval(interval);
         }
       }
     }
 
-    var interval = global.setInterval(function () {
+    var interval = glb.setInterval(function () {
       judge(interval);
     }, time);
 
@@ -980,7 +989,7 @@ function copyTextToClipboard(text) {
 } // jquery
 
 function jqFixedSize(sel) {
-  var $ = global.jQuery;
+  var $ = glb.jQuery;
   $(sel).each(function () {
     var t = $(this);
     t.css({
@@ -1000,7 +1009,7 @@ function jqMakeCarousel(wrapperSel, listSel, itemSel) {
   }
 
   var spaceNumber = parseFloat(space);
-  var $ = global.jQuery;
+  var $ = glb.jQuery;
   var wrapper = $(wrapperSel);
   var list = wrapper.find(listSel);
   wrapper.css({
@@ -1074,7 +1083,7 @@ function jqMakeCarousel(wrapperSel, listSel, itemSel) {
 
 function openWindow(url, name) {
   var opt = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-  global.open(url, name, Object.keys(opt).map(function (k) {
+  glb.open(url, name, Object.keys(opt).map(function (k) {
     return "".concat(k, "=").concat(opt[k]);
   }).join(','));
 }
@@ -1083,8 +1092,8 @@ function openCenterWindow(url, name, width, height) {
   var t = {
     width: width,
     height: height,
-    top: (global.screen.availHeight - 30 - height) / 2,
-    left: (global.screen.availWidth - 30 - width) / 2
+    top: (glb.screen.availHeight - 30 - height) / 2,
+    left: (glb.screen.availWidth - 30 - width) / 2
   };
   Object.assign(t, opt);
   openWindow(url, name, t);
@@ -1215,8 +1224,8 @@ function makeStorageHelper(storage) {
     }
   };
 }
-var localStorage2 = makeStorageHelper(global.localStorage);
-var sessionStorage2 = makeStorageHelper(global.sessionStorage); // 事件处理
+var localStorage2 = makeStorageHelper(glb.localStorage);
+var sessionStorage2 = makeStorageHelper(glb.sessionStorage); // 事件处理
 
 var EventProcessor =
 /*#__PURE__*/
@@ -1369,7 +1378,7 @@ function (_EventProcessor) {
 
       (_get3 = _get(CrossWindow.prototype.__proto__ || Object.getPrototypeOf(CrossWindow.prototype), "emit", this)).call.apply(_get3, [this, name].concat(args));
 
-      global.localStorage.setItem(this.storageName, JSON.stringify({
+      glb.localStorage.setItem(this.storageName, JSON.stringify({
         name: name,
         args: args,
         // use random make storage event triggered every time
