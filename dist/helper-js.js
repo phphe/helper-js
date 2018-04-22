@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.0.46
+ * helper-js v1.0.47
  * (c) 2017-present phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -324,6 +324,34 @@
     }
 
     return r;
+  } // loop for all type
+
+  function forAll(val, handler) {
+    if (isArray(val) || isString(val)) {
+      var len = val.length;
+
+      for (var i = 0; i < len; i++) {
+        if (handler(val[i], i) === false) {
+          break;
+        }
+      }
+    } else if (isObject(val)) {
+      var _arr = Object.keys(val);
+
+      for (var _i = 0; _i < _arr.length; _i++) {
+        var key = _arr[_i];
+
+        if (handler(val[key], key) === false) {
+          break;
+        }
+      }
+    } else if (Number.isInteger(val)) {
+      for (var _i2 = 0; _i2 < val; _i2++) {
+        if (handler(_i2) === false) {
+          break;
+        }
+      }
+    }
   } // source: http://stackoverflow.com/questions/8817394/javascript-get-deep-value-from-object-by-passing-path-to-it-as-string
 
   function objectGet(obj, path) {
@@ -414,10 +442,10 @@
         } else {
           r = {};
 
-          var _arr = Object.keys(obj);
+          var _arr2 = Object.keys(obj);
 
-          for (var _i = 0; _i < _arr.length; _i++) {
-            var key = _arr[_i];
+          for (var _i3 = 0; _i3 < _arr2.length; _i3++) {
+            var key = _arr2[_i3];
 
             if (!exclude || isArray(exclude) && !exclude.includes(key) || !exclude(key, obj[key], obj)) {
               r[key] = cloneObj(obj[key], exclude);
@@ -1287,8 +1315,8 @@
           }
         }
 
-        for (var _i2 = 0; _i2 < indexes.length; _i2++) {
-          var index = indexes[_i2];
+        for (var _i4 = 0; _i4 < indexes.length; _i4++) {
+          var index = indexes[_i4];
           this.eventStore.splice(index, 1);
         }
       }
@@ -1328,8 +1356,8 @@
           args[_key3 - 1] = arguments[_key3];
         }
 
-        for (var _i3 = 0; _i3 < items.length; _i3++) {
-          var _item = items[_i3];
+        for (var _i5 = 0; _i5 < items.length; _i5++) {
+          var _item = items[_i5];
 
           _item.handler.apply(_item, args);
         }
@@ -1430,6 +1458,7 @@
   exports.objectMap = objectMap;
   exports.objectOnly = objectOnly;
   exports.objectExcept = objectExcept;
+  exports.forAll = forAll;
   exports.objectGet = objectGet;
   exports.objectSet = objectSet;
   exports.unset = unset;

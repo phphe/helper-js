@@ -191,6 +191,30 @@ export function objectExcept(obj, keys) {
   }
   return r
 }
+// loop for all type
+export function forAll(val, handler) {
+  if (isArray(val) || isString(val)) {
+    const len = val.length
+    for (let i = 0; i < len; i++) {
+      if (handler(val[i], i) === false) {
+        break
+      }
+    }
+  } else if (isObject(val)) {
+    for (const key of Object.keys(val)) {
+      if (handler(val[key], key) === false) {
+        break
+      }
+    }
+  } else if (Number.isInteger(val)) {
+    for (let i = 0; i < val; i++) {
+      if (handler(i) === false) {
+        break
+      }
+    }
+  }
+}
+
 // source: http://stackoverflow.com/questions/8817394/javascript-get-deep-value-from-object-by-passing-path-to-it-as-string
 export function objectGet(obj, path, defaultValue = null) {
   const paths = path.split('.')
