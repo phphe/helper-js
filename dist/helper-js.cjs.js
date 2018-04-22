@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.0.47
+ * helper-js v1.0.48
  * (c) 2017-present phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -345,7 +345,7 @@ function forAll(val, handler) {
     }
   } else if (Number.isInteger(val)) {
     for (var _i2 = 0; _i2 < val; _i2++) {
-      if (handler(_i2) === false) {
+      if (handler(_i2, _i2) === false) {
         break;
       }
     }

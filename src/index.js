@@ -208,7 +208,7 @@ export function forAll(val, handler) {
     }
   } else if (Number.isInteger(val)) {
     for (let i = 0; i < val; i++) {
-      if (handler(i) === false) {
+      if (handler(i, i) === false) {
         break
       }
     }

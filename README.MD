@@ -55,6 +55,8 @@ helloWorldNice => Hello World Nice
 ###### objectMap   (obj, func)
 ###### objectOnly   (obj, keys) // return new object
 ###### objectExcept   (obj, keys) // return new object
+###### forAll(val, handler) // loop array, object or integer, return false in handler can break loop
+handler(item, index/key)
 ###### objectGet   (obj, path, defaultValue = null) // get by dot path
 ({a:{b:1}}, 'a.b') => 1
 ###### objectSet   (obj, path, value)
