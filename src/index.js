@@ -144,6 +144,16 @@ export function arrayDiff(arr1, arr2) {
   }
   return arr
 }
+export function arraySibling(arr, item, offset) {
+  const index = arr.indexOf(item)
+  if (index === -1) {
+    throw 'item is not in array'
+  }
+  if (isArray(offset)) {
+    return offset.map(v => arr[index + v])
+  }
+  return arr[index + offset]
+}
 export function toArrayIfNot(arrOrNot) {
   return isArray(arrOrNot) ? arrOrNot : [arrOrNot]
 }

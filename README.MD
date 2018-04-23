@@ -49,6 +49,7 @@ helloWorldNice => Hello World Nice
 ###### arrayFirst   
 ###### arrayLast   
 ###### arrayDiff  (arr1, arr2) // return items in arr2 but not in arr1
+###### arraySibling  (arr, item, Number/Array offset) // return sibling or siblings relative to item
 ###### toArrayIfNot   
 ###### assignIfDifferent(obj, key, val)   
 ###### objectMerge (obj1, obj2) // merge obj2 to obj1, and merge obj2 chldren to obj1 if it is object

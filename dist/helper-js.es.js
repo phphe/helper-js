@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.0.48
+ * helper-js v1.0.49
  * (c) 2017-present phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -265,6 +265,21 @@ function arrayDiff(arr1, arr2) {
   }
 
   return arr;
+}
+function arraySibling(arr, item, offset) {
+  var index = arr.indexOf(item);
+
+  if (index === -1) {
+    throw 'item is not in array';
+  }
+
+  if (isArray(offset)) {
+    return offset.map(function (v) {
+      return arr[index + v];
+    });
+  }
+
+  return arr[index + offset];
 }
 function toArrayIfNot(arrOrNot) {
   return isArray(arrOrNot) ? arrOrNot : [arrOrNot];
@@ -1419,4 +1434,4 @@ function (_EventProcessor) {
   return CrossWindow;
 }(EventProcessor);
 
-export { store, isset, isArray, isBool, isNumber, isNumeric, isString, isObject, isFunction, isPromise, empty, numRand, numPad, min, max, studlyCase, kebabCase, snakeCase, camelCase, camelToWords, titleCase, strRand, replaceMultiple, arrayRemove, arrayFirst, arrayLast, arrayDiff, toArrayIfNot, assignIfDifferent, objectMerge, objectMap, objectOnly, objectExcept, forAll, objectGet, objectSet, unset, cloneObj, mapObjectTree, mapObjects, executeWithCount, watchChange, getUrlParam, uniqueId, isDescendantOf, getOffsetWithoutScroll, getOffset, findParent, backupAttr, restoreAttr, hasClass, addClass, removeClass, getElSize, isOffsetInEl, getBorder, setElChildByIndex, onDOM, offDOM, binarySearch, windowLoaded, waitFor, retry, copyTextToClipboard, jqFixedSize, jqMakeCarousel, openWindow, openCenterWindow, URLHelper, resolveArgsByType, makeStorageHelper, localStorage2, sessionStorage2, EventProcessor, CrossWindow };
+export { store, isset, isArray, isBool, isNumber, isNumeric, isString, isObject, isFunction, isPromise, empty, numRand, numPad, min, max, studlyCase, kebabCase, snakeCase, camelCase, camelToWords, titleCase, strRand, replaceMultiple, arrayRemove, arrayFirst, arrayLast, arrayDiff, arraySibling, toArrayIfNot, assignIfDifferent, objectMerge, objectMap, objectOnly, objectExcept, forAll, objectGet, objectSet, unset, cloneObj, mapObjectTree, mapObjects, executeWithCount, watchChange, getUrlParam, uniqueId, isDescendantOf, getOffsetWithoutScroll, getOffset, findParent, backupAttr, restoreAttr, hasClass, addClass, removeClass, getElSize, isOffsetInEl, getBorder, setElChildByIndex, onDOM, offDOM, binarySearch, windowLoaded, waitFor, retry, copyTextToClipboard, jqFixedSize, jqMakeCarousel, openWindow, openCenterWindow, URLHelper, resolveArgsByType, makeStorageHelper, localStorage2, sessionStorage2, EventProcessor, CrossWindow };

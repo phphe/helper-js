@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.0.48
+ * helper-js v1.0.49
  * (c) 2017-present phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -271,6 +271,21 @@
     }
 
     return arr;
+  }
+  function arraySibling(arr, item, offset) {
+    var index = arr.indexOf(item);
+
+    if (index === -1) {
+      throw 'item is not in array';
+    }
+
+    if (isArray(offset)) {
+      return offset.map(function (v) {
+        return arr[index + v];
+      });
+    }
+
+    return arr[index + offset];
   }
   function toArrayIfNot(arrOrNot) {
     return isArray(arrOrNot) ? arrOrNot : [arrOrNot];
@@ -1452,6 +1467,7 @@
   exports.arrayFirst = arrayFirst;
   exports.arrayLast = arrayLast;
   exports.arrayDiff = arrayDiff;
+  exports.arraySibling = arraySibling;
   exports.toArrayIfNot = toArrayIfNot;
   exports.assignIfDifferent = assignIfDifferent;
   exports.objectMerge = objectMerge;
