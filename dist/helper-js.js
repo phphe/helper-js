@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.0.49
+ * helper-js v1.0.51
  * (c) 2017-present phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -254,6 +254,44 @@
 
     return count;
   }
+  function newArrayRemoveAt(arr, indexes) {
+    indexes = toArrayIfNot(indexes);
+    var mapping = {};
+    var _iteratorNormalCompletion = true;
+    var _didIteratorError = false;
+    var _iteratorError = undefined;
+
+    try {
+      for (var _iterator = indexes[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+        var index = _step.value;
+        mapping[index] = true;
+      }
+    } catch (err) {
+      _didIteratorError = true;
+      _iteratorError = err;
+    } finally {
+      try {
+        if (!_iteratorNormalCompletion && _iterator.return != null) {
+          _iterator.return();
+        }
+      } finally {
+        if (_didIteratorError) {
+          throw _iteratorError;
+        }
+      }
+    }
+
+    var newArr = [];
+    var len = arr.length;
+
+    for (var i = 0; i < len; i++) {
+      if (!mapping[i]) {
+        newArr.push(arr[i]);
+      }
+    }
+
+    return newArr;
+  }
   function arrayFirst(arr) {
     return arr[0];
   }
@@ -431,26 +469,26 @@
 
         if (isArray(obj)) {
           r = [];
-          var _iteratorNormalCompletion = true;
-          var _didIteratorError = false;
-          var _iteratorError = undefined;
+          var _iteratorNormalCompletion2 = true;
+          var _didIteratorError2 = false;
+          var _iteratorError2 = undefined;
 
           try {
-            for (var _iterator = obj[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-              var item = _step.value;
+            for (var _iterator2 = obj[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+              var item = _step2.value;
               r.push(cloneObj(item, exclude));
             }
           } catch (err) {
-            _didIteratorError = true;
-            _iteratorError = err;
+            _didIteratorError2 = true;
+            _iteratorError2 = err;
           } finally {
             try {
-              if (!_iteratorNormalCompletion && _iterator.return != null) {
-                _iterator.return();
+              if (!_iteratorNormalCompletion2 && _iterator2.return != null) {
+                _iterator2.return();
               }
             } finally {
-              if (_didIteratorError) {
-                throw _iteratorError;
+              if (_didIteratorError2) {
+                throw _iteratorError2;
               }
             }
           }
@@ -1199,7 +1237,8 @@
 
     return URLHelper;
   }(); // 解析函数参数, 帮助重载
-  // types eg: ['Object', (i) => i > 3, ['Number', default] ]
+  // types eg: ['Object', (i) => i > 3, ['Number', default], null ]
+  // null represent all types of argument
 
   function resolveArgsByType(args, types) {
     var argIndex = 0;
@@ -1340,29 +1379,29 @@
       value: function emit(name) {
         // 重要: 先找到要执行的项放在新数组里, 因为执行项会改变事件项存储数组
         var items = [];
-        var _iteratorNormalCompletion2 = true;
-        var _didIteratorError2 = false;
-        var _iteratorError2 = undefined;
+        var _iteratorNormalCompletion3 = true;
+        var _didIteratorError3 = false;
+        var _iteratorError3 = undefined;
 
         try {
-          for (var _iterator2 = this.eventStore[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-            var item = _step2.value;
+          for (var _iterator3 = this.eventStore[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+            var item = _step3.value;
 
             if (item.name === name) {
               items.push(item);
             }
           }
         } catch (err) {
-          _didIteratorError2 = true;
-          _iteratorError2 = err;
+          _didIteratorError3 = true;
+          _iteratorError3 = err;
         } finally {
           try {
-            if (!_iteratorNormalCompletion2 && _iterator2.return != null) {
-              _iterator2.return();
+            if (!_iteratorNormalCompletion3 && _iterator3.return != null) {
+              _iterator3.return();
             }
           } finally {
-            if (_didIteratorError2) {
-              throw _iteratorError2;
+            if (_didIteratorError3) {
+              throw _iteratorError3;
             }
           }
         }
@@ -1464,6 +1503,7 @@
   exports.strRand = strRand;
   exports.replaceMultiple = replaceMultiple;
   exports.arrayRemove = arrayRemove;
+  exports.newArrayRemoveAt = newArrayRemoveAt;
   exports.arrayFirst = arrayFirst;
   exports.arrayLast = arrayLast;
   exports.arrayDiff = arrayDiff;

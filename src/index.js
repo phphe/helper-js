@@ -129,7 +129,7 @@ export function arrayRemove(arr, v) {
   return count
 }
 export function newArrayRemoveAt(arr, indexes) {
-  const indexes = toArrayIfNot(indexes)
+  indexes = toArrayIfNot(indexes)
   const mapping = {}
   for (const index of indexes) {
     mapping[index] = true
