@@ -128,6 +128,21 @@ export function arrayRemove(arr, v) {
   }
   return count
 }
+export function newArrayRemoveAt(arr, indexes) {
+  const indexes = toArrayIfNot(indexes)
+  const mapping = {}
+  for (const index of indexes) {
+    mapping[index] = true
+  }
+  const newArr = []
+  const len = arr.length
+  for (let i = 0; i < len; i++) {
+    if (!mapping[i]) {
+      newArr.push(arr[i])
+    }
+  }
+  return newArr
+}
 export function arrayFirst(arr) {
   return arr[0]
 }
@@ -886,7 +901,8 @@ export class URLHelper {
 }
 
 // 解析函数参数, 帮助重载
-// types eg: ['Object', (i) => i > 3, ['Number', default] ]
+// types eg: ['Object', (i) => i > 3, ['Number', default], null ]
+// null represent all types of argument
 export function resolveArgsByType(args, types) {
   let argIndex = 0
   return types.map(v => {

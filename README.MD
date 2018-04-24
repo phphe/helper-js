@@ -46,6 +46,7 @@ helloWorldNice => Hello World Nice
 ###### replaceMultiple (mapObj, str)
 ({'1': '2', '3': '4'}, 'abcd1234') => 'abcd2244'
 ###### arrayRemove   (arr, item) // remove any === item
+###### newArrayRemoveAt   (arr, index/indexes) // remove by index or indexes, return new array
 ###### arrayFirst   
 ###### arrayLast   
 ###### arrayDiff  (arr1, arr2) // return items in arr2 but not in arr1
