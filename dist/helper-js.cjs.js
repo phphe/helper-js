@@ -1,6 +1,6 @@
 /*!
- * helper-js v1.0.52
- * (c) 2017-present phphe <phphe@outlook.com> (https://github.com/phphe)
+ * helper-js v1.0.53
+ * (c) 2018-present phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
 'use strict';
@@ -743,16 +743,15 @@ function getOffset(el) {
   };
 }
 function offsetToPosition(el, of) {
-  var parent = el.offsetParent;
+  var p = {
+    x: el.offsetLeft,
+    y: el.offsetTop // position
 
-  if (!parent) {
-    return Object.assign({}, of);
-  }
-
-  var pof = getOffset(parent);
+  };
+  var elOf = getOffset(el);
   return {
-    x: of.x - pof.x,
-    y: of.y - pof.y
+    x: of.x - (elOf.x - p.x),
+    y: of.y - (elOf.y - p.y)
   };
 }
 function findParent(el, callback) {
