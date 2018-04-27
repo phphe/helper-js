@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.0.51
+ * helper-js v1.0.52
  * (c) 2017-present phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -714,34 +714,48 @@
         el = el.parentElement;
       }
     }
-  }
-  function getOffsetWithoutScroll(el) {
-    var elOffset = {
-      x: el.offsetLeft,
-      y: el.offsetTop
-    };
-    var parentOffset = {
-      x: 0,
-      y: 0
-    };
-    if (el.offsetParent != null) parentOffset = getOffsetWithoutScroll(el.offsetParent);
-    return {
-      x: elOffset.x + parentOffset.x,
-      y: elOffset.y + parentOffset.y
-    };
-  }
-  function getOffset(el) {
-    var offfset = getOffsetWithoutScroll(el);
-    var el2 = el;
-    var body = document.body;
+  } // refer: https://stackoverflow.com/questions/871399/cross-browser-method-for-detecting-the-scrolltop-of-the-browser-window
 
-    while (el2 && el2 !== body) {
-      offfset.x -= el2.scrollLeft;
-      offfset.y -= el2.scrollTop;
-      el2 = el2.parentElement;
+  function getScroll() {
+    if (typeof pageYOffset != 'undefined') {
+      //most browsers except IE before #9
+      return {
+        top: pageYOffset,
+        left: pageXOffset
+      };
+    } else {
+      var B = document.body; //IE 'quirks'
+
+      var D = document.documentElement; //IE with doctype
+
+      D = D.clientHeight ? D : B;
+      return {
+        top: D.scrollTop,
+        left: D.scrollLeft
+      };
+    }
+  } // refer: https://gist.github.com/aderaaij/89547e34617b95ac29d1
+
+  function getOffset(el) {
+    var rect = el.getBoundingClientRect();
+    var scroll = getScroll();
+    return {
+      x: rect.left + scroll.left,
+      y: rect.top + scroll.top
+    };
+  }
+  function offsetToPosition(el, of) {
+    var parent = el.offsetParent;
+
+    if (!parent) {
+      return Object.assign({}, of);
     }
 
-    return offfset;
+    var pof = getOffset(parent);
+    return {
+      x: of.x - pof.x,
+      y: of.y - pof.y
+    };
   }
   function findParent(el, callback) {
     return doFindParent(el, callback);
@@ -1526,8 +1540,9 @@
   exports.getUrlParam = getUrlParam;
   exports.uniqueId = uniqueId;
   exports.isDescendantOf = isDescendantOf;
-  exports.getOffsetWithoutScroll = getOffsetWithoutScroll;
+  exports.getScroll = getScroll;
   exports.getOffset = getOffset;
+  exports.offsetToPosition = offsetToPosition;
   exports.findParent = findParent;
   exports.backupAttr = backupAttr;
   exports.restoreAttr = restoreAttr;

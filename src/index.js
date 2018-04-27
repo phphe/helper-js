@@ -460,29 +460,46 @@ export function isDescendantOf (el, parent) {
   }
 }
 
-export function getOffsetWithoutScroll(el) {
-  var elOffset = {
-    x: el.offsetLeft,
-    y: el.offsetTop
-  }
-  var parentOffset = {x: 0, y: 0}
-  if (el.offsetParent != null) parentOffset = getOffsetWithoutScroll(el.offsetParent)
-  return {
-    x: elOffset.x + parentOffset.x,
-    y: elOffset.y + parentOffset.y
-  }
+// refer: https://stackoverflow.com/questions/871399/cross-browser-method-for-detecting-the-scrolltop-of-the-browser-window
+export function getScroll(){
+    if(typeof pageYOffset!= 'undefined'){
+        //most browsers except IE before #9
+        return {
+          top: pageYOffset,
+          left: pageXOffset,
+        };
+    }
+    else{
+        var B= document.body; //IE 'quirks'
+        var D= document.documentElement; //IE with doctype
+        D= (D.clientHeight)? D: B;
+        return {
+          top: D.scrollTop,
+          left: D.scrollLeft,
+        };
+    }
+}
+// refer: https://gist.github.com/aderaaij/89547e34617b95ac29d1
+export function getOffset(el) {
+  const rect = el.getBoundingClientRect()
+  const scroll = getScroll()
+
+	return {
+		x: rect.left + scroll.left,
+    y: rect.top + scroll.top,
+	}
 }
 
-export function getOffset(el) {
-  const offfset = getOffsetWithoutScroll(el)
-  let el2 = el
-  const body = document.body
-  while (el2 && el2 !== body) {
-    offfset.x -= el2.scrollLeft
-    offfset.y -= el2.scrollTop
-    el2 = el2.parentElement
+export function offsetToPosition(el, of) {
+  const parent = el.offsetParent
+  if (!parent) {
+    return Object.assign({}, of)
   }
-  return offfset
+  const pof = getOffset(parent)
+  return {
+    x: of.x - pof.x,
+    y: of.y - pof.y,
+  }
 }
 
 export function findParent(el, callback) {
@@ -605,13 +622,13 @@ export function offDOM(el, name, handler) {
 // advance
 // binarySearch 二分查找
 export function binarySearch(arr, callback, start, end, returnNearestIfNoHit, max = 1000) {
-  var midNum
-  var mid
+  let midNum
+  let mid
   if (start == null) {
     start = 0
     end = arr.length - 1
   }
-  var i = 0
+  let i = 0
   let r
   while (start >= 0 && start <= end) {
     if (i >= max) {

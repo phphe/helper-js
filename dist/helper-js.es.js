@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.0.51
+ * helper-js v1.0.52
  * (c) 2017-present phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -708,34 +708,48 @@ function isDescendantOf(el, parent) {
       el = el.parentElement;
     }
   }
-}
-function getOffsetWithoutScroll(el) {
-  var elOffset = {
-    x: el.offsetLeft,
-    y: el.offsetTop
-  };
-  var parentOffset = {
-    x: 0,
-    y: 0
-  };
-  if (el.offsetParent != null) parentOffset = getOffsetWithoutScroll(el.offsetParent);
-  return {
-    x: elOffset.x + parentOffset.x,
-    y: elOffset.y + parentOffset.y
-  };
-}
-function getOffset(el) {
-  var offfset = getOffsetWithoutScroll(el);
-  var el2 = el;
-  var body = document.body;
+} // refer: https://stackoverflow.com/questions/871399/cross-browser-method-for-detecting-the-scrolltop-of-the-browser-window
 
-  while (el2 && el2 !== body) {
-    offfset.x -= el2.scrollLeft;
-    offfset.y -= el2.scrollTop;
-    el2 = el2.parentElement;
+function getScroll() {
+  if (typeof pageYOffset != 'undefined') {
+    //most browsers except IE before #9
+    return {
+      top: pageYOffset,
+      left: pageXOffset
+    };
+  } else {
+    var B = document.body; //IE 'quirks'
+
+    var D = document.documentElement; //IE with doctype
+
+    D = D.clientHeight ? D : B;
+    return {
+      top: D.scrollTop,
+      left: D.scrollLeft
+    };
+  }
+} // refer: https://gist.github.com/aderaaij/89547e34617b95ac29d1
+
+function getOffset(el) {
+  var rect = el.getBoundingClientRect();
+  var scroll = getScroll();
+  return {
+    x: rect.left + scroll.left,
+    y: rect.top + scroll.top
+  };
+}
+function offsetToPosition(el, of) {
+  var parent = el.offsetParent;
+
+  if (!parent) {
+    return Object.assign({}, of);
   }
 
-  return offfset;
+  var pof = getOffset(parent);
+  return {
+    x: of.x - pof.x,
+    y: of.y - pof.y
+  };
 }
 function findParent(el, callback) {
   return doFindParent(el, callback);
@@ -1473,4 +1487,4 @@ function (_EventProcessor) {
   return CrossWindow;
 }(EventProcessor);
 
-export { store, isset, isArray, isBool, isNumber, isNumeric, isString, isObject, isFunction, isPromise, empty, numRand, numPad, min, max, studlyCase, kebabCase, snakeCase, camelCase, camelToWords, titleCase, strRand, replaceMultiple, arrayRemove, newArrayRemoveAt, arrayFirst, arrayLast, arrayDiff, arraySibling, toArrayIfNot, assignIfDifferent, objectMerge, objectMap, objectOnly, objectExcept, forAll, objectGet, objectSet, unset, cloneObj, mapObjectTree, mapObjects, executeWithCount, watchChange, getUrlParam, uniqueId, isDescendantOf, getOffsetWithoutScroll, getOffset, findParent, backupAttr, restoreAttr, hasClass, addClass, removeClass, getElSize, isOffsetInEl, getBorder, setElChildByIndex, onDOM, offDOM, binarySearch, windowLoaded, waitFor, retry, copyTextToClipboard, jqFixedSize, jqMakeCarousel, openWindow, openCenterWindow, URLHelper, resolveArgsByType, makeStorageHelper, localStorage2, sessionStorage2, EventProcessor, CrossWindow };
+export { store, isset, isArray, isBool, isNumber, isNumeric, isString, isObject, isFunction, isPromise, empty, numRand, numPad, min, max, studlyCase, kebabCase, snakeCase, camelCase, camelToWords, titleCase, strRand, replaceMultiple, arrayRemove, newArrayRemoveAt, arrayFirst, arrayLast, arrayDiff, arraySibling, toArrayIfNot, assignIfDifferent, objectMerge, objectMap, objectOnly, objectExcept, forAll, objectGet, objectSet, unset, cloneObj, mapObjectTree, mapObjects, executeWithCount, watchChange, getUrlParam, uniqueId, isDescendantOf, getScroll, getOffset, offsetToPosition, findParent, backupAttr, restoreAttr, hasClass, addClass, removeClass, getElSize, isOffsetInEl, getBorder, setElChildByIndex, onDOM, offDOM, binarySearch, windowLoaded, waitFor, retry, copyTextToClipboard, jqFixedSize, jqMakeCarousel, openWindow, openCenterWindow, URLHelper, resolveArgsByType, makeStorageHelper, localStorage2, sessionStorage2, EventProcessor, CrossWindow };

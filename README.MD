@@ -86,8 +86,9 @@ eg: mapObjects([{id: 1}, {id:2}], (item, i) => item.id + 100 ) -> {'101':{id:1},
 ##3 DOM
 ###### uniqueId  (prefix = 'id_') // html element id
 ###### isDescendantOf (el, parent)  // if el === parent or is descendant of parent
-###### getOffsetWithoutScroll   // get offset({x,y}) of an el
-###### getOffset   
+###### getScroll // return {left, top}
+###### getOffset(el) // offset is relative to top element, return {x, y}   
+###### offsetToPosition(el, offset) // position is relative to offsetParent, return {x, y}
 ###### findParent (el, callback)
 ###### backupAttr   (el, name)
 ###### restoreAttr   (el, name)
