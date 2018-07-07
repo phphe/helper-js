@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.0.55
+ * helper-js v1.0.56
  * (c) 2018-present phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -731,7 +731,8 @@
 
   function executePromiseGetters(getters) {
     var concurrent = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
-    return new Promise(function (resolve, reject) {
+    var stopped;
+    var promise = new Promise(function (resolve, reject) {
       var r = [];
       var chunks = splitArray(getters, concurrent);
       var promise = Promise.resolve();
@@ -741,9 +742,13 @@
             r.push.apply(r, _toConsumableArray(result));
           }
 
-          return Promise.all(chunk.map(function (v) {
-            return v();
-          }));
+          if (stopped) {
+            reject('stopped');
+          } else {
+            return Promise.all(chunk.map(function (v) {
+              return v();
+            }));
+          }
         });
       });
       promise.then(function (result) {
@@ -751,6 +756,12 @@
         resolve(r);
       });
     });
+    return {
+      promise: promise,
+      destroy: function destroy() {
+        stopped = true;
+      }
+    };
   } // url
 
   /* eslint-disable */

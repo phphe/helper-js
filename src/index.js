@@ -474,7 +474,8 @@ export function watchChange(getVal, handler) {
 // promise
 // execute promise in sequence
 export function executePromiseGetters(getters, concurrent = 1) {
-  return new Promise(function(resolve, reject) {
+  let stopped
+  const promise = new Promise(function(resolve, reject) {
     const r = []
     const chunks = splitArray(getters, concurrent)
     let promise = Promise.resolve()
@@ -483,14 +484,24 @@ export function executePromiseGetters(getters, concurrent = 1) {
         if (result) {
           r.push(...result)
         }
-        return Promise.all(chunk.map(v => v()))
+        if (stopped) {
+          reject('stopped')
+        } else {
+          return Promise.all(chunk.map(v => v()))
+        }
       })
     })
     promise.then(result => {
       r.push(...result)
       resolve(r)
     })
-  });
+  })
+  return {
+    promise,
+    destroy() {
+      stopped = true
+    },
+  }
 }
 
 // url

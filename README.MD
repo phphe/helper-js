@@ -83,7 +83,7 @@ eg: mapObjects([{id: 1}, {id:2}], (item, i) => item.id + 100 ) -> {'101':{id:1},
 ```
 ###### executeWithCount (func, context = null) // wrap function, last arg of new function is excuted count
 ###### watchChange   (getVal, handler) // wrap getter function, when use getter to get value, it will check value if changed
-###### executePromiseGetters(getters, concurrent = 1)
+###### executePromiseGetters(getters, concurrent = 1) // return {promise, destroy}
 ###### getUrlParam   // get current url param by name
 ##3 DOM
 ###### uniqueId  (prefix = 'id_') // html element id
