@@ -52,6 +52,7 @@ helloWorldNice => Hello World Nice
 ###### arrayDiff  (arr1, arr2) // return items in arr2 but not in arr1
 ###### arraySibling  (arr, item, Number/Array offset) // return sibling or siblings relative to item
 ###### toArrayIfNot   
+###### splitArray(arr, n) // n can be getter(number of times); n可以是方法, 参数1是第几次分块
 ###### assignIfDifferent(obj, key, val)   
 ###### objectMerge (obj1, obj2) // merge obj2 to obj1, and merge obj2 chldren to obj1 if it is object
 ###### objectMap   (obj, func)
@@ -82,6 +83,7 @@ eg: mapObjects([{id: 1}, {id:2}], (item, i) => item.id + 100 ) -> {'101':{id:1},
 ```
 ###### executeWithCount (func, context = null) // wrap function, last arg of new function is excuted count
 ###### watchChange   (getVal, handler) // wrap getter function, when use getter to get value, it will check value if changed
+###### mergePromiseGetters(getters)
 ###### getUrlParam   // get current url param by name
 ##3 DOM
 ###### uniqueId  (prefix = 'id_') // html element id

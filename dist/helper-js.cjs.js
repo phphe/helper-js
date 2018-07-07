@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.0.53
+ * helper-js v1.0.54
  * (c) 2018-present phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -252,6 +252,12 @@ function arrayRemove(arr, v) {
 
   return count;
 }
+function arrayRemoveBySortedIndexes(arr, sortedIndexes) {
+  for (var i = sortedIndexes.length - 1; i >= 0; i--) {
+    var index = sortedIndexes[i];
+    arr.splice(index, 1);
+  }
+}
 function newArrayRemoveAt(arr, indexes) {
   indexes = toArrayIfNot(indexes);
   var mapping = {};
@@ -307,7 +313,8 @@ function arrayDiff(arr1, arr2) {
   }
 
   return arr;
-}
+} // offset can be many
+
 function arraySibling(arr, item, offset) {
   var index = arr.indexOf(item);
 
@@ -325,6 +332,37 @@ function arraySibling(arr, item, offset) {
 }
 function toArrayIfNot(arrOrNot) {
   return isArray(arrOrNot) ? arrOrNot : [arrOrNot];
+} // n can be getter(number of times)
+// n可以是方法, 参数1是第几次分块
+
+function splitArray(arr, n) {
+  var r = [];
+
+  if (isFunction(n)) {
+    var getChunkLength = n;
+    var times = 1;
+    var i = 0;
+
+    while (i < arr.length) {
+      var _n = getChunkLength(times);
+
+      var end = i + _n;
+      r.push(arr.slice(i, end));
+      i = end;
+      times++;
+    }
+  } else {
+    var _i = 0;
+
+    while (_i < arr.length) {
+      var _end = _i + n;
+
+      r.push(arr.slice(_i, _end));
+      _i = _end;
+    }
+  }
+
+  return r;
 } // object
 
 function assignIfDifferent(obj, key, val) {
@@ -377,29 +415,54 @@ function objectExcept(obj, keys) {
   return r;
 } // loop for all type
 
-function forAll(val, handler) {
-  if (isArray(val) || isString(val)) {
-    var len = val.length;
+function forAll(val, handler, reverse) {
+  if (!reverse) {
+    if (isArray(val) || isString(val)) {
+      for (var i = 0; i < val.length; i++) {
+        if (handler(val[i], i) === false) {
+          break;
+        }
+      }
+    } else if (isObject(val)) {
+      var _arr = Object.keys(val);
 
-    for (var i = 0; i < len; i++) {
-      if (handler(val[i], i) === false) {
-        break;
+      for (var _i2 = 0; _i2 < _arr.length; _i2++) {
+        var key = _arr[_i2];
+
+        if (handler(val[key], key) === false) {
+          break;
+        }
+      }
+    } else if (Number.isInteger(val)) {
+      for (var _i3 = 0; _i3 < val; _i3++) {
+        if (handler(_i3, _i3) === false) {
+          break;
+        }
       }
     }
-  } else if (isObject(val)) {
-    var _arr = Object.keys(val);
-
-    for (var _i = 0; _i < _arr.length; _i++) {
-      var key = _arr[_i];
-
-      if (handler(val[key], key) === false) {
-        break;
+  } else {
+    if (isArray(val) || isString(val)) {
+      for (var _i4 = val.length - 1; _i4 >= 0; _i4--) {
+        if (handler(val[_i4], _i4) === false) {
+          break;
+        }
       }
-    }
-  } else if (Number.isInteger(val)) {
-    for (var _i2 = 0; _i2 < val; _i2++) {
-      if (handler(_i2, _i2) === false) {
-        break;
+    } else if (isObject(val)) {
+      var keys = Object.keys(val);
+      keys.reverse();
+
+      for (var _i5 = 0; _i5 < keys.length; _i5++) {
+        var _key = keys[_i5];
+
+        if (handler(val[_key], _key) === false) {
+          break;
+        }
+      }
+    } else if (Number.isInteger(val)) {
+      for (var _i6 = val - 1; _i6 >= 0; _i6--) {
+        if (handler(_i6, _i6) === false) {
+          break;
+        }
       }
     }
   }
@@ -495,8 +558,8 @@ function cloneObj(obj, exclude) {
 
         var _arr2 = Object.keys(obj);
 
-        for (var _i3 = 0; _i3 < _arr2.length; _i3++) {
-          var key = _arr2[_i3];
+        for (var _i7 = 0; _i7 < _arr2.length; _i7++) {
+          var key = _arr2[_i7];
 
           if (!exclude || isArray(exclude) && !exclude.includes(key) || !exclude(key, obj[key], obj)) {
             r[key] = cloneObj(obj[key], exclude);
@@ -635,8 +698,8 @@ function mapObjects(arr, idKey) {
 function executeWithCount(func, context) {
   var count = 0;
   return function () {
-    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
+    for (var _len = arguments.length, args = new Array(_len), _key2 = 0; _key2 < _len; _key2++) {
+      args[_key2] = arguments[_key2];
     }
 
     args.unshift(count++);
@@ -647,8 +710,8 @@ function watchChange(getVal, handler) {
   var oldVal;
 
   var update = function update() {
-    for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-      args[_key2] = arguments[_key2];
+    for (var _len2 = arguments.length, args = new Array(_len2), _key3 = 0; _key3 < _len2; _key3++) {
+      args[_key3] = arguments[_key3];
     }
 
     var newVal = getVal.apply(void 0, args);
@@ -661,6 +724,14 @@ function watchChange(getVal, handler) {
   };
 
   return update;
+} // promise
+
+function mergePromiseGetters(getters) {
+  return function () {
+    return Promise.all(getters.map(function (getter) {
+      return getter();
+    }));
+  };
 } // url
 
 /* eslint-disable */
@@ -1380,8 +1451,8 @@ function () {
         }
       }
 
-      for (var _i4 = 0; _i4 < indexes.length; _i4++) {
-        var index = indexes[_i4];
+      for (var _i8 = 0; _i8 < indexes.length; _i8++) {
+        var index = indexes[_i8];
         this.eventStore.splice(index, 1);
       }
     }
@@ -1417,12 +1488,12 @@ function () {
         }
       }
 
-      for (var _len3 = arguments.length, args = new Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
-        args[_key3 - 1] = arguments[_key3];
+      for (var _len3 = arguments.length, args = new Array(_len3 > 1 ? _len3 - 1 : 0), _key4 = 1; _key4 < _len3; _key4++) {
+        args[_key4 - 1] = arguments[_key4];
       }
 
-      for (var _i5 = 0; _i5 < items.length; _i5++) {
-        var _item = items[_i5];
+      for (var _i9 = 0; _i9 < items.length; _i9++) {
+        var _item = items[_i9];
 
         _item.handler.apply(_item, args);
       }
@@ -1471,8 +1542,8 @@ function (_EventProcessor) {
     value: function emit(name) {
       var _get3;
 
-      for (var _len4 = arguments.length, args = new Array(_len4 > 1 ? _len4 - 1 : 0), _key4 = 1; _key4 < _len4; _key4++) {
-        args[_key4 - 1] = arguments[_key4];
+      for (var _len4 = arguments.length, args = new Array(_len4 > 1 ? _len4 - 1 : 0), _key5 = 1; _key5 < _len4; _key5++) {
+        args[_key5 - 1] = arguments[_key5];
       }
 
       (_get3 = _get(CrossWindow.prototype.__proto__ || Object.getPrototypeOf(CrossWindow.prototype), "emit", this)).call.apply(_get3, [this, name].concat(args));
@@ -1514,12 +1585,14 @@ exports.titleCase = titleCase;
 exports.strRand = strRand;
 exports.replaceMultiple = replaceMultiple;
 exports.arrayRemove = arrayRemove;
+exports.arrayRemoveBySortedIndexes = arrayRemoveBySortedIndexes;
 exports.newArrayRemoveAt = newArrayRemoveAt;
 exports.arrayFirst = arrayFirst;
 exports.arrayLast = arrayLast;
 exports.arrayDiff = arrayDiff;
 exports.arraySibling = arraySibling;
 exports.toArrayIfNot = toArrayIfNot;
+exports.splitArray = splitArray;
 exports.assignIfDifferent = assignIfDifferent;
 exports.objectMerge = objectMerge;
 exports.objectMap = objectMap;
@@ -1534,6 +1607,7 @@ exports.mapObjectTree = mapObjectTree;
 exports.mapObjects = mapObjects;
 exports.executeWithCount = executeWithCount;
 exports.watchChange = watchChange;
+exports.mergePromiseGetters = mergePromiseGetters;
 exports.getUrlParam = getUrlParam;
 exports.uniqueId = uniqueId;
 exports.isDescendantOf = isDescendantOf;

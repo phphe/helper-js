@@ -128,6 +128,12 @@ export function arrayRemove(arr, v) {
   }
   return count
 }
+export function arrayRemoveBySortedIndexes(arr, sortedIndexes) {
+  for (let i = sortedIndexes.length - 1; i >= 0; i--) {
+    const index = sortedIndexes[i]
+    arr.splice(index, 1)
+  }
+}
 export function newArrayRemoveAt(arr, indexes) {
   indexes = toArrayIfNot(indexes)
   const mapping = {}
@@ -159,6 +165,7 @@ export function arrayDiff(arr1, arr2) {
   }
   return arr
 }
+// offset can be many
 export function arraySibling(arr, item, offset) {
   const index = arr.indexOf(item)
   if (index === -1) {
@@ -172,7 +179,31 @@ export function arraySibling(arr, item, offset) {
 export function toArrayIfNot(arrOrNot) {
   return isArray(arrOrNot) ? arrOrNot : [arrOrNot]
 }
-
+// n can be getter(number of times)
+// n可以是方法, 参数1是第几次分块
+export function splitArray(arr, n) {
+  const r = []
+  if (isFunction(n)) {
+    const getChunkLength = n
+    let times = 1
+    let i = 0
+    while (i < arr.length) {
+      const n = getChunkLength(times)
+      const end = i + n
+      r.push(arr.slice(i, end))
+      i = end
+      times++
+    }
+  } else {
+    let i = 0
+    while (i < arr.length) {
+      const end = i + n
+      r.push(arr.slice(i, end))
+      i = end
+    }
+  }
+  return r
+}
 // object
 export function assignIfDifferent(obj, key, val) {
   if (obj[key] !== val) {
@@ -217,24 +248,47 @@ export function objectExcept(obj, keys) {
   return r
 }
 // loop for all type
-export function forAll(val, handler) {
-  if (isArray(val) || isString(val)) {
-    const len = val.length
-    for (let i = 0; i < len; i++) {
-      if (handler(val[i], i) === false) {
-        break
+export function forAll(val, handler, reverse) {
+  if (!reverse) {
+    if (isArray(val) || isString(val)) {
+      for (let i = 0; i < val.length; i++) {
+        if (handler(val[i], i) === false) {
+          break
+        }
+      }
+    } else if (isObject(val)) {
+      for (const key of Object.keys(val)) {
+        if (handler(val[key], key) === false) {
+          break
+        }
+      }
+    } else if (Number.isInteger(val)) {
+      for (let i = 0; i < val; i++) {
+        if (handler(i, i) === false) {
+          break
+        }
       }
     }
-  } else if (isObject(val)) {
-    for (const key of Object.keys(val)) {
-      if (handler(val[key], key) === false) {
-        break
+  } else {
+    if (isArray(val) || isString(val)) {
+      for (let i = val.length - 1; i >= 0 ; i--) {
+        if (handler(val[i], i) === false) {
+          break
+        }
       }
-    }
-  } else if (Number.isInteger(val)) {
-    for (let i = 0; i < val; i++) {
-      if (handler(i, i) === false) {
-        break
+    } else if (isObject(val)) {
+      const keys = Object.keys(val)
+      keys.reverse()
+      for (const key of keys) {
+        if (handler(val[key], key) === false) {
+          break
+        }
+      }
+    } else if (Number.isInteger(val)) {
+      for (let i = val - 1; i >= 0; i--) {
+        if (handler(i, i) === false) {
+          break
+        }
       }
     }
   }
@@ -416,6 +470,14 @@ export function watchChange(getVal, handler) {
   }
   return update
 }
+
+// promise
+export function mergePromiseGetters(getters) {
+  return () => {
+    return Promise.all(getters.map(getter => getter()))
+  }
+}
+
 // url
 /* eslint-disable */
 export function getUrlParam(par) {
