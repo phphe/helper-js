@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.0.54
+ * helper-js v1.0.55
  * (c) 2018-present phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -725,13 +725,30 @@ function watchChange(getVal, handler) {
 
   return update;
 } // promise
+// execute promise in sequence
 
-function mergePromiseGetters(getters) {
-  return function () {
-    return Promise.all(getters.map(function (getter) {
-      return getter();
-    }));
-  };
+function executePromiseGetters(getters) {
+  var concurrent = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
+  return new Promise(function (resolve, reject) {
+    var r = [];
+    var chunks = splitArray(getters, concurrent);
+    var promise = Promise.resolve();
+    chunks.forEach(function (chunk) {
+      promise = promise.then(function (result) {
+        if (result) {
+          r.push.apply(r, _toConsumableArray(result));
+        }
+
+        return Promise.all(chunk.map(function (v) {
+          return v();
+        }));
+      });
+    });
+    promise.then(function (result) {
+      r.push.apply(r, _toConsumableArray(result));
+      resolve(r);
+    });
+  });
 } // url
 
 /* eslint-disable */
@@ -1014,6 +1031,14 @@ function windowLoaded() {
         glb.removeEventListener('load', once);
       });
     }
+  });
+}
+function waitTime(milliseconds, callback) {
+  return new Promise(function (resolve, reject) {
+    setTimeout(function () {
+      callback && callback();
+      resolve();
+    }, milliseconds);
   });
 } // overload waitFor(condition, time = 100, maxCount = 1000))
 
@@ -1607,7 +1632,7 @@ exports.mapObjectTree = mapObjectTree;
 exports.mapObjects = mapObjects;
 exports.executeWithCount = executeWithCount;
 exports.watchChange = watchChange;
-exports.mergePromiseGetters = mergePromiseGetters;
+exports.executePromiseGetters = executePromiseGetters;
 exports.getUrlParam = getUrlParam;
 exports.uniqueId = uniqueId;
 exports.isDescendantOf = isDescendantOf;
@@ -1628,6 +1653,7 @@ exports.onDOM = onDOM;
 exports.offDOM = offDOM;
 exports.binarySearch = binarySearch;
 exports.windowLoaded = windowLoaded;
+exports.waitTime = waitTime;
 exports.waitFor = waitFor;
 exports.retry = retry;
 exports.copyTextToClipboard = copyTextToClipboard;

@@ -83,7 +83,7 @@ eg: mapObjects([{id: 1}, {id:2}], (item, i) => item.id + 100 ) -> {'101':{id:1},
 ```
 ###### executeWithCount (func, context = null) // wrap function, last arg of new function is excuted count
 ###### watchChange   (getVal, handler) // wrap getter function, when use getter to get value, it will check value if changed
-###### mergePromiseGetters(getters)
+###### executePromiseGetters(getters, concurrent = 1)
 ###### getUrlParam   // get current url param by name
 ##3 DOM
 ###### uniqueId  (prefix = 'id_') // html element id
@@ -105,6 +105,7 @@ eg: mapObjects([{id: 1}, {id:2}], (item, i) => item.id + 100 ) -> {'101':{id:1},
 ###### offDOM (el, name, handler)   // removeEventListener
 ###### binarySearch   (arr, callback, start, end, returnNearestIfNoHit, max = 1000) // binary search 二分查找
 ###### windowLoaded   // return a promise
+###### waitTime(milliseconds, [callback: optional]) // return a promise
 ###### waitFor   (name, condition, time = 100, maxCount = 1000)
 ###### retry   (func, limitTimes = 3)
 ###### copyTextToClipboard   (text) // tested in chrome

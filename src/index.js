@@ -472,10 +472,25 @@ export function watchChange(getVal, handler) {
 }
 
 // promise
-export function mergePromiseGetters(getters) {
-  return () => {
-    return Promise.all(getters.map(getter => getter()))
-  }
+// execute promise in sequence
+export function executePromiseGetters(getters, concurrent = 1) {
+  return new Promise(function(resolve, reject) {
+    const r = []
+    const chunks = splitArray(getters, concurrent)
+    let promise = Promise.resolve()
+    chunks.forEach(chunk => {
+      promise = promise.then(result => {
+        if (result) {
+          r.push(...result)
+        }
+        return Promise.all(chunk.map(v => v()))
+      })
+    })
+    promise.then(result => {
+      r.push(...result)
+      resolve(r)
+    })
+  });
 }
 
 // url
@@ -720,6 +735,16 @@ export function windowLoaded() {
     }
   })
 }
+
+export function waitTime(milliseconds, callback) {
+  return new Promise(function(resolve, reject) {
+    setTimeout(function () {
+      callback && callback()
+      resolve()
+    }, milliseconds)
+  })
+}
+
 // overload waitFor(condition, time = 100, maxCount = 1000))
 export function waitFor(name, condition, time = 100, maxCount = 1000) {
   if (isFunction(name)) {

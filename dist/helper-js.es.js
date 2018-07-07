@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.0.54
+ * helper-js v1.0.55
  * (c) 2018-present phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -721,13 +721,30 @@ function watchChange(getVal, handler) {
 
   return update;
 } // promise
+// execute promise in sequence
 
-function mergePromiseGetters(getters) {
-  return function () {
-    return Promise.all(getters.map(function (getter) {
-      return getter();
-    }));
-  };
+function executePromiseGetters(getters) {
+  var concurrent = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
+  return new Promise(function (resolve, reject) {
+    var r = [];
+    var chunks = splitArray(getters, concurrent);
+    var promise = Promise.resolve();
+    chunks.forEach(function (chunk) {
+      promise = promise.then(function (result) {
+        if (result) {
+          r.push.apply(r, _toConsumableArray(result));
+        }
+
+        return Promise.all(chunk.map(function (v) {
+          return v();
+        }));
+      });
+    });
+    promise.then(function (result) {
+      r.push.apply(r, _toConsumableArray(result));
+      resolve(r);
+    });
+  });
 } // url
 
 /* eslint-disable */
@@ -1010,6 +1027,14 @@ function windowLoaded() {
         glb.removeEventListener('load', once);
       });
     }
+  });
+}
+function waitTime(milliseconds, callback) {
+  return new Promise(function (resolve, reject) {
+    setTimeout(function () {
+      callback && callback();
+      resolve();
+    }, milliseconds);
   });
 } // overload waitFor(condition, time = 100, maxCount = 1000))
 
@@ -1557,4 +1582,4 @@ function (_EventProcessor) {
   return CrossWindow;
 }(EventProcessor);
 
-export { store, isset, isArray, isBool, isNumber, isNumeric, isString, isObject, isFunction, isPromise, empty, numRand, numPad, min, max, studlyCase, kebabCase, snakeCase, camelCase, camelToWords, titleCase, strRand, replaceMultiple, arrayRemove, arrayRemoveBySortedIndexes, newArrayRemoveAt, arrayFirst, arrayLast, arrayDiff, arraySibling, toArrayIfNot, splitArray, assignIfDifferent, objectMerge, objectMap, objectOnly, objectExcept, forAll, objectGet, objectSet, unset, cloneObj, mapObjectTree, mapObjects, executeWithCount, watchChange, mergePromiseGetters, getUrlParam, uniqueId, isDescendantOf, getScroll, getOffset, offsetToPosition, findParent, backupAttr, restoreAttr, hasClass, addClass, removeClass, getElSize, isOffsetInEl, getBorder, setElChildByIndex, onDOM, offDOM, binarySearch, windowLoaded, waitFor, retry, copyTextToClipboard, jqFixedSize, jqMakeCarousel, openWindow, openCenterWindow, URLHelper, resolveArgsByType, makeStorageHelper, localStorage2, sessionStorage2, EventProcessor, CrossWindow };
+export { store, isset, isArray, isBool, isNumber, isNumeric, isString, isObject, isFunction, isPromise, empty, numRand, numPad, min, max, studlyCase, kebabCase, snakeCase, camelCase, camelToWords, titleCase, strRand, replaceMultiple, arrayRemove, arrayRemoveBySortedIndexes, newArrayRemoveAt, arrayFirst, arrayLast, arrayDiff, arraySibling, toArrayIfNot, splitArray, assignIfDifferent, objectMerge, objectMap, objectOnly, objectExcept, forAll, objectGet, objectSet, unset, cloneObj, mapObjectTree, mapObjects, executeWithCount, watchChange, executePromiseGetters, getUrlParam, uniqueId, isDescendantOf, getScroll, getOffset, offsetToPosition, findParent, backupAttr, restoreAttr, hasClass, addClass, removeClass, getElSize, isOffsetInEl, getBorder, setElChildByIndex, onDOM, offDOM, binarySearch, windowLoaded, waitTime, waitFor, retry, copyTextToClipboard, jqFixedSize, jqMakeCarousel, openWindow, openCenterWindow, URLHelper, resolveArgsByType, makeStorageHelper, localStorage2, sessionStorage2, EventProcessor, CrossWindow };
