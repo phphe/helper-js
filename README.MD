@@ -81,6 +81,7 @@ idKey(item, i)
 eg: mapObjects([{id: 1}, {id:2}], 'id') -> {'1':{id:1},'2':{id:2}}
 eg: mapObjects([{id: 1}, {id:2}], (item, i) => item.id + 100 ) -> {'101':{id:1},'102':{id:2}}
 ```
+###### pairRows(rows1, rows2, key1, key2 = key1)
 ###### executeWithCount (func, context = null) // wrap function, last arg of new function is excuted count
 ###### watchChange   (getVal, handler) // wrap getter function, when use getter to get value, it will check value if changed
 ###### executePromiseGetters(getters, concurrent = 1) // return {promise, destroy}

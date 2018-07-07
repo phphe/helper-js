@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.0.56
+ * helper-js v1.0.57
  * (c) 2018-present phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -695,6 +695,17 @@
     }
 
     return r;
+  } //
+
+  function pairRows(rows1, rows2, key1, key2) {
+    if (!key2) {
+      key2 = key1;
+    }
+
+    var map = hp.mapObjects(rows2, key2);
+    return rows1.map(function (row1) {
+      return [row1, map[row1[key1]]];
+    });
   } // function
 
   function executeWithCount(func, context) {
@@ -1643,6 +1654,7 @@
   exports.cloneObj = cloneObj;
   exports.mapObjectTree = mapObjectTree;
   exports.mapObjects = mapObjects;
+  exports.pairRows = pairRows;
   exports.executeWithCount = executeWithCount;
   exports.watchChange = watchChange;
   exports.executePromiseGetters = executePromiseGetters;
