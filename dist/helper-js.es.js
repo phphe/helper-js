@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.0.59
+ * helper-js v1.0.60
  * (c) 2018-present phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -372,7 +372,7 @@ function groupArray(arr, getMark) {
     groups.get(mark).push(v);
   });
   var r = [];
-  groups.forEach(value, function (key) {
+  groups.forEach(function (value, key) {
     return [key, value];
   });
   return r;
