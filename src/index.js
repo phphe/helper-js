@@ -214,7 +214,9 @@ export function groupArray(arr, getMark) {
     groups.get(mark).push(v)
   })
   const r = []
-  groups.forEach((value, key) => [key, value])
+  groups.forEach((value, key) => {
+    r.push([key, value])
+  })
   return r
 }
 // object
