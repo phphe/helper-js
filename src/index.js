@@ -206,7 +206,6 @@ export function splitArray(arr, n) {
 }
 export function groupArray(arr, getMark) {
   const groups = new Map
-
   arr.forEach(v => {
     const mark = getMark(v)
     if (!groups.has(mark)) {
@@ -214,7 +213,9 @@ export function groupArray(arr, getMark) {
     }
     groups.get(mark).push(v)
   })
-  return [...groups.values()]
+  const r = []
+  groups.forEach(value, key => [key, value])
+  return r
 }
 // object
 export function assignIfDifferent(obj, key, val) {

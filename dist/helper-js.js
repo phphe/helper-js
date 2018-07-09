@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.0.58
+ * helper-js v1.0.59
  * (c) 2018-present phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -377,7 +377,11 @@
 
       groups.get(mark).push(v);
     });
-    return _toConsumableArray(groups.values());
+    var r = [];
+    groups.forEach(value, function (key) {
+      return [key, value];
+    });
+    return r;
   } // object
 
   function assignIfDifferent(obj, key, val) {
