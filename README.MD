@@ -53,6 +53,7 @@ helloWorldNice => Hello World Nice
 ###### arraySibling  (arr, item, Number/Array offset) // return sibling or siblings relative to item
 ###### toArrayIfNot   
 ###### splitArray(arr, n) // n can be getter(number of times); n可以是方法, 参数1是第几次分块
+###### groupArray(arr, getMark)
 ###### assignIfDifferent(obj, key, val)   
 ###### objectMerge (obj1, obj2) // merge obj2 to obj1, and merge obj2 chldren to obj1 if it is object
 ###### objectMap   (obj, func)
