@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.0.61
+ * helper-js v1.0.62
  * (c) 2018-present phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -487,7 +487,7 @@ function forAll(val, handler, reverse) {
 
 function objectGet(obj, path) {
   var defaultValue = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
-  var paths = path.split('.');
+  var paths = isArray(path) ? path : path.split('.');
   var current = obj;
   var parent = null;
 
@@ -504,15 +504,12 @@ function objectGet(obj, path) {
   return parent.hasOwnProperty(lastPath) ? current : defaultValue;
 }
 function objectSet(obj, path, value) {
-  var lastDotIndex = path.lastIndexOf('.');
-  var parent, lastKey;
+  var paths = isArray(path) ? path : path.split('.');
+  var lastKey = arrayLast(paths);
+  var parent = objectGet(obj, paths.slice(0, paths.length - 1));
 
-  if (lastDotIndex === -1) {
-    parent = obj;
-    lastKey = path;
-  } else {
-    parent = objectGet(obj, path.substring(0, lastDotIndex));
-    lastKey = path.substr(lastDotIndex + 1);
+  if (!parent) {
+    throw "Path does not exist";
   }
 
   parent[lastKey] = value;

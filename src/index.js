@@ -311,7 +311,7 @@ export function forAll(val, handler, reverse) {
 
 // source: http://stackoverflow.com/questions/8817394/javascript-get-deep-value-from-object-by-passing-path-to-it-as-string
 export function objectGet(obj, path, defaultValue = null) {
-  const paths = path.split('.')
+  const paths = isArray(path) ? path : path.split('.')
   let current = obj
   let parent = null
 
@@ -329,14 +329,11 @@ export function objectGet(obj, path, defaultValue = null) {
 }
 
 export function objectSet(obj, path, value) {
-  const lastDotIndex = path.lastIndexOf('.')
-  let parent, lastKey
-  if (lastDotIndex === -1) {
-    parent = obj
-    lastKey = path
-  } else {
-    parent = objectGet(obj, path.substring(0, lastDotIndex))
-    lastKey = path.substr(lastDotIndex + 1)
+  const paths = isArray(path) ? path : path.split('.')
+  const lastKey = arrayLast(paths)
+  const parent = objectGet(obj, paths.slice(0, paths.length - 1))
+  if (!parent) {
+    throw "Path does not exist"
   }
   parent[lastKey] = value
 }
