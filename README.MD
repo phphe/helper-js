@@ -54,6 +54,7 @@ helloWorldNice => Hello World Nice
 ###### toArrayIfNot   
 ###### splitArray(arr, n) // n can be getter(number of times); n可以是方法, 参数1是第几次分块
 ###### groupArray(arr, getMark)
+###### arrayDistinct(arr)
 ###### assignIfDifferent(obj, key, val)   
 ###### objectMerge (obj1, obj2) // merge obj2 to obj1, and merge obj2 chldren to obj1 if it is object
 ###### objectMap   (obj, func)

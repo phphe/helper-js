@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.0.62
+ * helper-js v1.0.63
  * (c) 2018-present phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -380,6 +380,15 @@ function groupArray(arr, getMark) {
     r.push([key, value]);
   });
   return r;
+}
+function arrayDistinct(arr) {
+  if (glb.Set) {
+    return _toConsumableArray(new Set(arr));
+  } else {
+    return arr.filter(function (v, i, a) {
+      return a.indexOf(v) === i;
+    });
+  }
 } // object
 
 function assignIfDifferent(obj, key, val) {
@@ -1655,6 +1664,7 @@ exports.arraySibling = arraySibling;
 exports.toArrayIfNot = toArrayIfNot;
 exports.splitArray = splitArray;
 exports.groupArray = groupArray;
+exports.arrayDistinct = arrayDistinct;
 exports.assignIfDifferent = assignIfDifferent;
 exports.objectMerge = objectMerge;
 exports.objectMap = objectMap;

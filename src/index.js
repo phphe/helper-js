@@ -219,6 +219,13 @@ export function groupArray(arr, getMark) {
   })
   return r
 }
+export function arrayDistinct(arr) {
+  if (glb.Set) {
+    return [...new Set(arr)]
+  } else {
+    return arr.filter((v, i, a) => a.indexOf(v) === i)
+  }
+}
 // object
 export function assignIfDifferent(obj, key, val) {
   if (obj[key] !== val) {
