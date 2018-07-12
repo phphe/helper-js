@@ -474,7 +474,7 @@ export function pairRows(rows1, rows2, key1, key2) {
   if (!key2) {
     key2 = key1
   }
-  const map = hp.mapObjects(rows2, key2)
+  const map = mapObjects(rows2, key2)
   return rows1.map(row1 => [row1, map[row1[key1]]])
 }
 

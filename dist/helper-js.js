@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.0.63
+ * helper-js v1.0.64
  * (c) 2018-present phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -725,7 +725,7 @@
       key2 = key1;
     }
 
-    var map = hp.mapObjects(rows2, key2);
+    var map = mapObjects(rows2, key2);
     return rows1.map(function (row1) {
       return [row1, map[row1[key1]]];
     });
