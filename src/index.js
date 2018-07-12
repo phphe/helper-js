@@ -317,22 +317,19 @@ export function forAll(val, handler, reverse) {
 }
 
 // source: http://stackoverflow.com/questions/8817394/javascript-get-deep-value-from-object-by-passing-path-to-it-as-string
-export function objectGet(obj, path, defaultValue = null) {
+export function objectGet(obj, path, throwError) {
   const paths = isArray(path) ? path : path.split('.')
   let current = obj
-  let parent = null
-
-  for (let i = 0; i < paths.length; i++) {
-    if (current[paths[i]] == null) {
-      return defaultValue
-    } else {
-      parent = current
-      current = current[paths[i]]
+  try {
+    for (const key of paths) {
+      current = current[key]
+    }
+  } catch (e) {
+    if (throwError) {
+      throw "Path does not exist"
     }
   }
-
-  const lastPath = arrayLast(paths)
-  return parent.hasOwnProperty(lastPath) ? current : defaultValue
+  return current
 }
 
 export function objectSet(obj, path, value) {
