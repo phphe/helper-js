@@ -47,8 +47,9 @@ helloWorldNice => Hello World Nice
 ({'1': '2', '3': '4'}, 'abcd1234') => 'abcd2244'
 ###### arrayRemove   (arr, item) // remove any === item
 ###### newArrayRemoveAt   (arr, index/indexes) // remove by index or indexes, return new array
+###### arrayAt(n)   // n can less than 0  
 ###### arrayFirst   
-###### arrayLast   
+###### arrayLast(arr)   
 ###### arrayDiff  (arr1, arr2) // return items in arr2 but not in arr1
 ###### arraySibling  (arr, item, Number/Array offset) // return sibling or siblings relative to item
 ###### toArrayIfNot   

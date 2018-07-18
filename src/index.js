@@ -149,6 +149,9 @@ export function newArrayRemoveAt(arr, indexes) {
   }
   return newArr
 }
+export function arrayAt(arr, n) {
+  return arr[n >= 0 ? n : (arr.length + n)]
+}
 export function arrayFirst(arr) {
   return arr[0]
 }

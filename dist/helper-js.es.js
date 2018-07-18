@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.1.0
+ * helper-js v1.1.1
  * (c) 2018-present phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -291,6 +291,9 @@ function newArrayRemoveAt(arr, indexes) {
   }
 
   return newArr;
+}
+function arrayAt(arr, n) {
+  return arr[n >= 0 ? n : arr.length + n];
 }
 function arrayFirst(arr) {
   return arr[0];
@@ -1645,4 +1648,4 @@ function (_EventProcessor) {
   return CrossWindow;
 }(EventProcessor);
 
-export { store, isset, isArray, isBool, isNumber, isNumeric, isString, isObject, isFunction, isPromise, empty, numRand, numPad, min, max, studlyCase, kebabCase, snakeCase, camelCase, camelToWords, titleCase, strRand, replaceMultiple, arrayRemove, arrayRemoveBySortedIndexes, newArrayRemoveAt, arrayFirst, arrayLast, arrayDiff, arraySibling, toArrayIfNot, splitArray, groupArray, arrayDistinct, assignIfDifferent, objectMerge, objectMap, objectOnly, objectExcept, forAll, objectGet, objectSet, unset, cloneObj, mapObjectTree, mapObjects, pairRows, executeWithCount, watchChange, executePromiseGetters, getUrlParam, uniqueId, isDescendantOf, getScroll, getOffset, offsetToPosition, findParent, backupAttr, restoreAttr, hasClass, addClass, removeClass, getElSize, isOffsetInEl, getBorder, setElChildByIndex, onDOM, offDOM, binarySearch, windowLoaded, waitTime, waitFor, retry, copyTextToClipboard, jqFixedSize, jqMakeCarousel, openWindow, openCenterWindow, URLHelper, resolveArgsByType, makeStorageHelper, localStorage2, sessionStorage2, EventProcessor, CrossWindow };
+export { store, isset, isArray, isBool, isNumber, isNumeric, isString, isObject, isFunction, isPromise, empty, numRand, numPad, min, max, studlyCase, kebabCase, snakeCase, camelCase, camelToWords, titleCase, strRand, replaceMultiple, arrayRemove, arrayRemoveBySortedIndexes, newArrayRemoveAt, arrayAt, arrayFirst, arrayLast, arrayDiff, arraySibling, toArrayIfNot, splitArray, groupArray, arrayDistinct, assignIfDifferent, objectMerge, objectMap, objectOnly, objectExcept, forAll, objectGet, objectSet, unset, cloneObj, mapObjectTree, mapObjects, pairRows, executeWithCount, watchChange, executePromiseGetters, getUrlParam, uniqueId, isDescendantOf, getScroll, getOffset, offsetToPosition, findParent, backupAttr, restoreAttr, hasClass, addClass, removeClass, getElSize, isOffsetInEl, getBorder, setElChildByIndex, onDOM, offDOM, binarySearch, windowLoaded, waitTime, waitFor, retry, copyTextToClipboard, jqFixedSize, jqMakeCarousel, openWindow, openCenterWindow, URLHelper, resolveArgsByType, makeStorageHelper, localStorage2, sessionStorage2, EventProcessor, CrossWindow };

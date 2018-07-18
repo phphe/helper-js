@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.1.0
+ * helper-js v1.1.1
  * (c) 2018-present phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -297,6 +297,9 @@
     }
 
     return newArr;
+  }
+  function arrayAt(arr, n) {
+    return arr[n >= 0 ? n : arr.length + n];
   }
   function arrayFirst(arr) {
     return arr[0];
@@ -1677,6 +1680,7 @@
   exports.arrayRemove = arrayRemove;
   exports.arrayRemoveBySortedIndexes = arrayRemoveBySortedIndexes;
   exports.newArrayRemoveAt = newArrayRemoveAt;
+  exports.arrayAt = arrayAt;
   exports.arrayFirst = arrayFirst;
   exports.arrayLast = arrayLast;
   exports.arrayDiff = arrayDiff;
