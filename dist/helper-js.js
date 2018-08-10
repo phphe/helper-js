@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.1.1
+ * helper-js v1.1.2
  * (c) 2018-present phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -909,6 +909,30 @@
       x: of.x - (elOf.x - p.x),
       y: of.y - (elOf.y - p.y)
     };
+    var offsetParent = el.offsetParent;
+
+    if (!offsetParent || offsetParent === document.body && getComputedStyle(document.body).position === 'static') {
+      offsetParent = document.body.parentElement;
+    }
+
+    var ps = {
+      x: el.offsetLeft,
+      y: el.offsetTop
+    };
+    var parent = el;
+
+    while (true) {
+      parent = parent.parentElement;
+
+      if (parent === offsetParent || !parent) {
+        break;
+      }
+
+      ps.x -= parent.scrollLeft;
+      ps.y -= parent.scrollTop;
+    }
+
+    return ps;
   }
   function findParent(el, callback) {
     return doFindParent(el, callback);

@@ -612,6 +612,25 @@ export function offsetToPosition(el, of) {
     x: of.x - (elOf.x - p.x),
     y: of.y - (elOf.y - p.y),
   }
+
+  let offsetParent = el.offsetParent
+  if(
+    !offsetParent
+    || offsetParent === document.body && getComputedStyle(document.body).position === 'static'
+  ) {
+    offsetParent = document.body.parentElement
+  }
+  const ps = {x: el.offsetLeft, y: el.offsetTop}
+  let parent = el
+  while (true) {
+    parent = parent.parentElement
+    if (parent === offsetParent || !parent) {
+      break
+    }
+    ps.x -= parent.scrollLeft
+    ps.y -= parent.scrollTop
+  }
+  return ps
 }
 
 export function findParent(el, callback) {
