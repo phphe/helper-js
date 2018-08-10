@@ -606,13 +606,6 @@ export function getOffset(el) {
 }
 
 export function offsetToPosition(el, of) {
-  const p = {x: el.offsetLeft, y: el.offsetTop} // position
-  const elOf = getOffset(el)
-  return {
-    x: of.x - (elOf.x - p.x),
-    y: of.y - (elOf.y - p.y),
-  }
-
   let offsetParent = el.offsetParent
   if(
     !offsetParent

@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.1.2
+ * helper-js v1.1.3
  * (c) 2018-present phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -899,16 +899,6 @@
     };
   }
   function offsetToPosition(el, of) {
-    var p = {
-      x: el.offsetLeft,
-      y: el.offsetTop // position
-
-    };
-    var elOf = getOffset(el);
-    return {
-      x: of.x - (elOf.x - p.x),
-      y: of.y - (elOf.y - p.y)
-    };
     var offsetParent = el.offsetParent;
 
     if (!offsetParent || offsetParent === document.body && getComputedStyle(document.body).position === 'static') {
