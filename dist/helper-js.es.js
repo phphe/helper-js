@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.1.3
+ * helper-js v1.1.4
  * (c) 2018-present phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -775,6 +775,30 @@ function watchChange(getVal, handler) {
   };
 
   return update;
+}
+var store_executeOnceInScopeByName = {};
+function executeOnceInScopeByName(name, action) {
+  var scope = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : scope_executeOnceInScopeByName;
+  var storeResult = arguments.length > 3 ? arguments[3] : undefined;
+  name = "executeOnceInScopeByName_".concat(name);
+
+  if (!scope[name]) {
+    var value = action();
+
+    var destroy = function destroy() {
+      delete scope[name];
+    };
+
+    scope[name] = {
+      destroy: destroy
+    };
+
+    if (storeResult) {
+      scope[name].value = value;
+    }
+  }
+
+  return scope[name];
 } // promise
 // execute promise in sequence
 
@@ -1662,4 +1686,4 @@ function (_EventProcessor) {
   return CrossWindow;
 }(EventProcessor);
 
-export { store, isset, isArray, isBool, isNumber, isNumeric, isString, isObject, isFunction, isPromise, empty, numRand, numPad, min, max, studlyCase, kebabCase, snakeCase, camelCase, camelToWords, titleCase, strRand, replaceMultiple, arrayRemove, arrayRemoveBySortedIndexes, newArrayRemoveAt, arrayAt, arrayFirst, arrayLast, arrayDiff, arraySibling, toArrayIfNot, splitArray, groupArray, arrayDistinct, assignIfDifferent, objectMerge, objectMap, objectOnly, objectExcept, forAll, objectGet, objectSet, unset, cloneObj, mapObjectTree, mapObjects, pairRows, executeWithCount, watchChange, executePromiseGetters, getUrlParam, uniqueId, isDescendantOf, getScroll, getOffset, offsetToPosition, findParent, backupAttr, restoreAttr, hasClass, addClass, removeClass, getElSize, isOffsetInEl, getBorder, setElChildByIndex, onDOM, offDOM, binarySearch, windowLoaded, waitTime, waitFor, retry, copyTextToClipboard, jqFixedSize, jqMakeCarousel, openWindow, openCenterWindow, URLHelper, resolveArgsByType, makeStorageHelper, localStorage2, sessionStorage2, EventProcessor, CrossWindow };
+export { store, isset, isArray, isBool, isNumber, isNumeric, isString, isObject, isFunction, isPromise, empty, numRand, numPad, min, max, studlyCase, kebabCase, snakeCase, camelCase, camelToWords, titleCase, strRand, replaceMultiple, arrayRemove, arrayRemoveBySortedIndexes, newArrayRemoveAt, arrayAt, arrayFirst, arrayLast, arrayDiff, arraySibling, toArrayIfNot, splitArray, groupArray, arrayDistinct, assignIfDifferent, objectMerge, objectMap, objectOnly, objectExcept, forAll, objectGet, objectSet, unset, cloneObj, mapObjectTree, mapObjects, pairRows, executeWithCount, watchChange, store_executeOnceInScopeByName, executeOnceInScopeByName, executePromiseGetters, getUrlParam, uniqueId, isDescendantOf, getScroll, getOffset, offsetToPosition, findParent, backupAttr, restoreAttr, hasClass, addClass, removeClass, getElSize, isOffsetInEl, getBorder, setElChildByIndex, onDOM, offDOM, binarySearch, windowLoaded, waitTime, waitFor, retry, copyTextToClipboard, jqFixedSize, jqMakeCarousel, openWindow, openCenterWindow, URLHelper, resolveArgsByType, makeStorageHelper, localStorage2, sessionStorage2, EventProcessor, CrossWindow };

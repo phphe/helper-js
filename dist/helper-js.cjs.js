@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.1.3
+ * helper-js v1.1.4
  * (c) 2018-present phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -779,6 +779,30 @@ function watchChange(getVal, handler) {
   };
 
   return update;
+}
+var store_executeOnceInScopeByName = {};
+function executeOnceInScopeByName(name, action) {
+  var scope = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : scope_executeOnceInScopeByName;
+  var storeResult = arguments.length > 3 ? arguments[3] : undefined;
+  name = "executeOnceInScopeByName_".concat(name);
+
+  if (!scope[name]) {
+    var value = action();
+
+    var destroy = function destroy() {
+      delete scope[name];
+    };
+
+    scope[name] = {
+      destroy: destroy
+    };
+
+    if (storeResult) {
+      scope[name].value = value;
+    }
+  }
+
+  return scope[name];
 } // promise
 // execute promise in sequence
 
@@ -1716,6 +1740,8 @@ exports.mapObjects = mapObjects;
 exports.pairRows = pairRows;
 exports.executeWithCount = executeWithCount;
 exports.watchChange = watchChange;
+exports.store_executeOnceInScopeByName = store_executeOnceInScopeByName;
+exports.executeOnceInScopeByName = executeOnceInScopeByName;
 exports.executePromiseGetters = executePromiseGetters;
 exports.getUrlParam = getUrlParam;
 exports.uniqueId = uniqueId;

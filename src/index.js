@@ -497,6 +497,21 @@ export function watchChange(getVal, handler) {
   }
   return update
 }
+export const store_executeOnceInScopeByName = {}
+export function executeOnceInScopeByName(name, action, scope = scope_executeOnceInScopeByName, storeResult) {
+  name = `executeOnceInScopeByName_${name}`
+  if (!scope[name]) {
+    const value = action()
+    const destroy = () => {
+      delete scope[name]
+    }
+    scope[name] = {destroy}
+    if (storeResult) {
+      scope[name].value = value
+    }
+  }
+  return scope[name]
+}
 
 // promise
 // execute promise in sequence
