@@ -89,6 +89,7 @@ eg: mapObjects([{id: 1}, {id:2}], (item, i) => item.id + 100 ) -> {'101':{id:1},
 ###### watchChange   (getVal, handler) // wrap getter function, when use getter to get value, it will check value if changed
 ###### executeOnceInScopeByName   (name, action, scope = store_executeOnceInScopeByName, storeResult)
 ###### debounce(action, wait = 0, immediate) // return newAction, newAction's scope is same with action, its arguments will be passed to action. newAction.destroy: function, newAction.destroyed: Boolean/undefined
+###### joinMethods(methods, mode = 'value') // mode: value, pipline
 ###### executePromiseGetters(getters, concurrent = 1) // return {promise, destroy}
 ###### getUrlParam   // get current url param by name
 ##3 DOM

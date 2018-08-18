@@ -478,7 +478,7 @@ export function pairRows(rows1, rows2, key1, key2) {
   return rows1.map(row1 => [row1, map[row1[key1]]])
 }
 
-// function
+// function helper | method helper
 export function executeWithCount(func, context) {
   let count = 0
   return (...args) => {
@@ -549,7 +549,26 @@ export function debounce(action, wait = 0, immediate) {
   }
   return wrappedAction
 }
-
+/**
+ * [joinMethods description]
+ * @param  {[Function[]]} methods        [description]
+ * @param  {String} [mode='value'] [value, pipeline]
+ * @return {[Function]}                [description]
+ */
+export function joinMethods(methods, mode = 'value') {
+  let simpleJoinedMethod
+  for (const method of methods) {
+    const old = simpleJoinedMethod
+    if (old) {
+      simpleJoinedMethod = function (...args) {
+        return method.call(this, mode === 'value' ? old.call(this, ...args) : old, ...args)
+      }
+    } else {
+      simpleJoinedMethod = method
+    }
+  }
+  return simpleJoinedMethod
+}
 // promise
 // execute promise in sequence
 export function executePromiseGetters(getters, concurrent = 1) {
