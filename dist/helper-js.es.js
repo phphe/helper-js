@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.1.4
+ * helper-js v1.1.5
  * (c) 2018-present phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -799,6 +799,58 @@ function executeOnceInScopeByName(name, action) {
   }
 
   return scope[name];
+}
+function debounce(action) {
+  var wait = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+  var immediate = arguments.length > 2 ? arguments[2] : undefined;
+  var t;
+  var delaying;
+  var lastArgs; // when trailing, use last args
+
+  var wrappedAction = function wrappedAction() {
+    var _this = this;
+
+    var self = wrappedAction;
+
+    for (var _len3 = arguments.length, args = new Array(_len3), _key4 = 0; _key4 < _len3; _key4++) {
+      args[_key4] = arguments[_key4];
+    }
+
+    lastArgs = args;
+
+    if (!delaying) {
+      delaying = true;
+      self.destroyed = false;
+
+      if (immediate) {
+        action.call.apply(action, [this].concat(args));
+        t = setTimeout(function () {
+          t = null;
+          delaying = false;
+          self.destroyed = true;
+        }, wait);
+      } else {
+        t = setTimeout(function () {
+          action.call.apply(action, [_this].concat(_toConsumableArray(lastArgs)));
+          t = null;
+          delaying = false;
+          self.destroyed = true;
+        }, wait);
+      }
+    }
+  };
+
+  wrappedAction.destroy = function () {
+    if (t) {
+      clearTimeout(t);
+      t = null;
+    }
+
+    delaying = false;
+    self.destroyed = true;
+  };
+
+  return wrappedAction;
 } // promise
 // execute promise in sequence
 
@@ -1397,7 +1449,7 @@ var URLHelper =
 function () {
   // protocol, hostname, port, pastname
   function URLHelper(baseUrl) {
-    var _this = this;
+    var _this2 = this;
 
     _classCallCheck(this, URLHelper);
 
@@ -1419,7 +1471,7 @@ function () {
     if (t[1]) {
       t[1].split('&').forEach(function (v) {
         var t2 = v.split('=');
-        _this.search[t2[0]] = t2[1] == null ? '' : decodeURIComponent(t2[1]);
+        _this2.search[t2[0]] = t2[1] == null ? '' : decodeURIComponent(t2[1]);
       });
     }
   }
@@ -1427,11 +1479,11 @@ function () {
   _createClass(URLHelper, [{
     key: "getHref",
     value: function getHref() {
-      var _this2 = this;
+      var _this3 = this;
 
       var t = [this.baseUrl];
       var searchStr = Object.keys(this.search).map(function (k) {
-        return "".concat(k, "=").concat(encodeURIComponent(_this2.search[k]));
+        return "".concat(k, "=").concat(encodeURIComponent(_this3.search[k]));
       }).join('&');
 
       if (searchStr) {
@@ -1547,10 +1599,10 @@ function () {
   }, {
     key: "once",
     value: function once(name, handler) {
-      var _this3 = this;
+      var _this4 = this;
 
       var off = function off() {
-        _this3.off(name, wrappedHandler);
+        _this4.off(name, wrappedHandler);
       };
 
       var wrappedHandler = function wrappedHandler() {
@@ -1613,8 +1665,8 @@ function () {
         }
       }
 
-      for (var _len3 = arguments.length, args = new Array(_len3 > 1 ? _len3 - 1 : 0), _key4 = 1; _key4 < _len3; _key4++) {
-        args[_key4 - 1] = arguments[_key4];
+      for (var _len4 = arguments.length, args = new Array(_len4 > 1 ? _len4 - 1 : 0), _key5 = 1; _key5 < _len4; _key5++) {
+        args[_key5 - 1] = arguments[_key5];
       }
 
       for (var _i9 = 0; _i9 < items.length; _i9++) {
@@ -1633,12 +1685,12 @@ function (_EventProcessor) {
   _inherits(CrossWindow, _EventProcessor);
 
   function CrossWindow() {
-    var _this4;
+    var _this5;
 
     _classCallCheck(this, CrossWindow);
 
-    _this4 = _possibleConstructorReturn(this, (CrossWindow.__proto__ || Object.getPrototypeOf(CrossWindow)).call(this));
-    Object.defineProperty(_assertThisInitialized(_this4), "storageName", {
+    _this5 = _possibleConstructorReturn(this, (CrossWindow.__proto__ || Object.getPrototypeOf(CrossWindow)).call(this));
+    Object.defineProperty(_assertThisInitialized(_this5), "storageName", {
       configurable: true,
       enumerable: true,
       writable: true,
@@ -1649,17 +1701,17 @@ function (_EventProcessor) {
     if (!cls._listen) {
       cls._listen = true;
       onDOM(window, 'storage', function (ev) {
-        if (ev.key === _this4.storageName) {
+        if (ev.key === _this5.storageName) {
           var _get2;
 
           var event = JSON.parse(ev.newValue);
 
-          (_get2 = _get(CrossWindow.prototype.__proto__ || Object.getPrototypeOf(CrossWindow.prototype), "emit", _assertThisInitialized(_this4))).call.apply(_get2, [_this4, event.name].concat(_toConsumableArray(event.args)));
+          (_get2 = _get(CrossWindow.prototype.__proto__ || Object.getPrototypeOf(CrossWindow.prototype), "emit", _assertThisInitialized(_this5))).call.apply(_get2, [_this5, event.name].concat(_toConsumableArray(event.args)));
         }
       });
     }
 
-    return _this4;
+    return _this5;
   }
 
   _createClass(CrossWindow, [{
@@ -1667,8 +1719,8 @@ function (_EventProcessor) {
     value: function emit(name) {
       var _get3;
 
-      for (var _len4 = arguments.length, args = new Array(_len4 > 1 ? _len4 - 1 : 0), _key5 = 1; _key5 < _len4; _key5++) {
-        args[_key5 - 1] = arguments[_key5];
+      for (var _len5 = arguments.length, args = new Array(_len5 > 1 ? _len5 - 1 : 0), _key6 = 1; _key6 < _len5; _key6++) {
+        args[_key6 - 1] = arguments[_key6];
       }
 
       (_get3 = _get(CrossWindow.prototype.__proto__ || Object.getPrototypeOf(CrossWindow.prototype), "emit", this)).call.apply(_get3, [this, name].concat(args));
@@ -1686,4 +1738,4 @@ function (_EventProcessor) {
   return CrossWindow;
 }(EventProcessor);
 
-export { store, isset, isArray, isBool, isNumber, isNumeric, isString, isObject, isFunction, isPromise, empty, numRand, numPad, min, max, studlyCase, kebabCase, snakeCase, camelCase, camelToWords, titleCase, strRand, replaceMultiple, arrayRemove, arrayRemoveBySortedIndexes, newArrayRemoveAt, arrayAt, arrayFirst, arrayLast, arrayDiff, arraySibling, toArrayIfNot, splitArray, groupArray, arrayDistinct, assignIfDifferent, objectMerge, objectMap, objectOnly, objectExcept, forAll, objectGet, objectSet, unset, cloneObj, mapObjectTree, mapObjects, pairRows, executeWithCount, watchChange, store_executeOnceInScopeByName, executeOnceInScopeByName, executePromiseGetters, getUrlParam, uniqueId, isDescendantOf, getScroll, getOffset, offsetToPosition, findParent, backupAttr, restoreAttr, hasClass, addClass, removeClass, getElSize, isOffsetInEl, getBorder, setElChildByIndex, onDOM, offDOM, binarySearch, windowLoaded, waitTime, waitFor, retry, copyTextToClipboard, jqFixedSize, jqMakeCarousel, openWindow, openCenterWindow, URLHelper, resolveArgsByType, makeStorageHelper, localStorage2, sessionStorage2, EventProcessor, CrossWindow };
+export { store, isset, isArray, isBool, isNumber, isNumeric, isString, isObject, isFunction, isPromise, empty, numRand, numPad, min, max, studlyCase, kebabCase, snakeCase, camelCase, camelToWords, titleCase, strRand, replaceMultiple, arrayRemove, arrayRemoveBySortedIndexes, newArrayRemoveAt, arrayAt, arrayFirst, arrayLast, arrayDiff, arraySibling, toArrayIfNot, splitArray, groupArray, arrayDistinct, assignIfDifferent, objectMerge, objectMap, objectOnly, objectExcept, forAll, objectGet, objectSet, unset, cloneObj, mapObjectTree, mapObjects, pairRows, executeWithCount, watchChange, store_executeOnceInScopeByName, executeOnceInScopeByName, debounce, executePromiseGetters, getUrlParam, uniqueId, isDescendantOf, getScroll, getOffset, offsetToPosition, findParent, backupAttr, restoreAttr, hasClass, addClass, removeClass, getElSize, isOffsetInEl, getBorder, setElChildByIndex, onDOM, offDOM, binarySearch, windowLoaded, waitTime, waitFor, retry, copyTextToClipboard, jqFixedSize, jqMakeCarousel, openWindow, openCenterWindow, URLHelper, resolveArgsByType, makeStorageHelper, localStorage2, sessionStorage2, EventProcessor, CrossWindow };

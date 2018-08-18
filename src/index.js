@@ -512,6 +512,43 @@ export function executeOnceInScopeByName(name, action, scope = scope_executeOnce
   }
   return scope[name]
 }
+export function debounce(action, wait = 0, immediate) {
+  let t
+  let delaying
+  let lastArgs // when trailing, use last args
+  const wrappedAction = function (...args) {
+    const self = wrappedAction
+    lastArgs = args
+    if (!delaying) {
+      delaying = true
+      self.destroyed = false
+      if (immediate) {
+        action.call(this, ...args)
+        t = setTimeout(() => {
+          t = null
+          delaying = false
+          self.destroyed = true
+        }, wait)
+      } else {
+        t = setTimeout(() => {
+          action.call(this, ...lastArgs)
+          t = null
+          delaying = false
+          self.destroyed = true
+        }, wait)
+      }
+    }
+  }
+  wrappedAction.destroy = () => {
+    if (t) {
+      clearTimeout(t)
+      t = null
+    }
+    delaying = false
+    self.destroyed = true
+  }
+  return wrappedAction
+}
 
 // promise
 // execute promise in sequence
