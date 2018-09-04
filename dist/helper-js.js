@@ -122,17 +122,26 @@
     throw new TypeError("Invalid attempt to spread non-iterable instance");
   }
 
-  // resolve global
-  var glb;
+  // local store
+  var store = {}; // get global
 
-  try {
-    glb = global;
-  } catch (e) {
-    glb = window;
-  } // local store
+  function glb() {
+    if (store.glb) {
+      return store.glb;
+    } else {
+      // resolve global
+      var t;
 
+      try {
+        t = global;
+      } catch (e) {
+        t = window;
+      }
 
-  var store = {}; // is 各种判断
+      store.glb = t;
+      return t;
+    }
+  } // is 各种判断
 
   function isset(v) {
     return typeof v !== 'undefined';
@@ -387,7 +396,7 @@
     return r;
   }
   function arrayDistinct(arr) {
-    if (glb.Set) {
+    if (glb().Set) {
       return _toConsumableArray(new Set(arr));
     } else {
       return arr.filter(function (v, i, a) {
@@ -1131,7 +1140,7 @@
       left: of.x,
       right: of.x + workArea.offsetWidth,
       top: of.y + 50,
-      bottom: body.offsetHeight < glb.innerHeight ? glb.innerHeight : body.offsetHeight
+      bottom: body.offsetHeight < glb().innerHeight ? glb().innerHeight : body.offsetHeight
     };
   }
   function setElChildByIndex(el, index, child) {
@@ -1244,9 +1253,9 @@
       if (document && document.readyState === 'complete') {
         resolve();
       } else {
-        glb.addEventListener('load', function once() {
+        glb().addEventListener('load', function once() {
           resolve();
-          glb.removeEventListener('load', once);
+          glb().removeEventListener('load', once);
         });
       }
     });
@@ -1275,7 +1284,7 @@
     var waits = store.waitFor;
 
     if (name && isset(waits[name])) {
-      glb.clearInterval(waits[name]);
+      glb().clearInterval(waits[name]);
       delete waits[name];
     }
 
@@ -1299,15 +1308,15 @@
       function stop(interval, name) {
         if (interval) {
           if (name && isset(waits[name])) {
-            glb.clearInterval(waits[name]);
+            glb().clearInterval(waits[name]);
             delete waits[name];
           } else {
-            glb.clearInterval(interval);
+            glb().clearInterval(interval);
           }
         }
       }
 
-      var interval = glb.setInterval(function () {
+      var interval = glb().setInterval(function () {
         judge(interval);
       }, time);
 
@@ -1401,7 +1410,7 @@
   } // jquery
 
   function jqFixedSize(sel) {
-    var $ = glb.jQuery;
+    var $ = glb().jQuery;
     $(sel).each(function () {
       var t = $(this);
       t.css({
@@ -1421,7 +1430,7 @@
     }
 
     var spaceNumber = parseFloat(space);
-    var $ = glb.jQuery;
+    var $ = glb().jQuery;
     var wrapper = $(wrapperSel);
     var list = wrapper.find(listSel);
     wrapper.css({
@@ -1495,7 +1504,7 @@
 
   function openWindow(url, name) {
     var opt = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-    glb.open(url, name, Object.keys(opt).map(function (k) {
+    glb().open(url, name, Object.keys(opt).map(function (k) {
       return "".concat(k, "=").concat(opt[k]);
     }).join(','));
   }
@@ -1504,8 +1513,8 @@
     var t = {
       width: width,
       height: height,
-      top: (glb.screen.availHeight - 30 - height) / 2,
-      left: (glb.screen.availWidth - 30 - width) / 2
+      top: (glb().screen.availHeight - 30 - height) / 2,
+      left: (glb().screen.availWidth - 30 - width) / 2
     };
     Object.assign(t, opt);
     openWindow(url, name, t);
@@ -1637,8 +1646,20 @@
       }
     };
   }
-  var localStorage2 = makeStorageHelper(glb.localStorage);
-  var sessionStorage2 = makeStorageHelper(glb.sessionStorage); // 事件处理
+  function getLocalStorage2() {
+    if (!store.localStorage2) {
+      store.localStorage2 = makeStorageHelper(glb().localStorage);
+    }
+
+    return store.localStorage2;
+  }
+  function getSessionStorage2() {
+    if (!store.sessionStorage2) {
+      store.sessionStorage2 = makeStorageHelper(glb().sessionStorage);
+    }
+
+    return store.sessionStorage2;
+  } // 事件处理
 
   var EventProcessor =
   /*#__PURE__*/
@@ -1791,7 +1812,7 @@
 
         (_get3 = _get(CrossWindow.prototype.__proto__ || Object.getPrototypeOf(CrossWindow.prototype), "emit", this)).call.apply(_get3, [this, name].concat(args));
 
-        glb.localStorage.setItem(this.storageName, JSON.stringify({
+        glb().localStorage.setItem(this.storageName, JSON.stringify({
           name: name,
           args: args,
           // use random make storage event triggered every time
@@ -1805,6 +1826,7 @@
   }(EventProcessor);
 
   exports.store = store;
+  exports.glb = glb;
   exports.isset = isset;
   exports.isArray = isArray;
   exports.isBool = isBool;
@@ -1890,8 +1912,8 @@
   exports.URLHelper = URLHelper;
   exports.resolveArgsByType = resolveArgsByType;
   exports.makeStorageHelper = makeStorageHelper;
-  exports.localStorage2 = localStorage2;
-  exports.sessionStorage2 = sessionStorage2;
+  exports.getLocalStorage2 = getLocalStorage2;
+  exports.getSessionStorage2 = getSessionStorage2;
   exports.EventProcessor = EventProcessor;
   exports.CrossWindow = CrossWindow;
 

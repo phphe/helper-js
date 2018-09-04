@@ -12,6 +12,7 @@ import {function1, function2} from'helper-js
 
 ```
 ### some functions. pls check source to get more 常用方法, 请查看源码获取更多方法
+###### glb()   // get global cross environment
 ###### isset   
 typeof v !== 'undefined'
 ###### isArray   
@@ -130,7 +131,7 @@ resolveArgsByType([1,'str'], ['Number', ['Boolean', true] ,'String']) -> [1, tru
 check source code to learn more
 ```
 ###### makeStorageHelper(storage) // make localStorage or sessionStorage can use json as value and has expiry
-###### localStorage2 // made by makeStorageHelper
-###### sessionStorage2 // made by makeStorageHelper
+###### getLocalStorage2 //
+###### getSessionStorage2 //
 ###### class EventProcessor
 ###### class CrossWindow // cross window(same domain) event processor

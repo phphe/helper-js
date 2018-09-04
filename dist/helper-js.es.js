@@ -116,17 +116,26 @@ function _nonIterableSpread() {
   throw new TypeError("Invalid attempt to spread non-iterable instance");
 }
 
-// resolve global
-var glb;
+// local store
+var store = {}; // get global
 
-try {
-  glb = global;
-} catch (e) {
-  glb = window;
-} // local store
+function glb() {
+  if (store.glb) {
+    return store.glb;
+  } else {
+    // resolve global
+    var t;
 
+    try {
+      t = global;
+    } catch (e) {
+      t = window;
+    }
 
-var store = {}; // is 各种判断
+    store.glb = t;
+    return t;
+  }
+} // is 各种判断
 
 function isset(v) {
   return typeof v !== 'undefined';
@@ -381,7 +390,7 @@ function groupArray(arr, getMark) {
   return r;
 }
 function arrayDistinct(arr) {
-  if (glb.Set) {
+  if (glb().Set) {
     return _toConsumableArray(new Set(arr));
   } else {
     return arr.filter(function (v, i, a) {
@@ -1125,7 +1134,7 @@ function getBorder(el) {
     left: of.x,
     right: of.x + workArea.offsetWidth,
     top: of.y + 50,
-    bottom: body.offsetHeight < glb.innerHeight ? glb.innerHeight : body.offsetHeight
+    bottom: body.offsetHeight < glb().innerHeight ? glb().innerHeight : body.offsetHeight
   };
 }
 function setElChildByIndex(el, index, child) {
@@ -1238,9 +1247,9 @@ function windowLoaded() {
     if (document && document.readyState === 'complete') {
       resolve();
     } else {
-      glb.addEventListener('load', function once() {
+      glb().addEventListener('load', function once() {
         resolve();
-        glb.removeEventListener('load', once);
+        glb().removeEventListener('load', once);
       });
     }
   });
@@ -1269,7 +1278,7 @@ function waitFor(name, condition) {
   var waits = store.waitFor;
 
   if (name && isset(waits[name])) {
-    glb.clearInterval(waits[name]);
+    glb().clearInterval(waits[name]);
     delete waits[name];
   }
 
@@ -1293,15 +1302,15 @@ function waitFor(name, condition) {
     function stop(interval, name) {
       if (interval) {
         if (name && isset(waits[name])) {
-          glb.clearInterval(waits[name]);
+          glb().clearInterval(waits[name]);
           delete waits[name];
         } else {
-          glb.clearInterval(interval);
+          glb().clearInterval(interval);
         }
       }
     }
 
-    var interval = glb.setInterval(function () {
+    var interval = glb().setInterval(function () {
       judge(interval);
     }, time);
 
@@ -1395,7 +1404,7 @@ function copyTextToClipboard(text) {
 } // jquery
 
 function jqFixedSize(sel) {
-  var $ = glb.jQuery;
+  var $ = glb().jQuery;
   $(sel).each(function () {
     var t = $(this);
     t.css({
@@ -1415,7 +1424,7 @@ function jqMakeCarousel(wrapperSel, listSel, itemSel) {
   }
 
   var spaceNumber = parseFloat(space);
-  var $ = glb.jQuery;
+  var $ = glb().jQuery;
   var wrapper = $(wrapperSel);
   var list = wrapper.find(listSel);
   wrapper.css({
@@ -1489,7 +1498,7 @@ function jqMakeCarousel(wrapperSel, listSel, itemSel) {
 
 function openWindow(url, name) {
   var opt = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-  glb.open(url, name, Object.keys(opt).map(function (k) {
+  glb().open(url, name, Object.keys(opt).map(function (k) {
     return "".concat(k, "=").concat(opt[k]);
   }).join(','));
 }
@@ -1498,8 +1507,8 @@ function openCenterWindow(url, name, width, height) {
   var t = {
     width: width,
     height: height,
-    top: (glb.screen.availHeight - 30 - height) / 2,
-    left: (glb.screen.availWidth - 30 - width) / 2
+    top: (glb().screen.availHeight - 30 - height) / 2,
+    left: (glb().screen.availWidth - 30 - width) / 2
   };
   Object.assign(t, opt);
   openWindow(url, name, t);
@@ -1631,8 +1640,20 @@ function makeStorageHelper(storage) {
     }
   };
 }
-var localStorage2 = makeStorageHelper(glb.localStorage);
-var sessionStorage2 = makeStorageHelper(glb.sessionStorage); // 事件处理
+function getLocalStorage2() {
+  if (!store.localStorage2) {
+    store.localStorage2 = makeStorageHelper(glb().localStorage);
+  }
+
+  return store.localStorage2;
+}
+function getSessionStorage2() {
+  if (!store.sessionStorage2) {
+    store.sessionStorage2 = makeStorageHelper(glb().sessionStorage);
+  }
+
+  return store.sessionStorage2;
+} // 事件处理
 
 var EventProcessor =
 /*#__PURE__*/
@@ -1785,7 +1806,7 @@ function (_EventProcessor) {
 
       (_get3 = _get(CrossWindow.prototype.__proto__ || Object.getPrototypeOf(CrossWindow.prototype), "emit", this)).call.apply(_get3, [this, name].concat(args));
 
-      glb.localStorage.setItem(this.storageName, JSON.stringify({
+      glb().localStorage.setItem(this.storageName, JSON.stringify({
         name: name,
         args: args,
         // use random make storage event triggered every time
@@ -1798,4 +1819,4 @@ function (_EventProcessor) {
   return CrossWindow;
 }(EventProcessor);
 
-export { store, isset, isArray, isBool, isNumber, isNumeric, isString, isObject, isFunction, isPromise, empty, numRand, numPad, min, max, studlyCase, kebabCase, snakeCase, camelCase, camelToWords, titleCase, strRand, replaceMultiple, arrayRemove, arrayRemoveBySortedIndexes, newArrayRemoveAt, arrayAt, arrayFirst, arrayLast, arrayDiff, arraySibling, toArrayIfNot, splitArray, groupArray, arrayDistinct, assignIfDifferent, objectMerge, objectMap, objectOnly, objectExcept, forAll, objectGet, objectSet, unset, cloneObj, mapObjectTree, mapObjects, pairRows, executeWithCount, watchChange, store_executeOnceInScopeByName, executeOnceInScopeByName, debounce, joinMethods, executePromiseGetters, getUrlParam, uniqueId, isDescendantOf, getScroll, getOffset, offsetToPosition, findParent, backupAttr, restoreAttr, hasClass, addClass, removeClass, getElSize, isOffsetInEl, getBorder, setElChildByIndex, onDOM, offDOM, binarySearch, windowLoaded, waitTime, waitFor, retry, copyTextToClipboard, jqFixedSize, jqMakeCarousel, openWindow, openCenterWindow, URLHelper, resolveArgsByType, makeStorageHelper, localStorage2, sessionStorage2, EventProcessor, CrossWindow };
+export { store, glb, isset, isArray, isBool, isNumber, isNumeric, isString, isObject, isFunction, isPromise, empty, numRand, numPad, min, max, studlyCase, kebabCase, snakeCase, camelCase, camelToWords, titleCase, strRand, replaceMultiple, arrayRemove, arrayRemoveBySortedIndexes, newArrayRemoveAt, arrayAt, arrayFirst, arrayLast, arrayDiff, arraySibling, toArrayIfNot, splitArray, groupArray, arrayDistinct, assignIfDifferent, objectMerge, objectMap, objectOnly, objectExcept, forAll, objectGet, objectSet, unset, cloneObj, mapObjectTree, mapObjects, pairRows, executeWithCount, watchChange, store_executeOnceInScopeByName, executeOnceInScopeByName, debounce, joinMethods, executePromiseGetters, getUrlParam, uniqueId, isDescendantOf, getScroll, getOffset, offsetToPosition, findParent, backupAttr, restoreAttr, hasClass, addClass, removeClass, getElSize, isOffsetInEl, getBorder, setElChildByIndex, onDOM, offDOM, binarySearch, windowLoaded, waitTime, waitFor, retry, copyTextToClipboard, jqFixedSize, jqMakeCarousel, openWindow, openCenterWindow, URLHelper, resolveArgsByType, makeStorageHelper, getLocalStorage2, getSessionStorage2, EventProcessor, CrossWindow };
