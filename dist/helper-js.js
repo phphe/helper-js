@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.1.6
+ * helper-js v1.1.7
  * (c) 2018-present phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -1165,21 +1165,29 @@
   } // dom event
 
   function onDOM(el, name, handler) {
+    for (var _len5 = arguments.length, args = new Array(_len5 > 3 ? _len5 - 3 : 0), _key6 = 3; _key6 < _len5; _key6++) {
+      args[_key6 - 3] = arguments[_key6];
+    }
+
     if (el.addEventListener) {
       // 所有主流浏览器，除了 IE 8 及更早 IE版本
-      el.addEventListener(name, handler);
+      el.addEventListener.apply(el, [name, handler].concat(args));
     } else if (el.attachEvent) {
       // IE 8 及更早 IE 版本
-      el.attachEvent("on".concat(name), handler);
+      el.attachEvent.apply(el, ["on".concat(name), handler].concat(args));
     }
   }
   function offDOM(el, name, handler) {
+    for (var _len6 = arguments.length, args = new Array(_len6 > 3 ? _len6 - 3 : 0), _key7 = 3; _key7 < _len6; _key7++) {
+      args[_key7 - 3] = arguments[_key7];
+    }
+
     if (el.removeEventListener) {
       // 所有主流浏览器，除了 IE 8 及更早 IE版本
-      el.removeEventListener(name, handler);
+      el.removeEventListener.apply(el, [name, handler].concat(args));
     } else if (el.detachEvent) {
       // IE 8 及更早 IE 版本
-      el.detachEvent("on".concat(name), handler);
+      el.detachEvent.apply(el, ["on".concat(name), handler].concat(args));
     }
   } // advance
   // binarySearch 二分查找
@@ -1723,8 +1731,8 @@
           }
         }
 
-        for (var _len5 = arguments.length, args = new Array(_len5 > 1 ? _len5 - 1 : 0), _key6 = 1; _key6 < _len5; _key6++) {
-          args[_key6 - 1] = arguments[_key6];
+        for (var _len7 = arguments.length, args = new Array(_len7 > 1 ? _len7 - 1 : 0), _key8 = 1; _key8 < _len7; _key8++) {
+          args[_key8 - 1] = arguments[_key8];
         }
 
         for (var _i9 = 0; _i9 < items.length; _i9++) {
@@ -1777,8 +1785,8 @@
       value: function emit(name) {
         var _get3;
 
-        for (var _len6 = arguments.length, args = new Array(_len6 > 1 ? _len6 - 1 : 0), _key7 = 1; _key7 < _len6; _key7++) {
-          args[_key7 - 1] = arguments[_key7];
+        for (var _len8 = arguments.length, args = new Array(_len8 > 1 ? _len8 - 1 : 0), _key9 = 1; _key9 < _len8; _key9++) {
+          args[_key9 - 1] = arguments[_key9];
         }
 
         (_get3 = _get(CrossWindow.prototype.__proto__ || Object.getPrototypeOf(CrossWindow.prototype), "emit", this)).call.apply(_get3, [this, name].concat(args));

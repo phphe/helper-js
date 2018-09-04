@@ -800,18 +800,18 @@ export function setElChildByIndex(el, index, child) {
   }
 }
 // dom event
-export function onDOM(el, name, handler) {
+export function onDOM(el, name, handler, ...args) {
   if (el.addEventListener) { // 所有主流浏览器，除了 IE 8 及更早 IE版本
-    el.addEventListener(name, handler)
+    el.addEventListener(name, handler, ...args)
   } else if (el.attachEvent) { // IE 8 及更早 IE 版本
-    el.attachEvent(`on${name}`, handler)
+    el.attachEvent(`on${name}`, handler, ...args)
   }
 }
-export function offDOM(el, name, handler) {
+export function offDOM(el, name, handler, ...args) {
   if (el.removeEventListener) { // 所有主流浏览器，除了 IE 8 及更早 IE版本
-    el.removeEventListener(name, handler)
+    el.removeEventListener(name, handler, ...args)
   } else if (el.detachEvent) { // IE 8 及更早 IE 版本
-    el.detachEvent(`on${name}`, handler)
+    el.detachEvent(`on${name}`, handler, ...args)
   }
 }
 // advance

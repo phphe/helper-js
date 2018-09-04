@@ -108,8 +108,8 @@ eg: mapObjects([{id: 1}, {id:2}], (item, i) => item.id + 100 ) -> {'101':{id:1},
 ###### isOffsetInEl   (x, y, el)
 ###### getBorder   (el) // return {left, top, right, bottom}
 ###### setElChildByIndex   
-###### onDOM (el, name, handler)   // addEventListener
-###### offDOM (el, name, handler)   // removeEventListener
+###### onDOM (el, name, handler, ...args)   // addEventListener
+###### offDOM (el, name, handler, ...args)   // removeEventListener
 ###### binarySearch   (arr, callback, start, end, returnNearestIfNoHit, max = 1000) // binary search 二分查找
 ###### windowLoaded   // return a promise
 ###### waitTime(milliseconds, [callback: optional]) // return a promise
