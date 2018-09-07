@@ -488,11 +488,10 @@ export function pairRows(rows1, rows2, key1, key2) {
 }
 
 // function helper | method helper
-export function executeWithCount(func, context) {
+export function executeWithCount(func) {
   let count = 0
-  return (...args) => {
-    args.unshift(count++)
-    return func.apply(context, args)
+  return function(...args) {
+    return func.call(this, count++, ...args)
   }
 }
 export function watchChange(getVal, handler) {

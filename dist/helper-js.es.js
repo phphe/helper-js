@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.1.7
+ * helper-js v1.2.1
  * (c) 2018-present phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -755,15 +755,14 @@ function pairRows(rows1, rows2, key1, key2) {
   });
 } // function helper | method helper
 
-function executeWithCount(func, context) {
+function executeWithCount(func) {
   var count = 0;
   return function () {
     for (var _len = arguments.length, args = new Array(_len), _key2 = 0; _key2 < _len; _key2++) {
       args[_key2] = arguments[_key2];
     }
 
-    args.unshift(count++);
-    return func.apply(context, args);
+    return func.call.apply(func, [this, count++].concat(args));
   };
 }
 function watchChange(getVal, handler) {

@@ -86,7 +86,7 @@ eg: mapObjects([{id: 1}, {id:2}], 'id') -> {'1':{id:1},'2':{id:2}}
 eg: mapObjects([{id: 1}, {id:2}], (item, i) => item.id + 100 ) -> {'101':{id:1},'102':{id:2}}
 ```
 ###### pairRows(rows1, rows2, key1, key2 = key1)
-###### executeWithCount (func, context = null) // wrap function, last arg of new function is excuted count
+###### executeWithCount (func, context = null) // wrap function, the first arg of func is excuted count
 ###### watchChange   (getVal, handler) // wrap getter function, when use getter to get value, it will check value if changed
 ###### executeOnceInScopeByName   (name, action, scope = store_executeOnceInScopeByName, storeResult)
 ###### debounce(action, wait = 0, immediate) // return newAction, newAction's scope is same with action, its arguments will be passed to action. newAction.destroy: function, newAction.destroyed: Boolean/undefined
