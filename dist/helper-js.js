@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.2.1
+ * helper-js v1.2.2
  * (c) 2018-present phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -1621,7 +1621,7 @@
         } else {
           this.storage.setItem(name, JSON.stringify({
             value: value,
-            expired_at: minutes && new Date().getTime() / 1000 + minutes * 60
+            expired_at: minutes ? new Date().getTime() + minutes * 60 * 1000 : null
           }));
         }
       },

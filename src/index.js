@@ -1173,7 +1173,7 @@ export function makeStorageHelper(storage) {
       } else {
         this.storage.setItem(name, JSON.stringify({
           value,
-          expired_at: minutes && new Date().getTime() / 1000 + minutes * 60,
+          expired_at: minutes ? new Date().getTime() + minutes * 60 * 1000 : null,
         }))
       }
     },
