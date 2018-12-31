@@ -398,14 +398,23 @@ export function cloneObj(obj, exclude) {
       break;
   }
 }
-// return cloned obj
-// handler(value, key, parent)
-// handler can return follow:
-//  null: don't change anything
-//  {key: false}: delete
-//  {value}: change value
-//  {key, value}. change key and value
-// limit: to prevent circular reference.
+/*
+return cloned obj
+handler(value, key, parent)
+handler can return null or an object.
+null: don't change anything
+object{
+  key: false, // delete. Deprecated, this will be removed in future, please use `delete` instead of it.
+  key: new key, // use a new key instead of old key. if key == null, the old key will be detected
+  delete,
+  value, // new value. if value not gived, the old value will be detected
+
+}
+{key: false}: delete
+{value}: change value
+{key, value}. change key and value
+limit: to prevent circular reference.
+ */
 export function mapObjectTree(obj, handler, limit=10000) {
   let r
   let count = 0
@@ -435,7 +444,7 @@ export function mapObjectTree(obj, handler, limit=10000) {
       // value may changed
       return value
     }
-    let newVal, val
+    let newVal, val, toDelete , stop, skipChildren
     if (!t) {
       // no change
       val = value
@@ -443,17 +452,26 @@ export function mapObjectTree(obj, handler, limit=10000) {
     } else {
       const {key: key2, value} = t
       val = value
-      if (key2 === false) {
+      if (t.delete || key2 === false) {
         // del
-        continue
+        toDelete = true
       } else if (key2 == null) {
         // don't change key
         newVal = assign(value, key, true)
-      } else {
+      } else if(t.hasOwnProperty('value')) {
         newVal = assign(value, key2)
       }
+      ({stop, skipChildren}) = t
     }
-
+    if (toDelete) {
+      continue
+    }
+    if (skipChildren) {
+      continue
+    }
+    if (stop) {
+      break
+    }
     if (isArray(val)) {
       const len = val.length
       for (let i = 0; i < len; i++) {
