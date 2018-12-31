@@ -684,6 +684,7 @@ export function getOffset(el) {
 	}
 }
 
+// todo 修改版好像也不对, 这方法到底有什么作用?
 export function offsetToPosition(el, of) {
   let offsetParent = el.offsetParent
   if(
@@ -703,6 +704,35 @@ export function offsetToPosition(el, of) {
     ps.y -= parent.scrollTop
   }
   return ps
+}
+// todo 修改版
+function offsetToPosition(el, of) {
+  let offsetParent = el.offsetParent
+  if(
+    !offsetParent
+    || offsetParent === document.body && getComputedStyle(document.body).position === 'static'
+  ) {
+    offsetParent = document.body.parentElement
+  }
+  const scrolled = {x: 0, y: 0}
+  let parent = el
+  while (true) {
+    parent = parent.parentElement
+    if (!parent) {
+      break
+    }
+    scrolled.x += parent.scrollLeft
+    scrolled.y += parent.scrollTop
+    if (parent === offsetParent) {
+      break
+    }
+  }
+  // todo
+  const parentOf = hp.getOffset(parent)
+  return {
+    x: of.x - parentOf.x + scrolled.x,
+    y: of.y - parentOf.y + scrolled.y,
+  }
 }
 
 export function findParent(el, callback) {
