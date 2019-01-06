@@ -702,7 +702,8 @@ export function getOffset(el) {
 	}
 }
 
-export function offsetToPosition(el, of) {
+// there is some trap in el.offsetParent, so use this func to fix
+export function getOffsetParent(el) {
   let offsetParent = el.offsetParent
   if(
     !offsetParent
@@ -710,6 +711,13 @@ export function offsetToPosition(el, of) {
   ) {
     offsetParent = document.body.parentElement
   }
+  return offsetParent
+}
+// get el current position. like jQuery.position
+// the position is relative to offsetParent viewport left top. it is for set absolute position, absolute position is relative to offsetParent viewport left top.
+// 相对于offsetParent可视区域左上角(el.offsetLeft或top包含父元素的滚动距离, 所以要减去). position一般用于设置绝对定位的情况, 而绝对定位就是以可视区域左上角为原点.
+export function getPosition(el) {
+  const offsetParent = getOffsetParent(el)
   const ps = {x: el.offsetLeft, y: el.offsetTop}
   let parent = el
   while (true) {
@@ -721,6 +729,17 @@ export function offsetToPosition(el, of) {
     ps.y -= parent.scrollTop
   }
   return ps
+}
+
+// get position of a el if its offset is given. like jQuery.offset.
+// 类似 jQuery.offset的设置功能, 但是它只返回计算的position, 不改变元素样式.
+export function getPositionFromOffset(el, of) {
+  const offsetParent = getOffsetParent(el)
+  const parentOf = getOffset(offsetParent)
+  return {
+    x: of.x - parentOf.x,
+    y: of.y - parentOf.y,
+  }
 }
 
 export function findParent(el, callback) {

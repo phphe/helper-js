@@ -98,7 +98,9 @@ eg: mapObjects([{id: 1}, {id:2}], (item, i) => item.id + 100 ) -> {'101':{id:1},
 ###### isDescendantOf (el, parent)  // if el === parent or is descendant of parent
 ###### getScroll // return {left, top}
 ###### getOffset(el) // offset is relative to top element, return {x, y}   
-###### offsetToPosition(el, offset) // position is relative to offsetParent, return {x, y}
+###### getOffsetParent (el) // there is some trap in el.offsetParent, so use this func to fix
+###### getPosition (el) // get el current position. like jQuery.position
+###### getPositionFromOffset (el, offset) // get position of a el if its offset is given. like jQuery.offset.
 ###### findParent (el, callback)
 ###### backupAttr   (el, name)
 ###### restoreAttr   (el, name)
