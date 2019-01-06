@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.2.2
+ * helper-js v1.3.0
  * (c) 2018-present phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -627,14 +627,25 @@ function cloneObj(obj, exclude) {
       return obj;
       break;
   }
-} // return cloned obj
-// handler(value, key, parent)
-// handler can return follow:
-//  null: don't change anything
-//  {key: false}: delete
-//  {value}: change value
-//  {key, value}. change key and value
-// limit: to prevent circular reference.
+}
+/*
+return cloned obj
+handler(value, key, parent)
+handler can return null or an object.
+null: don't change anything
+object{
+  key: false, // delete. Deprecated, this will be removed in future, please use `delete` instead of it.
+  key: new key, // use a new key instead of old key. if key == null, the old key will be detected
+  delete,
+  value, // new value. if value not gived, the old value will be detected
+  skip, // skip children
+  stop,
+}
+{key: false}: delete
+{value}: change value
+{key, value}. change key and value
+limit: to prevent circular reference.
+ */
 
 function mapObjectTree(obj, handler) {
   var limit = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 10000;
@@ -644,7 +655,7 @@ function mapObjectTree(obj, handler) {
     value: obj
   }];
 
-  var _loop = function _loop() {
+  var _loop2 = function _loop2() {
     if (count >= limit) {
       throw "mapObjectTree: limit(".concat(limit, ") reached, object may has circular reference");
     }
@@ -681,7 +692,10 @@ function mapObjectTree(obj, handler) {
     };
 
     var newVal = void 0,
-        val = void 0;
+        val = void 0,
+        toDelete = void 0,
+        stop = void 0,
+        skip = void 0;
 
     if (!t) {
       // no change
@@ -692,15 +706,30 @@ function mapObjectTree(obj, handler) {
           _value = t.value;
       val = _value;
 
-      if (key2 === false) {
+      if (t.delete || key2 === false) {
         // del
-        return "continue";
+        toDelete = true;
       } else if (key2 == null) {
         // don't change key
         newVal = assign(_value, key, true);
-      } else {
+      } else if (t.hasOwnProperty('value')) {
         newVal = assign(_value, key2);
       }
+
+      stop = t.stop;
+      skip = t.skip;
+    }
+
+    if (toDelete) {
+      return "continue";
+    }
+
+    if (skip) {
+      return "continue";
+    }
+
+    if (stop) {
+      return "break";
     }
 
     if (isArray(val)) {
@@ -726,10 +755,16 @@ function mapObjectTree(obj, handler) {
     }
   };
 
-  while (stack.length > 0) {
-    var _ret = _loop();
+  _loop: while (stack.length > 0) {
+    var _ret = _loop2();
 
-    if (_ret === "continue") continue;
+    switch (_ret) {
+      case "continue":
+        continue;
+
+      case "break":
+        break _loop;
+    }
   }
 
   return r;
@@ -879,7 +914,7 @@ function joinMethods(methods) {
   var _iteratorError4 = undefined;
 
   try {
-    var _loop2 = function _loop2() {
+    var _loop3 = function _loop3() {
       var method = _step4.value;
       var old = simpleJoinedMethod;
 
@@ -897,7 +932,7 @@ function joinMethods(methods) {
     };
 
     for (var _iterator4 = methods[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
-      _loop2();
+      _loop3();
     }
   } catch (err) {
     _didIteratorError4 = true;
@@ -1031,14 +1066,22 @@ function getOffset(el) {
     x: rect.left + scroll.left,
     y: rect.top + scroll.top
   };
-}
-function offsetToPosition(el, of) {
+} // there is some trap in el.offsetParent, so use this func to fix
+
+function getOffsetParent(el) {
   var offsetParent = el.offsetParent;
 
   if (!offsetParent || offsetParent === document.body && getComputedStyle(document.body).position === 'static') {
     offsetParent = document.body.parentElement;
   }
 
+  return offsetParent;
+} // get el current position. like jQuery.position
+// the position is relative to offsetParent viewport left top. it is for set absolute position, absolute position is relative to offsetParent viewport left top.
+// 相对于offsetParent可视区域左上角(el.offsetLeft或top包含父元素的滚动距离, 所以要减去). position一般用于设置绝对定位的情况, 而绝对定位就是以可视区域左上角为原点.
+
+function getPosition(el) {
+  var offsetParent = getOffsetParent(el);
   var ps = {
     x: el.offsetLeft,
     y: el.offsetTop
@@ -1057,6 +1100,16 @@ function offsetToPosition(el, of) {
   }
 
   return ps;
+} // get position of a el if its offset is given. like jQuery.offset.
+// 类似 jQuery.offset的设置功能, 但是它只返回计算的position, 不改变元素样式.
+
+function getPositionFromOffset(el, of) {
+  var offsetParent = getOffsetParent(el);
+  var parentOf = getOffset(offsetParent);
+  return {
+    x: of.x - parentOf.x,
+    y: of.y - parentOf.y
+  };
 }
 function findParent(el, callback) {
   return doFindParent(el, callback);
@@ -1883,7 +1936,9 @@ exports.uniqueId = uniqueId;
 exports.isDescendantOf = isDescendantOf;
 exports.getScroll = getScroll;
 exports.getOffset = getOffset;
-exports.offsetToPosition = offsetToPosition;
+exports.getOffsetParent = getOffsetParent;
+exports.getPosition = getPosition;
+exports.getPositionFromOffset = getPositionFromOffset;
 exports.findParent = findParent;
 exports.backupAttr = backupAttr;
 exports.restoreAttr = restoreAttr;
