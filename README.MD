@@ -71,12 +71,21 @@ handler(item, index/key)
 ###### cloneObj  (obj, exclude) // can clone one-level object. exclude: array or function
 ###### mapObjectTree(obj, handler, limit=10000) // can clone whole object tree, can traverse every node, can exclude nodes
 ```
+return cloned obj
 handler(value, key, parent)
-handler can return follow:
- null: don't change anything
- {key: false}: delete
- {value}: change value
- {key, value}. change key and value
+handler can return null or an object.
+null: don't change anything
+object{
+  key: false, // delete. Deprecated, this will be removed in future, please use `delete` instead of it.
+  key: new key, // use a new key instead of old key. if key == null, the old key will be detected
+  delete,
+  value, // new value. if value not gived, the old value will be detected
+  skip, // skip children
+  stop,
+}
+{key: false}: delete
+{value}: change value
+{key, value}. change key and value
 limit: to prevent circular reference.
 ```
 ###### mapObjects(arr, idKey) // idKey can be function which return a key

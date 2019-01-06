@@ -408,7 +408,8 @@ object{
   key: new key, // use a new key instead of old key. if key == null, the old key will be detected
   delete,
   value, // new value. if value not gived, the old value will be detected
-
+  skip, // skip children
+  stop,
 }
 {key: false}: delete
 {value}: change value
@@ -444,7 +445,7 @@ export function mapObjectTree(obj, handler, limit=10000) {
       // value may changed
       return value
     }
-    let newVal, val, toDelete , stop, skipChildren
+    let newVal, val, toDelete , stop, skip
     if (!t) {
       // no change
       val = value
@@ -461,12 +462,12 @@ export function mapObjectTree(obj, handler, limit=10000) {
       } else if(t.hasOwnProperty('value')) {
         newVal = assign(value, key2)
       }
-      ({stop, skipChildren}) = t
+      ({stop, skip} = t)
     }
     if (toDelete) {
       continue
     }
-    if (skipChildren) {
+    if (skip) {
       continue
     }
     if (stop) {
