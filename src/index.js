@@ -684,8 +684,8 @@ export function getOffset(el) {
 	}
 }
 
-// todo 修改版好像也不对, 这方法到底有什么作用?
-export function offsetToPosition(el, of) {
+// there is some trap in el.offsetParent, so use this func to fix
+export function getOffsetParent(el) {
   let offsetParent = el.offsetParent
   if(
     !offsetParent
@@ -693,6 +693,13 @@ export function offsetToPosition(el, of) {
   ) {
     offsetParent = document.body.parentElement
   }
+  return offsetParent
+}
+// get el current position. like jQuery.position
+// the position is relative to offsetParent viewport left top. it is for set absolute position, absolute position is relative to offsetParent viewport left top.
+// 相对于offsetParent可视区域左上角(el.offsetLeft或top包含父元素的滚动距离, 所以要减去). position一般用于设置绝对定位的情况, 而绝对定位就是以可视区域左上角为原点.
+export function getPosition(el) {
+  const offsetParent = getOffsetParent(el)
   const ps = {x: el.offsetLeft, y: el.offsetTop}
   let parent = el
   while (true) {
@@ -705,33 +712,15 @@ export function offsetToPosition(el, of) {
   }
   return ps
 }
-// todo 修改版
-function offsetToPosition(el, of) {
-  let offsetParent = el.offsetParent
-  if(
-    !offsetParent
-    || offsetParent === document.body && getComputedStyle(document.body).position === 'static'
-  ) {
-    offsetParent = document.body.parentElement
-  }
-  const scrolled = {x: 0, y: 0}
-  let parent = el
-  while (true) {
-    parent = parent.parentElement
-    if (!parent) {
-      break
-    }
-    scrolled.x += parent.scrollLeft
-    scrolled.y += parent.scrollTop
-    if (parent === offsetParent) {
-      break
-    }
-  }
-  // todo
-  const parentOf = hp.getOffset(parent)
+
+// get position of a el if its offset is given. like jQuery.offset.
+// 类似 jQuery.offset的设置功能, 但是它只返回计算的position, 不改变元素样式.
+export function getPositionFromOffset(el, of) {
+  const offsetParent = getOffsetParent(el)
+  const parentOf = getOffset(offsetParent)
   return {
-    x: of.x - parentOf.x + scrolled.x,
-    y: of.y - parentOf.y + scrolled.y,
+    x: of.x - parentOf.x,
+    y: of.y - parentOf.y,
   }
 }
 
