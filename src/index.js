@@ -629,6 +629,27 @@ export function executePromiseGetters(getters, concurrent = 1) {
   }
 }
 
+export function promiseTimeout(promise, timeout) {
+  return new Promise((resolve, reject) => {
+    let t, rejected
+    promise.then((...args) => {
+      clearTimeout(t)
+      resolve(...args)
+    }, (...args) => {
+      if (!rejected) {
+        clearTimeout(t)
+        reject(...args)
+      }
+    })
+    t = setTimeout(() => {
+      rejected = true
+      const e = new Error('Promise timeout!')
+      e.name = 'timeout'
+      reject(e)
+    }, timeout)
+  })
+}
+
 // url
 /* eslint-disable */
 export function getUrlParam(par) {
