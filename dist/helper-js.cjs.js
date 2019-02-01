@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.3.0
+ * helper-js v1.3.1
  * (c) 2018-present phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -986,6 +986,26 @@ function executePromiseGetters(getters) {
       stopped = true;
     }
   };
+}
+function promiseTimeout(promise, timeout) {
+  return new Promise(function (resolve, reject) {
+    var t, rejected;
+    promise.then(function () {
+      clearTimeout(t);
+      resolve.apply(void 0, arguments);
+    }, function () {
+      if (!rejected) {
+        clearTimeout(t);
+        reject.apply(void 0, arguments);
+      }
+    });
+    t = setTimeout(function () {
+      rejected = true;
+      var e = new Error('Promise timeout!');
+      e.name = 'timeout';
+      reject(e);
+    }, timeout);
+  });
 } // url
 
 /* eslint-disable */
@@ -1931,6 +1951,7 @@ exports.executeOnceInScopeByName = executeOnceInScopeByName;
 exports.debounce = debounce;
 exports.joinMethods = joinMethods;
 exports.executePromiseGetters = executePromiseGetters;
+exports.promiseTimeout = promiseTimeout;
 exports.getUrlParam = getUrlParam;
 exports.uniqueId = uniqueId;
 exports.isDescendantOf = isDescendantOf;
