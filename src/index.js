@@ -539,42 +539,78 @@ export function executeOnceInScopeByName(name, action, scope = scope_executeOnce
   }
   return scope[name]
 }
-export function debounce(action, wait = 0, immediate) {
+export function debounceTrailing(action, wait = 0) {
   let t
   let delaying
   let lastArgs // when trailing, use last args
+  let resolves = []
+  let rejects = []
   const wrappedAction = function (...args) {
-    const self = wrappedAction
-    lastArgs = args
-    if (!delaying) {
-      delaying = true
-      self.destroyed = false
-      if (immediate) {
-        action.call(this, ...args)
+    return new Promise((resolve, reject) => {
+      resolves.push(resolve)
+      rejects.push(reject)
+      //
+      lastArgs = args
+      if (!delaying) {
+        delaying = true
         t = setTimeout(() => {
+          const result = action.call(this, ...lastArgs)
           t = null
           delaying = false
-          self.destroyed = true
-        }, wait)
-      } else {
-        t = setTimeout(() => {
-          action.call(this, ...lastArgs)
-          t = null
-          delaying = false
-          self.destroyed = true
+          resolves.forEach(resolve => resolve(result))
+          resolves = []
+          rejects = []
         }, wait)
       }
-    }
+    })
   }
-  wrappedAction.destroy = () => {
+  wrappedAction.stop = () => {
     if (t) {
       clearTimeout(t)
       t = null
     }
     delaying = false
-    self.destroyed = true
+    resolves = []
+    rejects.forEach(reject => reject())
+    rejects = []
   }
   return wrappedAction
+}
+export function debounceImmediate(action, wait = 0) {
+  let t
+  let delaying
+  let result
+  const wrappedAction = function (...args) {
+    return new Promise((resolve, reject) => {
+      if (delaying) {
+        resolve(result)
+      } else {
+        delaying = true
+        result = action.call(this, ...lastArgs)
+        resolve(result)
+        t = setTimeout(() => {
+          t = null
+          delaying = false
+          result = null
+        }, wait)
+      }
+    })
+  }
+  wrappedAction.stop = () => {
+    if (t) {
+      clearTimeout(t)
+      t = null
+    }
+    delaying = false
+  }
+  return wrappedAction
+}
+export function debounce(action, wait = 0, opt = {}) {
+  if (opt.immediate) {
+    return debounceImmediate(action, wait)
+  } else {
+    return debounceTrailing(action, wait)
+  }
 }
 /**
  * [joinMethods description]

@@ -98,7 +98,14 @@ eg: mapObjects([{id: 1}, {id:2}], (item, i) => item.id + 100 ) -> {'101':{id:1},
 ###### executeWithCount (func, context = null) // wrap function, the first arg of func is excuted count
 ###### watchChange   (getVal, handler) // wrap getter function, when use getter to get value, it will check value if changed
 ###### executeOnceInScopeByName   (name, action, scope = store_executeOnceInScopeByName, storeResult)
-###### debounce(action, wait = 0, immediate) // return newAction, newAction's scope is same with action, its arguments will be passed to action. newAction.destroy: function, newAction.destroyed: Boolean/undefined
+###### debounce(action, wait = 0, opt = {}) // return newAction, newAction's scope is same with action, its arguments will be passed to action. newAction.stop: function, to stop timeout
+```js
+opt: {
+  immediate: false,
+}
+```
+###### debounceTrailing(action, wait = 0)
+###### debounceImmediate(action, wait = 0)
 ###### joinMethods(methods, mode = 'value') // mode: value, pipline
 ###### executePromiseGetters(getters, concurrent = 1) // return {promise, destroy}
 ###### promiseTimeout(promise, timeout) // timeout unit is millisecond. return a new promise, which throw error named 'timeout' if timeout
