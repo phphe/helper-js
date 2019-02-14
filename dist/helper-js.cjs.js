@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.3.1
+ * helper-js v1.3.2
  * (c) 2018-present phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -847,57 +847,105 @@ function executeOnceInScopeByName(name, action) {
 
   return scope[name];
 }
-function debounce(action) {
+function debounceTrailing(action) {
   var wait = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
-  var immediate = arguments.length > 2 ? arguments[2] : undefined;
   var t;
   var delaying;
   var lastArgs; // when trailing, use last args
 
+  var resolves = [];
+  var rejects = [];
+
   var wrappedAction = function wrappedAction() {
     var _this = this;
-
-    var self = wrappedAction;
 
     for (var _len3 = arguments.length, args = new Array(_len3), _key4 = 0; _key4 < _len3; _key4++) {
       args[_key4] = arguments[_key4];
     }
 
-    lastArgs = args;
+    return new Promise(function (resolve, reject) {
+      resolves.push(resolve);
+      rejects.push(reject); //
 
-    if (!delaying) {
-      delaying = true;
-      self.destroyed = false;
+      lastArgs = args;
 
-      if (immediate) {
-        action.call.apply(action, [this].concat(args));
+      if (!delaying) {
+        delaying = true;
         t = setTimeout(function () {
+          var result = action.call.apply(action, [_this].concat(_toConsumableArray(lastArgs)));
           t = null;
           delaying = false;
-          self.destroyed = true;
-        }, wait);
-      } else {
-        t = setTimeout(function () {
-          action.call.apply(action, [_this].concat(_toConsumableArray(lastArgs)));
-          t = null;
-          delaying = false;
-          self.destroyed = true;
+          resolves.forEach(function (resolve) {
+            return resolve(result);
+          });
+          resolves = [];
+          rejects = [];
         }, wait);
       }
-    }
+    });
   };
 
-  wrappedAction.destroy = function () {
+  wrappedAction.stop = function () {
     if (t) {
       clearTimeout(t);
       t = null;
     }
 
     delaying = false;
-    self.destroyed = true;
+    resolves = [];
+    rejects.forEach(function (reject) {
+      return reject();
+    });
+    rejects = [];
   };
 
   return wrappedAction;
+}
+function debounceImmediate(action) {
+  var wait = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+  var t;
+  var delaying;
+  var result;
+
+  var wrappedAction = function wrappedAction() {
+    var _this2 = this;
+
+    return new Promise(function (resolve, reject) {
+      if (delaying) {
+        resolve(result);
+      } else {
+        delaying = true;
+        result = action.call.apply(action, [_this2].concat(_toConsumableArray(lastArgs)));
+        resolve(result);
+        t = setTimeout(function () {
+          t = null;
+          delaying = false;
+          result = null;
+        }, wait);
+      }
+    });
+  };
+
+  wrappedAction.stop = function () {
+    if (t) {
+      clearTimeout(t);
+      t = null;
+    }
+
+    delaying = false;
+  };
+
+  return wrappedAction;
+}
+function debounce(action) {
+  var wait = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+  var opt = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+
+  if (opt.immediate) {
+    return debounceImmediate(action, wait);
+  } else {
+    return debounceTrailing(action, wait);
+  }
 }
 /**
  * [joinMethods description]
@@ -1240,6 +1288,41 @@ function setElChildByIndex(el, index, child) {
         el.appendChild(child);
       }
     }
+  }
+} // from https://blog.csdn.net/qq_30100043/article/details/74719534
+
+function getCss3Prefix() {
+  var opt = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+  if (opt.noCache || store.css3Prefix == null) {
+    store.css3Prefix = reget();
+  }
+
+  return store.css3Prefix;
+
+  function reget() {
+    var div = document.createElement('div');
+    var cssText = '-webkit-transition:all .1s; -moz-transition:all .1s; -o-transition:all .1s; -ms-transition:all .1s; transition:all .1s;';
+    div.style.cssText = cssText;
+    var style = div.style;
+
+    if (style.webkitTransition) {
+      return '-webkit-';
+    }
+
+    if (style.MozTransition) {
+      return '-moz-';
+    }
+
+    if (style.oTransition) {
+      return '-o-';
+    }
+
+    if (style.msTransition) {
+      return '-ms-';
+    }
+
+    return '';
   }
 } // dom event
 
@@ -1594,7 +1677,7 @@ var URLHelper =
 function () {
   // protocol, hostname, port, pastname
   function URLHelper(baseUrl) {
-    var _this2 = this;
+    var _this3 = this;
 
     _classCallCheck(this, URLHelper);
 
@@ -1616,7 +1699,7 @@ function () {
     if (t[1]) {
       t[1].split('&').forEach(function (v) {
         var t2 = v.split('=');
-        _this2.search[t2[0]] = t2[1] == null ? '' : decodeURIComponent(t2[1]);
+        _this3.search[t2[0]] = t2[1] == null ? '' : decodeURIComponent(t2[1]);
       });
     }
   }
@@ -1624,11 +1707,11 @@ function () {
   _createClass(URLHelper, [{
     key: "getHref",
     value: function getHref() {
-      var _this3 = this;
+      var _this4 = this;
 
       var t = [this.baseUrl];
       var searchStr = Object.keys(this.search).map(function (k) {
-        return "".concat(k, "=").concat(encodeURIComponent(_this3.search[k]));
+        return "".concat(k, "=").concat(encodeURIComponent(_this4.search[k]));
       }).join('&');
 
       if (searchStr) {
@@ -1756,10 +1839,10 @@ function () {
   }, {
     key: "once",
     value: function once(name, handler) {
-      var _this4 = this;
+      var _this5 = this;
 
       var off = function off() {
-        _this4.off(name, wrappedHandler);
+        _this5.off(name, wrappedHandler);
       };
 
       var wrappedHandler = function wrappedHandler() {
@@ -1842,12 +1925,12 @@ function (_EventProcessor) {
   _inherits(CrossWindow, _EventProcessor);
 
   function CrossWindow() {
-    var _this5;
+    var _this6;
 
     _classCallCheck(this, CrossWindow);
 
-    _this5 = _possibleConstructorReturn(this, (CrossWindow.__proto__ || Object.getPrototypeOf(CrossWindow)).call(this));
-    Object.defineProperty(_assertThisInitialized(_this5), "storageName", {
+    _this6 = _possibleConstructorReturn(this, (CrossWindow.__proto__ || Object.getPrototypeOf(CrossWindow)).call(this));
+    Object.defineProperty(_assertThisInitialized(_this6), "storageName", {
       configurable: true,
       enumerable: true,
       writable: true,
@@ -1858,17 +1941,17 @@ function (_EventProcessor) {
     if (!cls._listen) {
       cls._listen = true;
       onDOM(window, 'storage', function (ev) {
-        if (ev.key === _this5.storageName) {
+        if (ev.key === _this6.storageName) {
           var _get2;
 
           var event = JSON.parse(ev.newValue);
 
-          (_get2 = _get(CrossWindow.prototype.__proto__ || Object.getPrototypeOf(CrossWindow.prototype), "emit", _assertThisInitialized(_this5))).call.apply(_get2, [_this5, event.name].concat(_toConsumableArray(event.args)));
+          (_get2 = _get(CrossWindow.prototype.__proto__ || Object.getPrototypeOf(CrossWindow.prototype), "emit", _assertThisInitialized(_this6))).call.apply(_get2, [_this6, event.name].concat(_toConsumableArray(event.args)));
         }
       });
     }
 
-    return _this5;
+    return _this6;
   }
 
   _createClass(CrossWindow, [{
@@ -1948,6 +2031,8 @@ exports.executeWithCount = executeWithCount;
 exports.watchChange = watchChange;
 exports.store_executeOnceInScopeByName = store_executeOnceInScopeByName;
 exports.executeOnceInScopeByName = executeOnceInScopeByName;
+exports.debounceTrailing = debounceTrailing;
+exports.debounceImmediate = debounceImmediate;
 exports.debounce = debounce;
 exports.joinMethods = joinMethods;
 exports.executePromiseGetters = executePromiseGetters;
@@ -1970,6 +2055,7 @@ exports.getElSize = getElSize;
 exports.isOffsetInEl = isOffsetInEl;
 exports.getBorder = getBorder;
 exports.setElChildByIndex = setElChildByIndex;
+exports.getCss3Prefix = getCss3Prefix;
 exports.onDOM = onDOM;
 exports.offDOM = offDOM;
 exports.binarySearch = binarySearch;
