@@ -902,6 +902,32 @@ export function setElChildByIndex(el, index, child) {
     }
   }
 }
+// from https://blog.csdn.net/qq_30100043/article/details/74719534
+export function getCss3Prefix(opt = {}) {
+  if (opt.noCache || store.css3Prefix == null) {
+    store.css3Prefix = reget()
+  }
+  return store.css3Prefix
+  function reget() {
+    var div = document.createElement('div');
+    var cssText = '-webkit-transition:all .1s; -moz-transition:all .1s; -o-transition:all .1s; -ms-transition:all .1s; transition:all .1s;';
+    div.style.cssText = cssText;
+    var style = div.style;
+    if (style.webkitTransition) {
+        return '-webkit-';
+    }
+    if (style.MozTransition) {
+        return '-moz-';
+    }
+    if (style.oTransition) {
+        return '-o-';
+    }
+    if (style.msTransition) {
+        return '-ms-';
+    }
+    return '';
+  }
+}
 // dom event
 export function onDOM(el, name, handler, ...args) {
   if (el.addEventListener) { // 所有主流浏览器，除了 IE 8 及更早 IE版本

@@ -127,7 +127,13 @@ opt: {
 ###### getElSize   (el)
 ###### isOffsetInEl   (x, y, el)
 ###### getBorder   (el) // return {left, top, right, bottom}
-###### setElChildByIndex   
+###### setElChildByIndex  
+###### getCss3Prefix(opt) // return -webkit-, -moz-, -o-, -ms-, ''
+```js
+opt: {
+  noCache: false,
+}
+```
 ###### onDOM (el, name, handler, ...args)   // addEventListener
 ###### offDOM (el, name, handler, ...args)   // removeEventListener
 ###### binarySearch   (arr, callback, start, end, returnNearestIfNoHit, max = 1000) // binary search 二分查找
