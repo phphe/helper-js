@@ -136,6 +136,7 @@ opt: {
 ```
 ###### onDOM (el, name, handler, ...args)   // addEventListener
 ###### offDOM (el, name, handler, ...args)   // removeEventListener
+###### onDOMMany(els, names, handler, ...args)   // return destroy
 ###### binarySearch   (arr, callback, start, end, returnNearestIfNoHit, max = 1000) // binary search 二分查找
 ###### windowLoaded   // return a promise
 ###### waitTime(milliseconds, [callback: optional]) // return a promise

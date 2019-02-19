@@ -943,6 +943,23 @@ export function offDOM(el, name, handler, ...args) {
     el.detachEvent(`on${name}`, handler, ...args)
   }
 }
+export function onDOMMany(els, names, handler, ...args) {
+  els = toArrayIfNot(els)
+  names = toArrayIfNot(names)
+  for (const el of els) {
+    for (const name of names) {
+      onDOM(el, name, handler, ...args)
+    }
+  }
+  const destroy = () => {
+    for (const el of els) {
+      for (const name of names) {
+        offDOM(el, name, handler)
+      }
+    }
+  }
+  return destroy
+}
 // advance
 // binarySearch 二分查找
 export function binarySearch(arr, callback, start, end, returnNearestIfNoHit, max = 1000) {
