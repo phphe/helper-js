@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.3.3
+ * helper-js v1.3.5
  * (c) 2018-present phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -1105,6 +1105,11 @@ function isDescendantOf(el, parent) {
       el = el.parentElement;
     }
   }
+}
+function removeEl(el) {
+  if (el.parentNode !== null) {
+    return el.parentNode.removeChild(el);
+  }
 } // refer: https://stackoverflow.com/questions/871399/cross-browser-method-for-detecting-the-scrolltop-of-the-browser-window
 
 function getScroll() {
@@ -2144,6 +2149,7 @@ exports.promiseTimeout = promiseTimeout;
 exports.getUrlParam = getUrlParam;
 exports.uniqueId = uniqueId;
 exports.isDescendantOf = isDescendantOf;
+exports.removeEl = removeEl;
 exports.getScroll = getScroll;
 exports.getOffset = getOffset;
 exports.getOffsetParent = getOffsetParent;

@@ -730,6 +730,12 @@ export function isDescendantOf (el, parent) {
   }
 }
 
+export function removeEl(el) {
+  if (el.parentNode !== null) {
+    return el.parentNode.removeChild(el)
+  }
+}
+
 // refer: https://stackoverflow.com/questions/871399/cross-browser-method-for-detecting-the-scrolltop-of-the-browser-window
 export function getScroll(){
     if(typeof pageYOffset!= 'undefined'){

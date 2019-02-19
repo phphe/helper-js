@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.3.3
+ * helper-js v1.3.5
  * (c) 2018-present phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -1101,6 +1101,11 @@ function isDescendantOf(el, parent) {
       el = el.parentElement;
     }
   }
+}
+function removeEl(el) {
+  if (el.parentNode !== null) {
+    return el.parentNode.removeChild(el);
+  }
 } // refer: https://stackoverflow.com/questions/871399/cross-browser-method-for-detecting-the-scrolltop-of-the-browser-window
 
 function getScroll() {
@@ -2078,4 +2083,4 @@ function (_EventProcessor) {
   return CrossWindow;
 }(EventProcessor);
 
-export { store, glb, isset, isArray, isBool, isNumber, isNumeric, isString, isObject, isFunction, isPromise, empty, numRand, numPad, min, max, studlyCase, kebabCase, snakeCase, camelCase, camelToWords, titleCase, strRand, replaceMultiple, arrayRemove, arrayRemoveBySortedIndexes, newArrayRemoveAt, arrayAt, arrayFirst, arrayLast, arrayDiff, arraySibling, toArrayIfNot, splitArray, groupArray, arrayDistinct, assignIfDifferent, objectMerge, objectMap, objectOnly, objectExcept, forAll, objectGet, objectSet, unset, cloneObj, mapObjectTree, mapObjects, pairRows, executeWithCount, watchChange, store_executeOnceInScopeByName, executeOnceInScopeByName, debounceTrailing, debounceImmediate, debounce, joinMethods, executePromiseGetters, promiseTimeout, getUrlParam, uniqueId, isDescendantOf, getScroll, getOffset, getOffsetParent, getPosition, getPositionFromOffset, findParent, backupAttr, restoreAttr, hasClass, addClass, removeClass, getElSize, isOffsetInEl, getBorder, setElChildByIndex, getCss3Prefix, onDOM, offDOM, onDOMMany, binarySearch, windowLoaded, waitTime, waitFor, retry, copyTextToClipboard, jqFixedSize, jqMakeCarousel, openWindow, openCenterWindow, URLHelper, resolveArgsByType, makeStorageHelper, getLocalStorage2, getSessionStorage2, EventProcessor, CrossWindow };
+export { store, glb, isset, isArray, isBool, isNumber, isNumeric, isString, isObject, isFunction, isPromise, empty, numRand, numPad, min, max, studlyCase, kebabCase, snakeCase, camelCase, camelToWords, titleCase, strRand, replaceMultiple, arrayRemove, arrayRemoveBySortedIndexes, newArrayRemoveAt, arrayAt, arrayFirst, arrayLast, arrayDiff, arraySibling, toArrayIfNot, splitArray, groupArray, arrayDistinct, assignIfDifferent, objectMerge, objectMap, objectOnly, objectExcept, forAll, objectGet, objectSet, unset, cloneObj, mapObjectTree, mapObjects, pairRows, executeWithCount, watchChange, store_executeOnceInScopeByName, executeOnceInScopeByName, debounceTrailing, debounceImmediate, debounce, joinMethods, executePromiseGetters, promiseTimeout, getUrlParam, uniqueId, isDescendantOf, removeEl, getScroll, getOffset, getOffsetParent, getPosition, getPositionFromOffset, findParent, backupAttr, restoreAttr, hasClass, addClass, removeClass, getElSize, isOffsetInEl, getBorder, setElChildByIndex, getCss3Prefix, onDOM, offDOM, onDOMMany, binarySearch, windowLoaded, waitTime, waitFor, retry, copyTextToClipboard, jqFixedSize, jqMakeCarousel, openWindow, openCenterWindow, URLHelper, resolveArgsByType, makeStorageHelper, getLocalStorage2, getSessionStorage2, EventProcessor, CrossWindow };

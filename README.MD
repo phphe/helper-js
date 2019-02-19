@@ -113,6 +113,7 @@ opt: {
 ##3 DOM
 ###### uniqueId  (prefix = 'id_') // html element id
 ###### isDescendantOf (el, parent)  // if el === parent or is descendant of parent
+###### removeEl (el)
 ###### getScroll // return {left, top}
 ###### getOffset(el) // offset is relative to top element, return {x, y}   
 ###### getOffsetParent (el) // there is some trap in el.offsetParent, so use this func to fix
