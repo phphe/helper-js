@@ -1097,6 +1097,11 @@ export function retry(func, limitTimes = 3) {
 }
 // 复制文字到剪贴板
 export function copyTextToClipboard(text) {
+  try {
+    // use latest api
+    navigator.clipboard.writeText(text)
+    return
+  } catch (e) {}
   var textArea = document.createElement('textarea')
 
   //
