@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.3.5
+ * helper-js v1.3.6
  * (c) 2018-present phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -1627,6 +1627,12 @@
   } // 复制文字到剪贴板
 
   function copyTextToClipboard(text) {
+    try {
+      // use latest api
+      navigator.clipboard.writeText(text);
+      return;
+    } catch (e) {}
+
     var textArea = document.createElement('textarea'); //
     // *** This styling is an extra step which is likely not required. ***
     //
