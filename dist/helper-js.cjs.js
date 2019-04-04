@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.3.8
+ * helper-js v1.3.9
  * (c) 2018-present phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -189,7 +189,7 @@ function isNumber(v) {
   return Object.prototype.toString.call(v) === '[object Number]';
 }
 function isNumeric(v) {
-  return isFinite(v) && !isNaN(parseFloat(n));
+  return isFinite(v) && !isNaN(parseFloat(v));
 }
 function isString(v) {
   return Object.prototype.toString.call(v) === '[object String]';
