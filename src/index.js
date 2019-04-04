@@ -30,7 +30,7 @@ export function isNumber (v) {
   return Object.prototype.toString.call(v) === '[object Number]'
 }
 export function isNumeric (v) {
-  return isFinite(v) && !isNaN(parseFloat(n))
+  return isFinite(v) && !isNaN(parseFloat(v))
 }
 export function isString (v) {
   return Object.prototype.toString.call(v) === '[object String]'
