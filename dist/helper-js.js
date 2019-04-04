@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.3.7
+ * helper-js v1.3.8
  * (c) 2018-present phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -45,29 +45,19 @@
     return Constructor;
   }
 
-  function _get(object, property, receiver) {
-    if (object === null) object = Function.prototype;
-    var desc = Object.getOwnPropertyDescriptor(object, property);
-
-    if (desc === undefined) {
-      var parent = Object.getPrototypeOf(object);
-
-      if (parent === null) {
-        return undefined;
-      } else {
-        return _get(parent, property, receiver);
-      }
-    } else if ("value" in desc) {
-      return desc.value;
+  function _defineProperty(obj, key, value) {
+    if (key in obj) {
+      Object.defineProperty(obj, key, {
+        value: value,
+        enumerable: true,
+        configurable: true,
+        writable: true
+      });
     } else {
-      var getter = desc.get;
-
-      if (getter === undefined) {
-        return undefined;
-      }
-
-      return getter.call(receiver);
+      obj[key] = value;
     }
+
+    return obj;
   }
 
   function _inherits(subClass, superClass) {
@@ -78,12 +68,27 @@
     subClass.prototype = Object.create(superClass && superClass.prototype, {
       constructor: {
         value: subClass,
-        enumerable: false,
         writable: true,
         configurable: true
       }
     });
-    if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+    if (superClass) _setPrototypeOf(subClass, superClass);
+  }
+
+  function _getPrototypeOf(o) {
+    _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
+      return o.__proto__ || Object.getPrototypeOf(o);
+    };
+    return _getPrototypeOf(o);
+  }
+
+  function _setPrototypeOf(o, p) {
+    _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
+      o.__proto__ = p;
+      return o;
+    };
+
+    return _setPrototypeOf(o, p);
   }
 
   function _assertThisInitialized(self) {
@@ -100,6 +105,36 @@
     }
 
     return _assertThisInitialized(self);
+  }
+
+  function _superPropBase(object, property) {
+    while (!Object.prototype.hasOwnProperty.call(object, property)) {
+      object = _getPrototypeOf(object);
+      if (object === null) break;
+    }
+
+    return object;
+  }
+
+  function _get(target, property, receiver) {
+    if (typeof Reflect !== "undefined" && Reflect.get) {
+      _get = Reflect.get;
+    } else {
+      _get = function _get(target, property, receiver) {
+        var base = _superPropBase(target, property);
+
+        if (!base) return;
+        var desc = Object.getOwnPropertyDescriptor(base, property);
+
+        if (desc.get) {
+          return desc.get.call(receiver);
+        }
+
+        return desc.value;
+      };
+    }
+
+    return _get(target, property, receiver || target);
   }
 
   function _toConsumableArray(arr) {
@@ -156,7 +191,7 @@
     return Object.prototype.toString.call(v) === '[object Number]';
   }
   function isNumeric(v) {
-    return isFinite(v);
+    return isFinite(v) && !isNaN(parseFloat(n));
   }
   function isString(v) {
     return Object.prototype.toString.call(v) === '[object String]';
@@ -464,10 +499,8 @@
           }
         }
       } else if (isObject(val)) {
-        var _arr = Object.keys(val);
-
-        for (var _i2 = 0; _i2 < _arr.length; _i2++) {
-          var key = _arr[_i2];
+        for (var _i2 = 0, _Object$keys = Object.keys(val); _i2 < _Object$keys.length; _i2++) {
+          var key = _Object$keys[_i2];
 
           if (handler(val[key], key) === false) {
             break;
@@ -491,8 +524,8 @@
         var keys = Object.keys(val);
         keys.reverse();
 
-        for (var _i5 = 0; _i5 < keys.length; _i5++) {
-          var _key = keys[_i5];
+        for (var _i5 = 0, _keys = keys; _i5 < _keys.length; _i5++) {
+          var _key = _keys[_i5];
 
           if (handler(val[_key], _key) === false) {
             break;
@@ -611,10 +644,8 @@
         } else {
           r = {};
 
-          var _arr2 = Object.keys(obj);
-
-          for (var _i7 = 0; _i7 < _arr2.length; _i7++) {
-            var key = _arr2[_i7];
+          for (var _i7 = 0, _Object$keys2 = Object.keys(obj); _i7 < _Object$keys2.length; _i7++) {
+            var key = _Object$keys2[_i7];
 
             if (!exclude || isArray(exclude) && !exclude.includes(key) || !exclude(key, obj[key], obj)) {
               r[key] = cloneObj(obj[key], exclude);
@@ -1798,18 +1829,10 @@
 
       _classCallCheck(this, URLHelper);
 
-      Object.defineProperty(this, "baseUrl", {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        value: ''
-      });
-      Object.defineProperty(this, "search", {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        value: {}
-      });
+      _defineProperty(this, "baseUrl", '');
+
+      _defineProperty(this, "search", {});
+
       var t = decodeURI(baseUrl).split('?');
       this.baseUrl = t[0];
 
@@ -1937,12 +1960,7 @@
     function EventProcessor() {
       _classCallCheck(this, EventProcessor);
 
-      Object.defineProperty(this, "eventStore", {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        value: []
-      });
+      _defineProperty(this, "eventStore", []);
     }
 
     _createClass(EventProcessor, [{
@@ -1985,8 +2003,8 @@
           }
         }
 
-        for (var _i8 = 0; _i8 < indexes.length; _i8++) {
-          var index = indexes[_i8];
+        for (var _i8 = 0, _indexes = indexes; _i8 < _indexes.length; _i8++) {
+          var index = _indexes[_i8];
           this.eventStore.splice(index, 1);
         }
       }
@@ -2026,8 +2044,8 @@
           args[_key9 - 1] = arguments[_key9];
         }
 
-        for (var _i9 = 0; _i9 < items.length; _i9++) {
-          var _item = items[_i9];
+        for (var _i9 = 0, _items = items; _i9 < _items.length; _i9++) {
+          var _item = _items[_i9];
 
           _item.handler.apply(_item, args);
         }
@@ -2046,13 +2064,10 @@
 
       _classCallCheck(this, CrossWindow);
 
-      _this6 = _possibleConstructorReturn(this, (CrossWindow.__proto__ || Object.getPrototypeOf(CrossWindow)).call(this));
-      Object.defineProperty(_assertThisInitialized(_this6), "storageName", {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        value: '_crossWindow'
-      });
+      _this6 = _possibleConstructorReturn(this, _getPrototypeOf(CrossWindow).call(this));
+
+      _defineProperty(_assertThisInitialized(_this6), "storageName", '_crossWindow');
+
       var cls = CrossWindow;
 
       if (!cls._listen) {
@@ -2063,7 +2078,7 @@
 
             var event = JSON.parse(ev.newValue);
 
-            (_get2 = _get(CrossWindow.prototype.__proto__ || Object.getPrototypeOf(CrossWindow.prototype), "emit", _assertThisInitialized(_this6))).call.apply(_get2, [_this6, event.name].concat(_toConsumableArray(event.args)));
+            (_get2 = _get(_getPrototypeOf(CrossWindow.prototype), "emit", _assertThisInitialized(_this6))).call.apply(_get2, [_assertThisInitialized(_this6), event.name].concat(_toConsumableArray(event.args)));
           }
         });
       }
@@ -2080,7 +2095,7 @@
           args[_key10 - 1] = arguments[_key10];
         }
 
-        (_get3 = _get(CrossWindow.prototype.__proto__ || Object.getPrototypeOf(CrossWindow.prototype), "emit", this)).call.apply(_get3, [this, name].concat(args));
+        (_get3 = _get(_getPrototypeOf(CrossWindow.prototype), "emit", this)).call.apply(_get3, [this, name].concat(args));
 
         glb().localStorage.setItem(this.storageName, JSON.stringify({
           name: name,
