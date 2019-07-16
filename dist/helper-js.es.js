@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.3.9
+ * helper-js v1.3.10
  * (c) 2018-present phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -657,7 +657,7 @@ function cloneObj(obj, exclude) {
 }
 /*
 return cloned obj
-handler(value, key, parent)
+handler(value, key, parent, newParent)
 handler can return null or an object.
 null: don't change anything
 object{
@@ -695,7 +695,7 @@ function mapObjectTree(obj, handler) {
         parent = _stack$shift.parent,
         newParent = _stack$shift.newParent;
 
-    var t = handler(value, key, parent);
+    var t = handler(value, key, parent, newParent);
 
     var assign = function assign(value, key, canPush) {
       if (isArray(value)) {
