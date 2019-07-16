@@ -400,7 +400,7 @@ export function cloneObj(obj, exclude) {
 }
 /*
 return cloned obj
-handler(value, key, parent)
+handler(value, key, parent, newParent)
 handler can return null or an object.
 null: don't change anything
 object{
@@ -426,7 +426,7 @@ export function mapObjectTree(obj, handler, limit=10000) {
     }
     count++
     const {value, key, parent, newParent} = stack.shift()
-    const t = handler(value, key, parent)
+    const t = handler(value, key, parent, newParent)
     const assign = (value, key, canPush) => {
       if (isArray(value)) {
         value = []
