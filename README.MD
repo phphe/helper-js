@@ -119,7 +119,7 @@ opt: {
 ###### getOffsetParent (el) // there is some trap in el.offsetParent, so use this func to fix
 ###### getPosition (el) // get el current position. like jQuery.position
 ###### getPositionFromOffset (el, offset) // get position of a el if its offset is given. like jQuery.offset.
-###### findParent (el, callback)
+###### findParent (el, callback) // callback return 'break' to break loop
 ###### backupAttr   (el, name)
 ###### restoreAttr   (el, name)
 ###### hasClass   (el, className)

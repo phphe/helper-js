@@ -810,7 +810,10 @@ export function findParent(el, callback) {
   return doFindParent(el, callback)
   function doFindParent(el, callback) {
     if (el.parentElement) {
-      if (callback(el.parentElement)) {
+      const r = callback(el.parentElement)
+      if (r === 'break') {
+        return
+      } else if(r) {
         return el.parentElement
       } else {
         return doFindParent(el.parentElement, callback)
