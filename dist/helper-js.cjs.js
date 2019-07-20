@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.3.11
+ * helper-js v1.3.12
  * (c) 2018-present phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -1220,7 +1220,11 @@ function findParent(el, callback) {
 
   function doFindParent(el, callback) {
     if (el.parentElement) {
-      if (callback(el.parentElement)) {
+      var r = callback(el.parentElement);
+
+      if (r === 'break') {
+        return;
+      } else if (r) {
         return el.parentElement;
       } else {
         return doFindParent(el.parentElement, callback);
