@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.3.12
+ * helper-js v1.3.13
  * (c) 2018-present phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -2058,48 +2058,50 @@
 
     return EventProcessor;
   }();
-  var CrossWindow =
+  var CrossWindowEventProcessor =
   /*#__PURE__*/
   function (_EventProcessor) {
-    _inherits(CrossWindow, _EventProcessor);
+    _inherits(CrossWindowEventProcessor, _EventProcessor);
 
-    function CrossWindow() {
+    function CrossWindowEventProcessor() {
       var _this6;
 
-      _classCallCheck(this, CrossWindow);
+      _classCallCheck(this, CrossWindowEventProcessor);
 
-      _this6 = _possibleConstructorReturn(this, _getPrototypeOf(CrossWindow).call(this));
+      _this6 = _possibleConstructorReturn(this, _getPrototypeOf(CrossWindowEventProcessor).call(this));
 
       _defineProperty(_assertThisInitialized(_this6), "storageName", '_crossWindow');
 
-      var cls = CrossWindow;
+      onDOM(window, 'storage', function (ev) {
+        if (ev.key === _this6.storageName) {
+          var _this7;
 
-      if (!cls._listen) {
-        cls._listen = true;
-        onDOM(window, 'storage', function (ev) {
-          if (ev.key === _this6.storageName) {
-            var _get2;
+          var event = JSON.parse(ev.newValue);
 
-            var event = JSON.parse(ev.newValue);
-
-            (_get2 = _get(_getPrototypeOf(CrossWindow.prototype), "emit", _assertThisInitialized(_this6))).call.apply(_get2, [_assertThisInitialized(_this6), event.name].concat(_toConsumableArray(event.args)));
-          }
-        });
-      }
-
+          (_this7 = _this6).emitLocal.apply(_this7, [event.name].concat(_toConsumableArray(event.args)));
+        }
+      });
       return _this6;
     }
 
-    _createClass(CrossWindow, [{
-      key: "emit",
-      value: function emit(name) {
-        var _get3;
+    _createClass(CrossWindowEventProcessor, [{
+      key: "emitLocal",
+      value: function emitLocal(name) {
+        var _get2;
 
         for (var _len9 = arguments.length, args = new Array(_len9 > 1 ? _len9 - 1 : 0), _key10 = 1; _key10 < _len9; _key10++) {
           args[_key10 - 1] = arguments[_key10];
         }
 
-        (_get3 = _get(_getPrototypeOf(CrossWindow.prototype), "emit", this)).call.apply(_get3, [this, name].concat(args));
+        (_get2 = _get(_getPrototypeOf(CrossWindowEventProcessor.prototype), "emit", this)).call.apply(_get2, [this, name].concat(args)); // emit to current window
+
+      }
+    }, {
+      key: "broadcast",
+      value: function broadcast(name) {
+        for (var _len10 = arguments.length, args = new Array(_len10 > 1 ? _len10 - 1 : 0), _key11 = 1; _key11 < _len10; _key11++) {
+          args[_key11 - 1] = arguments[_key11];
+        }
 
         glb().localStorage.setItem(this.storageName, JSON.stringify({
           name: name,
@@ -2109,10 +2111,22 @@
           random: Math.random()
         }));
       }
+    }, {
+      key: "emit",
+      value: function emit(name) {
+        for (var _len11 = arguments.length, args = new Array(_len11 > 1 ? _len11 - 1 : 0), _key12 = 1; _key12 < _len11; _key12++) {
+          args[_key12 - 1] = arguments[_key12];
+        }
+
+        this.emitLocal.apply(this, [name].concat(args));
+        this.broadcast.apply(this, [name].concat(args));
+      }
     }]);
 
-    return CrossWindow;
-  }(EventProcessor);
+    return CrossWindowEventProcessor;
+  }(EventProcessor); // Deprecated in next version
+
+  var CrossWindow = CrossWindowEventProcessor;
 
   exports.store = store;
   exports.glb = glb;
@@ -2212,6 +2226,7 @@
   exports.getLocalStorage2 = getLocalStorage2;
   exports.getSessionStorage2 = getSessionStorage2;
   exports.EventProcessor = EventProcessor;
+  exports.CrossWindowEventProcessor = CrossWindowEventProcessor;
   exports.CrossWindow = CrossWindow;
 
   Object.defineProperty(exports, '__esModule', { value: true });
