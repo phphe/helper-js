@@ -1404,30 +1404,70 @@ export class EventProcessor {
 
 export class CrossWindowEventProcessor extends EventProcessor{
   storageName = '_crossWindow';
+  windows = [];
+  // id
   constructor() {
      super()
      onDOM(window, 'storage', (ev) => {
        if (ev.key === this.storageName) {
          const event = JSON.parse(ev.newValue)
-         this.emitLocal(event.name, ...event.args)
+         if (event.targets.includes(this.id)) {
+           this.emitLocal(event.name, ...event.args)
+         }
        }
      })
+     // join
+     this.id = strRand()
+     this.windows = [this.id]
+     this.on('_windows_updated', windows => {
+       this.windows = windows
+     })
+     this.broadcast('_join', this.id)
+     this.on('_join', (id) => {
+       this.windows.push(id)
+       if (this.windows[0] === this.id) {
+         // is first
+         this.broadcast('_windows_updated', this.windows)
+       }
+     })
+     // exit
+     this.on('_exit', (id) => {
+       arrayRemove(this.windows, id)
+       if (this.windows[0] === this.id) {
+         // is first
+         this.broadcast('_windows_updated', this.windows)
+       }
+     })
+     onDOM(window, 'beforeunload', () => {
+       this.broadcast('_exit', this.id)
+     })
   }
-  emitLocal(name, ...args) {
-    super.emit(name, ...args) // emit to current window
-  }
-  broadcast(name, ...args) {
+  emitTo(name, targets, ...args) {
+    if (targets && !isArray(targets)) {
+      targets = [targets]
+    }
+    if (targets.includes(this.id)) {
+      super.emit(name, ...args) // emit to current window
+    }
     glb().localStorage.setItem(this.storageName, JSON.stringify({
       name,
+      targets,
       args,
       // use random make storage event triggered every time
       // 加入随机保证触发storage事件
       random: Math.random(),
     }))
   }
+  emitLocal(name, ...args) {
+    this.emitTo(name, this.id, ...args)
+  }
+  broadcast(name, ...args) {
+    const targets = this.windows.slice()
+    arrayRemove(targets, this.id)
+    this.emitTo(name, targets, ...args)
+  }
   emit(name, ...args) {
-    this.emitLocal(name, ...args)
-    this.broadcast(name, ...args)
+    this.emitTo(name, this.windows, ...args)
   }
 }
 // Deprecated in next version

@@ -170,6 +170,7 @@ const cwep = new CrossWindowEventProcessor()
 cwep.storageName = '_crossWindow_channel2'
 // functions
 // on, once, off: same to EventProcessor
+// emitTo(name, targets, ...args)
 // emitLocal(name, ...args) emit to current window
 // broadcast(name, ...args) emit to other windows
 // emit(name, ...args) emit to all windows
