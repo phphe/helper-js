@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.3.13
+ * helper-js v1.3.14
  * (c) 2018-present phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -2061,6 +2061,7 @@ var CrossWindowEventProcessor =
 function (_EventProcessor) {
   _inherits(CrossWindowEventProcessor, _EventProcessor);
 
+  // id
   function CrossWindowEventProcessor() {
     var _this6;
 
@@ -2070,39 +2071,75 @@ function (_EventProcessor) {
 
     _defineProperty(_assertThisInitialized(_this6), "storageName", '_crossWindow');
 
+    _defineProperty(_assertThisInitialized(_this6), "windows", []);
+
     onDOM(window, 'storage', function (ev) {
       if (ev.key === _this6.storageName) {
-        var _this7;
-
         var event = JSON.parse(ev.newValue);
 
-        (_this7 = _this6).emitLocal.apply(_this7, [event.name].concat(_toConsumableArray(event.args)));
+        if (event.targets.includes(_this6.id)) {
+          var _this7;
+
+          (_this7 = _this6).emitLocal.apply(_this7, [event.name].concat(_toConsumableArray(event.args)));
+        }
       }
+    }); // join
+
+    _this6.id = strRand();
+    _this6.windows = [_this6.id];
+
+    _this6.on('_windows_updated', function (windows) {
+      _this6.windows = windows;
+    });
+
+    _this6.broadcast('_join', _this6.id);
+
+    _this6.on('_join', function (id) {
+      _this6.windows.push(id);
+
+      if (_this6.windows[0] === _this6.id) {
+        // is first
+        _this6.broadcast('_windows_updated', _this6.windows);
+      }
+    }); // exit
+
+
+    _this6.on('_exit', function (id) {
+      arrayRemove(_this6.windows, id);
+
+      if (_this6.windows[0] === _this6.id) {
+        // is first
+        _this6.broadcast('_windows_updated', _this6.windows);
+      }
+    });
+
+    onDOM(window, 'beforeunload', function () {
+      _this6.broadcast('_exit', _this6.id);
     });
     return _this6;
   }
 
   _createClass(CrossWindowEventProcessor, [{
-    key: "emitLocal",
-    value: function emitLocal(name) {
-      var _get2;
-
-      for (var _len9 = arguments.length, args = new Array(_len9 > 1 ? _len9 - 1 : 0), _key10 = 1; _key10 < _len9; _key10++) {
-        args[_key10 - 1] = arguments[_key10];
+    key: "emitTo",
+    value: function emitTo(name, targets) {
+      if (targets && !isArray(targets)) {
+        targets = [targets];
       }
 
-      (_get2 = _get(_getPrototypeOf(CrossWindowEventProcessor.prototype), "emit", this)).call.apply(_get2, [this, name].concat(args)); // emit to current window
+      for (var _len9 = arguments.length, args = new Array(_len9 > 2 ? _len9 - 2 : 0), _key10 = 2; _key10 < _len9; _key10++) {
+        args[_key10 - 2] = arguments[_key10];
+      }
 
-    }
-  }, {
-    key: "broadcast",
-    value: function broadcast(name) {
-      for (var _len10 = arguments.length, args = new Array(_len10 > 1 ? _len10 - 1 : 0), _key11 = 1; _key11 < _len10; _key11++) {
-        args[_key11 - 1] = arguments[_key11];
+      if (targets.includes(this.id)) {
+        var _get2;
+
+        (_get2 = _get(_getPrototypeOf(CrossWindowEventProcessor.prototype), "emit", this)).call.apply(_get2, [this, name].concat(args)); // emit to current window
+
       }
 
       glb().localStorage.setItem(this.storageName, JSON.stringify({
         name: name,
+        targets: targets,
         args: args,
         // use random make storage event triggered every time
         // 加入随机保证触发storage事件
@@ -2110,14 +2147,34 @@ function (_EventProcessor) {
       }));
     }
   }, {
-    key: "emit",
-    value: function emit(name) {
+    key: "emitLocal",
+    value: function emitLocal(name) {
+      for (var _len10 = arguments.length, args = new Array(_len10 > 1 ? _len10 - 1 : 0), _key11 = 1; _key11 < _len10; _key11++) {
+        args[_key11 - 1] = arguments[_key11];
+      }
+
+      this.emitTo.apply(this, [name, this.id].concat(args));
+    }
+  }, {
+    key: "broadcast",
+    value: function broadcast(name) {
+      var targets = this.windows.slice();
+      arrayRemove(targets, this.id);
+
       for (var _len11 = arguments.length, args = new Array(_len11 > 1 ? _len11 - 1 : 0), _key12 = 1; _key12 < _len11; _key12++) {
         args[_key12 - 1] = arguments[_key12];
       }
 
-      this.emitLocal.apply(this, [name].concat(args));
-      this.broadcast.apply(this, [name].concat(args));
+      this.emitTo.apply(this, [name, targets].concat(args));
+    }
+  }, {
+    key: "emit",
+    value: function emit(name) {
+      for (var _len12 = arguments.length, args = new Array(_len12 > 1 ? _len12 - 1 : 0), _key13 = 1; _key13 < _len12; _key13++) {
+        args[_key13 - 1] = arguments[_key13];
+      }
+
+      this.emitTo.apply(this, [name, this.windows].concat(args));
     }
   }]);
 
