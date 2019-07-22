@@ -1402,29 +1402,33 @@ export class EventProcessor {
   }
 }
 
-export class CrossWindow extends EventProcessor{
+export class CrossWindowEventProcessor extends EventProcessor{
   storageName = '_crossWindow';
   constructor() {
      super()
-     const cls = CrossWindow
-     if (!cls._listen) {
-       cls._listen = true
-       onDOM(window, 'storage', (ev) => {
-         if (ev.key === this.storageName) {
-           const event = JSON.parse(ev.newValue)
-           super.emit(event.name, ...event.args)
-         }
-       })
-     }
+     onDOM(window, 'storage', (ev) => {
+       if (ev.key === this.storageName) {
+         const event = JSON.parse(ev.newValue)
+         this.emitLocal(event.name, ...event.args)
+       }
+     })
+  }
+  emitLocal(name, ...args) {
+    super.emit(name, ...args) // emit to current window
+  }
+  broadcast(name, ...args) {
+    glb().localStorage.setItem(this.storageName, JSON.stringify({
+      name,
+      args,
+      // use random make storage event triggered every time
+      // 加入随机保证触发storage事件
+      random: Math.random(),
+    }))
   }
   emit(name, ...args) {
-     super.emit(name, ...args)
-     glb().localStorage.setItem(this.storageName, JSON.stringify({
-       name,
-       args,
-       // use random make storage event triggered every time
-       // 加入随机保证触发storage事件
-       random: Math.random(),
-     }))
+    this.emitLocal(name, ...args)
+    this.broadcast(name, ...args)
   }
 }
+// Deprecated in next version
+export const CrossWindow = CrossWindowEventProcessor

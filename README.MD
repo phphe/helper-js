@@ -161,4 +161,17 @@ check source code to learn more
 ###### getLocalStorage2 //
 ###### getSessionStorage2 //
 ###### class EventProcessor
-###### class CrossWindow // cross window(same domain) event processor
+###### class CrossWindowEventProcessor // cross window(same domain) event processor
+```js
+const cwep = new CrossWindowEventProcessor()
+// CrossWindowEventProcessor has a default name; communicate in same-name instances.
+// don't create more than one same-name instances in one window
+// set different name if there are more than one same-name instances
+cwep.storageName = '_crossWindow_channel2'
+// functions
+// on, once, off: same to EventProcessor
+// emitLocal(name, ...args) emit to current window
+// broadcast(name, ...args) emit to other windows
+// emit(name, ...args) emit to all windows
+```
+###### class CrossWindow = CrossWindowEventProcessor // Deprecated in next version
