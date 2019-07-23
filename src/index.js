@@ -1368,12 +1368,30 @@ export class EventProcessor {
     const off = () => {
       this.off(name, wrappedHandler)
     }
-    const wrappedHandler = () => {
-      handler()
+    const wrappedHandler = (...args) => {
+      handler(...args)
       off()
     }
     this.on(name, wrappedHandler)
     return off
+  }
+  onceTimeout(name, handler, timeout) {
+    let off
+    const promise = new Promise((resolve, reject) => {
+      const wrappedHandler = (...args) => {
+        handler(...args)
+        resolve()
+      }
+      off = this.once(name, wrappedHandler)
+      waitTime(timeout).then(() => {
+        off()
+        reject()
+      })
+    })
+    const off2 = () => {
+      off && off()
+    }
+    return {off: off2, promise}
   }
   off(name, handler) {
     const indexes = [] // to remove indexes; reverse; 倒序的
@@ -1411,43 +1429,74 @@ export class CrossWindowEventProcessor extends EventProcessor{
      onDOM(window, 'storage', (ev) => {
        if (ev.key === this.storageName) {
          const event = JSON.parse(ev.newValue)
-         if (event.targets.includes(this.id)) {
+         if (!event.targets || event.targets.includes(this.id)) {
            this.emitLocal(event.name, ...event.args)
          }
        }
      })
+     // social parts 集体部分
      // join
      this.id = strRand()
      this.windows = [this.id]
-     this.on('_windows_updated', windows => {
-       this.windows = windows
+     this.ready = new Promise((resolve, reject) => {
+       this.onceTimeout('_windows_updated', ({windows}) => {
+         this.windows = windows
+       }, 80).promise.then(() => {
+         resolve()
+         // responsed 被响应
+       }, () => {
+         // no response 无响应
+         resolve()
+         // try again
+         this.onceTimeout('_windows_updated', ({windows}) => {
+           this.windows = windows
+         }, 200)
+       })
+       this.broadcast('_join', this.id)
      })
-     this.broadcast('_join', this.id)
-     this.on('_join', (id) => {
-       this.windows.push(id)
-       if (this.windows[0] === this.id) {
-         // is first
-         this.broadcast('_windows_updated', this.windows)
-       }
-     })
-     // exit
-     this.on('_exit', (id) => {
-       arrayRemove(this.windows, id)
-       if (this.windows[0] === this.id) {
-         // is first
-         this.broadcast('_windows_updated', this.windows)
-       }
-     })
-     onDOM(window, 'beforeunload', () => {
-       this.broadcast('_exit', this.id)
+     this.ready.then(() => {
+       // on join
+       this.on('_join', (id) => {
+         this.windows.push(id)
+         if (this.isMain()) {
+           this.broadcast('_windows_updated', {windows: this.windows, type: 'join', id})
+         }
+       })
+       // on _windows_updated
+       this.on('_windows_updated', ({windows}) => {
+         this.windows = windows
+       })
+       // on exit
+       this.on('_exit', (id) => {
+         const oldMain = this.windows[0]
+         arrayRemove(this.windows, id)
+         if (this.isMain()) {
+           this.emit('_windows_updated', {windows: this.windows, type: 'exit', id})
+           if (oldMain != this.id) {
+             console.log('_main_updated');
+             this.emit('_main_updated', {windows: this.windows, old: oldMain, 'new': this.id})
+           }
+         }
+       })
+       onDOM(window, 'beforeunload', () => {
+         this.exitGroup()
+       })
      })
   }
+  isMain() {
+    return this.id === this.windows[0]
+  }
+  BROADCAST = '__BROADCAST__';
   emitTo(name, targets, ...args) {
-    if (targets && !isArray(targets)) {
-      targets = [targets]
-    }
-    if (targets.includes(this.id)) {
-      super.emit(name, ...args) // emit to current window
+    if (targets === this.BROADCAST) {
+      targets = null
+    } else {
+      if (targets && !isArray(targets)) {
+        targets = [targets]
+      }
+      if (targets.includes(this.id)) {
+        super.emit(name, ...args) // emit to current window
+      }
     }
     glb().localStorage.setItem(this.storageName, JSON.stringify({
       name,
@@ -1462,12 +1511,13 @@ export class CrossWindowEventProcessor extends EventProcessor{
     this.emitTo(name, this.id, ...args)
   }
   broadcast(name, ...args) {
-    const targets = this.windows.slice()
-    arrayRemove(targets, this.id)
-    this.emitTo(name, targets, ...args)
+    this.emitTo(name, this.BROADCAST, ...args)
   }
   emit(name, ...args) {
     this.emitTo(name, this.windows, ...args)
+  }
+  exitGroup() {
+    this.broadcast('_exit', this.id)
   }
 }
 // Deprecated in next version
