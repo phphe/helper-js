@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.3.14
+ * helper-js v1.3.15
  * (c) 2018-present phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -1979,12 +1979,40 @@ function () {
       };
 
       var wrappedHandler = function wrappedHandler() {
-        handler();
+        handler.apply(void 0, arguments);
         off();
       };
 
       this.on(name, wrappedHandler);
       return off;
+    }
+  }, {
+    key: "onceTimeout",
+    value: function onceTimeout(name, handler, timeout) {
+      var _this6 = this;
+
+      var off;
+      var promise = new Promise(function (resolve, reject) {
+        var wrappedHandler = function wrappedHandler() {
+          handler.apply(void 0, arguments);
+          resolve();
+        };
+
+        off = _this6.once(name, wrappedHandler);
+        waitTime(timeout).then(function () {
+          off();
+          reject();
+        });
+      });
+
+      var off2 = function off2() {
+        off && off();
+      };
+
+      return {
+        off: off2,
+        promise: promise
+      };
     }
   }, {
     key: "off",
@@ -2059,78 +2087,129 @@ function (_EventProcessor) {
 
   // id
   function CrossWindowEventProcessor() {
-    var _this6;
+    var _this7;
 
     _classCallCheck(this, CrossWindowEventProcessor);
 
-    _this6 = _possibleConstructorReturn(this, _getPrototypeOf(CrossWindowEventProcessor).call(this));
+    _this7 = _possibleConstructorReturn(this, _getPrototypeOf(CrossWindowEventProcessor).call(this));
 
-    _defineProperty(_assertThisInitialized(_this6), "storageName", '_crossWindow');
+    _defineProperty(_assertThisInitialized(_this7), "storageName", '_crossWindow');
 
-    _defineProperty(_assertThisInitialized(_this6), "windows", []);
+    _defineProperty(_assertThisInitialized(_this7), "windows", []);
+
+    _defineProperty(_assertThisInitialized(_this7), "BROADCAST", '__BROADCAST__');
 
     onDOM(window, 'storage', function (ev) {
-      if (ev.key === _this6.storageName) {
+      if (ev.key === _this7.storageName) {
         var event = JSON.parse(ev.newValue);
 
-        if (event.targets.includes(_this6.id)) {
-          var _this7;
+        if (!event.targets || event.targets.includes(_this7.id)) {
+          var _this8;
 
-          (_this7 = _this6).emitLocal.apply(_this7, [event.name].concat(_toConsumableArray(event.args)));
+          (_this8 = _this7).emitLocal.apply(_this8, [event.name].concat(_toConsumableArray(event.args)));
         }
       }
-    }); // join
+    }); // social parts 集体部分
+    // join
 
-    _this6.id = strRand();
-    _this6.windows = [_this6.id];
+    _this7.id = strRand();
+    _this7.windows = [_this7.id];
+    _this7.ready = new Promise(function (resolve, reject) {
+      _this7.onceTimeout('_windows_updated', function (_ref) {
+        var windows = _ref.windows;
+        _this7.windows = windows;
+      }, 80).promise.then(function () {
+        resolve(); // responsed 被响应
+      }, function () {
+        // no response 无响应
+        resolve(); // try again
 
-    _this6.on('_windows_updated', function (windows) {
-      _this6.windows = windows;
+        _this7.onceTimeout('_windows_updated', function (_ref2) {
+          var windows = _ref2.windows;
+          _this7.windows = windows;
+        }, 200);
+      });
+
+      _this7.broadcast('_join', _this7.id);
     });
 
-    _this6.broadcast('_join', _this6.id);
+    _this7.ready.then(function () {
+      // on join
+      _this7.on('_join', function (id) {
+        _this7.windows.push(id);
 
-    _this6.on('_join', function (id) {
-      _this6.windows.push(id);
+        if (_this7.isMain()) {
+          _this7.broadcast('_windows_updated', {
+            windows: _this7.windows,
+            type: 'join',
+            id: id
+          });
+        }
+      }); // on _windows_updated
 
-      if (_this6.windows[0] === _this6.id) {
-        // is first
-        _this6.broadcast('_windows_updated', _this6.windows);
-      }
-    }); // exit
+
+      _this7.on('_windows_updated', function (_ref3) {
+        var windows = _ref3.windows;
+        _this7.windows = windows;
+      }); // on exit
 
 
-    _this6.on('_exit', function (id) {
-      arrayRemove(_this6.windows, id);
+      _this7.on('_exit', function (id) {
+        var oldMain = _this7.windows[0];
+        arrayRemove(_this7.windows, id);
 
-      if (_this6.windows[0] === _this6.id) {
-        // is first
-        _this6.broadcast('_windows_updated', _this6.windows);
-      }
+        if (_this7.isMain()) {
+          _this7.emit('_windows_updated', {
+            windows: _this7.windows,
+            type: 'exit',
+            id: id
+          });
+
+          if (oldMain != _this7.id) {
+            console.log('_main_updated');
+
+            _this7.emit('_main_updated', {
+              windows: _this7.windows,
+              old: oldMain,
+              'new': _this7.id
+            });
+          }
+        }
+      });
+
+      onDOM(window, 'beforeunload', function () {
+        _this7.exitGroup();
+      });
     });
 
-    onDOM(window, 'beforeunload', function () {
-      _this6.broadcast('_exit', _this6.id);
-    });
-    return _this6;
+    return _this7;
   }
 
   _createClass(CrossWindowEventProcessor, [{
+    key: "isMain",
+    value: function isMain() {
+      return this.id === this.windows[0];
+    }
+  }, {
     key: "emitTo",
     value: function emitTo(name, targets) {
-      if (targets && !isArray(targets)) {
-        targets = [targets];
-      }
-
       for (var _len9 = arguments.length, args = new Array(_len9 > 2 ? _len9 - 2 : 0), _key10 = 2; _key10 < _len9; _key10++) {
         args[_key10 - 2] = arguments[_key10];
       }
 
-      if (targets.includes(this.id)) {
-        var _get2;
+      if (targets === this.BROADCAST) {
+        targets = null;
+      } else {
+        if (targets && !isArray(targets)) {
+          targets = [targets];
+        }
 
-        (_get2 = _get(_getPrototypeOf(CrossWindowEventProcessor.prototype), "emit", this)).call.apply(_get2, [this, name].concat(args)); // emit to current window
+        if (targets.includes(this.id)) {
+          var _get2;
 
+          (_get2 = _get(_getPrototypeOf(CrossWindowEventProcessor.prototype), "emit", this)).call.apply(_get2, [this, name].concat(args)); // emit to current window
+
+        }
       }
 
       glb().localStorage.setItem(this.storageName, JSON.stringify({
@@ -2154,14 +2233,11 @@ function (_EventProcessor) {
   }, {
     key: "broadcast",
     value: function broadcast(name) {
-      var targets = this.windows.slice();
-      arrayRemove(targets, this.id);
-
       for (var _len11 = arguments.length, args = new Array(_len11 > 1 ? _len11 - 1 : 0), _key12 = 1; _key12 < _len11; _key12++) {
         args[_key12 - 1] = arguments[_key12];
       }
 
-      this.emitTo.apply(this, [name, targets].concat(args));
+      this.emitTo.apply(this, [name, this.BROADCAST].concat(args));
     }
   }, {
     key: "emit",
@@ -2171,6 +2247,11 @@ function (_EventProcessor) {
       }
 
       this.emitTo.apply(this, [name, this.windows].concat(args));
+    }
+  }, {
+    key: "exitGroup",
+    value: function exitGroup() {
+      this.broadcast('_exit', this.id);
     }
   }]);
 
