@@ -1,13 +1,13 @@
 /*!
- * helper-js v1.3.15
- * (c) 2018-present phphe <phphe@outlook.com> (https://github.com/phphe)
+ * helper-js v1.4.0
+ * (c) phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
   typeof define === 'function' && define.amd ? define(['exports'], factory) :
-  (factory((global.helperJs = {})));
-}(this, (function (exports) { 'use strict';
+  (global = global || self, factory(global['helper-js'] = {}));
+}(this, function (exports) { 'use strict';
 
   function _typeof(obj) {
     if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
@@ -159,23 +159,10 @@
 
   // local store
   var store = {}; // get global
+  // todo change glb to variable in next version
 
   function glb() {
-    if (store.glb) {
-      return store.glb;
-    } else {
-      // resolve global
-      var t;
-
-      try {
-        t = global;
-      } catch (e) {
-        t = window;
-      }
-
-      store.glb = t;
-      return t;
-    }
+    return this;
   } // is 各种判断
 
   function isset(v) {
@@ -321,8 +308,8 @@
       _iteratorError = err;
     } finally {
       try {
-        if (!_iteratorNormalCompletion && _iterator.return != null) {
-          _iterator.return();
+        if (!_iteratorNormalCompletion && _iterator["return"] != null) {
+          _iterator["return"]();
         }
       } finally {
         if (_didIteratorError) {
@@ -560,8 +547,8 @@
         _iteratorError2 = err;
       } finally {
         try {
-          if (!_iteratorNormalCompletion2 && _iterator2.return != null) {
-            _iterator2.return();
+          if (!_iteratorNormalCompletion2 && _iterator2["return"] != null) {
+            _iterator2["return"]();
           }
         } finally {
           if (_didIteratorError2) {
@@ -632,8 +619,8 @@
             _iteratorError3 = err;
           } finally {
             try {
-              if (!_iteratorNormalCompletion3 && _iterator3.return != null) {
-                _iterator3.return();
+              if (!_iteratorNormalCompletion3 && _iterator3["return"] != null) {
+                _iterator3["return"]();
               }
             } finally {
               if (_didIteratorError3) {
@@ -739,7 +726,7 @@
             _value = t.value;
         val = _value;
 
-        if (t.delete || key2 === false) {
+        if (t["delete"] || key2 === false) {
           // del
           toDelete = true;
         } else if (key2 == null) {
@@ -1020,8 +1007,8 @@
       _iteratorError4 = err;
     } finally {
       try {
-        if (!_iteratorNormalCompletion4 && _iterator4.return != null) {
-          _iterator4.return();
+        if (!_iteratorNormalCompletion4 && _iterator4["return"] != null) {
+          _iterator4["return"]();
         }
       } finally {
         if (_didIteratorError4) {
@@ -1095,14 +1082,14 @@
     // 获取当前URL
     var local_url = document.location.href; // 获取要取得的get参数位置
 
-    var get$$1 = local_url.indexOf(par + '=');
+    var get = local_url.indexOf(par + '=');
 
-    if (get$$1 == -1) {
+    if (get == -1) {
       return false;
     } // 截取字符串
 
 
-    var get_par = local_url.slice(par.length + get$$1 + 1); // 判断截取后的字符串是否还有其他get参数
+    var get_par = local_url.slice(par.length + get + 1); // 判断截取后的字符串是否还有其他get参数
 
     var nextPar = get_par.indexOf('&');
 
@@ -1217,20 +1204,18 @@
       y: of.y - parentOf.y
     };
   }
-  function findParent(el, callback) {
-    return doFindParent(el, callback);
+  function findParent(el, callback, opt) {
+    var cur = opt && opt.withSelf ? el : el.parentElement;
 
-    function doFindParent(el, callback) {
-      if (el.parentElement) {
-        var r = callback(el.parentElement);
+    while (cur) {
+      var r = callback(cur);
 
-        if (r === 'break') {
-          return;
-        } else if (r) {
-          return el.parentElement;
-        } else {
-          return doFindParent(el.parentElement, callback);
-        }
+      if (r === 'break') {
+        return;
+      } else if (r) {
+        return cur;
+      } else {
+        cur = cur.parentElement;
       }
     }
   }
@@ -1423,8 +1408,8 @@
           _iteratorError8 = err;
         } finally {
           try {
-            if (!_iteratorNormalCompletion8 && _iterator8.return != null) {
-              _iterator8.return();
+            if (!_iteratorNormalCompletion8 && _iterator8["return"] != null) {
+              _iterator8["return"]();
             }
           } finally {
             if (_didIteratorError8) {
@@ -1438,8 +1423,8 @@
       _iteratorError5 = err;
     } finally {
       try {
-        if (!_iteratorNormalCompletion5 && _iterator5.return != null) {
-          _iterator5.return();
+        if (!_iteratorNormalCompletion5 && _iterator5["return"] != null) {
+          _iterator5["return"]();
         }
       } finally {
         if (_didIteratorError5) {
@@ -1470,8 +1455,8 @@
             _iteratorError7 = err;
           } finally {
             try {
-              if (!_iteratorNormalCompletion7 && _iterator7.return != null) {
-                _iterator7.return();
+              if (!_iteratorNormalCompletion7 && _iterator7["return"] != null) {
+                _iterator7["return"]();
               }
             } finally {
               if (_didIteratorError7) {
@@ -1485,8 +1470,8 @@
         _iteratorError6 = err;
       } finally {
         try {
-          if (!_iteratorNormalCompletion6 && _iterator6.return != null) {
-            _iterator6.return();
+          if (!_iteratorNormalCompletion6 && _iterator6["return"] != null) {
+            _iterator6["return"]();
           }
         } finally {
           if (_didIteratorError6) {
@@ -1638,7 +1623,7 @@
       return func(arg1, arg2, arg3).then(function (data) {
         delete counters[name];
         return data;
-      }).catch(function (e) {
+      })["catch"](function (e) {
         counters[name]++;
 
         if (counters[name] >= limitTimes) {
@@ -1923,7 +1908,7 @@
           }));
         }
       },
-      get: function get$$1(name) {
+      get: function get(name) {
         var t = this.storage.getItem(name);
 
         if (t) {
@@ -2062,8 +2047,8 @@
           _iteratorError9 = err;
         } finally {
           try {
-            if (!_iteratorNormalCompletion9 && _iterator9.return != null) {
-              _iterator9.return();
+            if (!_iteratorNormalCompletion9 && _iterator9["return"] != null) {
+              _iterator9["return"]();
             }
           } finally {
             if (_didIteratorError9) {
@@ -2266,107 +2251,107 @@
 
   var CrossWindow = CrossWindowEventProcessor;
 
-  exports.store = store;
-  exports.glb = glb;
-  exports.isset = isset;
-  exports.isArray = isArray;
-  exports.isBool = isBool;
-  exports.isNumber = isNumber;
-  exports.isNumeric = isNumeric;
-  exports.isString = isString;
-  exports.isObject = isObject;
-  exports.isFunction = isFunction;
-  exports.isPromise = isPromise;
-  exports.empty = empty;
-  exports.numRand = numRand;
-  exports.numPad = numPad;
-  exports.min = min;
-  exports.max = max;
-  exports.studlyCase = studlyCase;
-  exports.kebabCase = kebabCase;
-  exports.snakeCase = snakeCase;
-  exports.camelCase = camelCase;
-  exports.camelToWords = camelToWords;
-  exports.titleCase = titleCase;
-  exports.strRand = strRand;
-  exports.replaceMultiple = replaceMultiple;
-  exports.arrayRemove = arrayRemove;
-  exports.arrayRemoveBySortedIndexes = arrayRemoveBySortedIndexes;
-  exports.newArrayRemoveAt = newArrayRemoveAt;
+  exports.CrossWindow = CrossWindow;
+  exports.CrossWindowEventProcessor = CrossWindowEventProcessor;
+  exports.EventProcessor = EventProcessor;
+  exports.URLHelper = URLHelper;
+  exports.addClass = addClass;
   exports.arrayAt = arrayAt;
+  exports.arrayDiff = arrayDiff;
+  exports.arrayDistinct = arrayDistinct;
   exports.arrayFirst = arrayFirst;
   exports.arrayLast = arrayLast;
-  exports.arrayDiff = arrayDiff;
+  exports.arrayRemove = arrayRemove;
+  exports.arrayRemoveBySortedIndexes = arrayRemoveBySortedIndexes;
   exports.arraySibling = arraySibling;
-  exports.toArrayIfNot = toArrayIfNot;
-  exports.splitArray = splitArray;
-  exports.groupArray = groupArray;
-  exports.arrayDistinct = arrayDistinct;
   exports.assignIfDifferent = assignIfDifferent;
-  exports.objectMerge = objectMerge;
-  exports.objectMap = objectMap;
-  exports.objectOnly = objectOnly;
-  exports.objectExcept = objectExcept;
-  exports.forAll = forAll;
-  exports.objectGet = objectGet;
-  exports.objectSet = objectSet;
-  exports.unset = unset;
+  exports.backupAttr = backupAttr;
+  exports.binarySearch = binarySearch;
+  exports.camelCase = camelCase;
+  exports.camelToWords = camelToWords;
   exports.cloneObj = cloneObj;
-  exports.mapObjectTree = mapObjectTree;
-  exports.mapObjects = mapObjects;
-  exports.pairRows = pairRows;
-  exports.executeWithCount = executeWithCount;
-  exports.watchChange = watchChange;
-  exports.store_executeOnceInScopeByName = store_executeOnceInScopeByName;
-  exports.executeOnceInScopeByName = executeOnceInScopeByName;
-  exports.debounceTrailing = debounceTrailing;
-  exports.debounceImmediate = debounceImmediate;
+  exports.copyTextToClipboard = copyTextToClipboard;
   exports.debounce = debounce;
-  exports.joinMethods = joinMethods;
+  exports.debounceImmediate = debounceImmediate;
+  exports.debounceTrailing = debounceTrailing;
+  exports.empty = empty;
+  exports.executeOnceInScopeByName = executeOnceInScopeByName;
   exports.executePromiseGetters = executePromiseGetters;
-  exports.promiseTimeout = promiseTimeout;
-  exports.getUrlParam = getUrlParam;
-  exports.uniqueId = uniqueId;
-  exports.isDescendantOf = isDescendantOf;
-  exports.removeEl = removeEl;
-  exports.getScroll = getScroll;
+  exports.executeWithCount = executeWithCount;
+  exports.findParent = findParent;
+  exports.forAll = forAll;
+  exports.getBorder = getBorder;
+  exports.getCss3Prefix = getCss3Prefix;
+  exports.getElSize = getElSize;
+  exports.getLocalStorage2 = getLocalStorage2;
   exports.getOffset = getOffset;
   exports.getOffsetParent = getOffsetParent;
   exports.getPosition = getPosition;
   exports.getPositionFromOffset = getPositionFromOffset;
-  exports.findParent = findParent;
-  exports.backupAttr = backupAttr;
-  exports.restoreAttr = restoreAttr;
+  exports.getScroll = getScroll;
+  exports.getSessionStorage2 = getSessionStorage2;
+  exports.getUrlParam = getUrlParam;
+  exports.glb = glb;
+  exports.groupArray = groupArray;
   exports.hasClass = hasClass;
-  exports.addClass = addClass;
-  exports.removeClass = removeClass;
-  exports.getElSize = getElSize;
+  exports.isArray = isArray;
+  exports.isBool = isBool;
+  exports.isDescendantOf = isDescendantOf;
+  exports.isFunction = isFunction;
+  exports.isNumber = isNumber;
+  exports.isNumeric = isNumeric;
+  exports.isObject = isObject;
   exports.isOffsetInEl = isOffsetInEl;
-  exports.getBorder = getBorder;
-  exports.setElChildByIndex = setElChildByIndex;
-  exports.getCss3Prefix = getCss3Prefix;
-  exports.onDOM = onDOM;
-  exports.offDOM = offDOM;
-  exports.onDOMMany = onDOMMany;
-  exports.binarySearch = binarySearch;
-  exports.windowLoaded = windowLoaded;
-  exports.waitTime = waitTime;
-  exports.waitFor = waitFor;
-  exports.retry = retry;
-  exports.copyTextToClipboard = copyTextToClipboard;
+  exports.isPromise = isPromise;
+  exports.isString = isString;
+  exports.isset = isset;
+  exports.joinMethods = joinMethods;
   exports.jqFixedSize = jqFixedSize;
   exports.jqMakeCarousel = jqMakeCarousel;
-  exports.openWindow = openWindow;
-  exports.openCenterWindow = openCenterWindow;
-  exports.URLHelper = URLHelper;
-  exports.resolveArgsByType = resolveArgsByType;
+  exports.kebabCase = kebabCase;
   exports.makeStorageHelper = makeStorageHelper;
-  exports.getLocalStorage2 = getLocalStorage2;
-  exports.getSessionStorage2 = getSessionStorage2;
-  exports.EventProcessor = EventProcessor;
-  exports.CrossWindowEventProcessor = CrossWindowEventProcessor;
-  exports.CrossWindow = CrossWindow;
+  exports.mapObjectTree = mapObjectTree;
+  exports.mapObjects = mapObjects;
+  exports.max = max;
+  exports.min = min;
+  exports.newArrayRemoveAt = newArrayRemoveAt;
+  exports.numPad = numPad;
+  exports.numRand = numRand;
+  exports.objectExcept = objectExcept;
+  exports.objectGet = objectGet;
+  exports.objectMap = objectMap;
+  exports.objectMerge = objectMerge;
+  exports.objectOnly = objectOnly;
+  exports.objectSet = objectSet;
+  exports.offDOM = offDOM;
+  exports.onDOM = onDOM;
+  exports.onDOMMany = onDOMMany;
+  exports.openCenterWindow = openCenterWindow;
+  exports.openWindow = openWindow;
+  exports.pairRows = pairRows;
+  exports.promiseTimeout = promiseTimeout;
+  exports.removeClass = removeClass;
+  exports.removeEl = removeEl;
+  exports.replaceMultiple = replaceMultiple;
+  exports.resolveArgsByType = resolveArgsByType;
+  exports.restoreAttr = restoreAttr;
+  exports.retry = retry;
+  exports.setElChildByIndex = setElChildByIndex;
+  exports.snakeCase = snakeCase;
+  exports.splitArray = splitArray;
+  exports.store = store;
+  exports.store_executeOnceInScopeByName = store_executeOnceInScopeByName;
+  exports.strRand = strRand;
+  exports.studlyCase = studlyCase;
+  exports.titleCase = titleCase;
+  exports.toArrayIfNot = toArrayIfNot;
+  exports.uniqueId = uniqueId;
+  exports.unset = unset;
+  exports.waitFor = waitFor;
+  exports.waitTime = waitTime;
+  exports.watchChange = watchChange;
+  exports.windowLoaded = windowLoaded;
 
   Object.defineProperty(exports, '__esModule', { value: true });
 
-})));
+}));

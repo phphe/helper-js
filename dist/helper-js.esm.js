@@ -1,6 +1,6 @@
 /*!
- * helper-js v1.3.15
- * (c) 2018-present phphe <phphe@outlook.com> (https://github.com/phphe)
+ * helper-js v1.4.0
+ * (c) phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
 function _typeof(obj) {
@@ -153,23 +153,10 @@ function _nonIterableSpread() {
 
 // local store
 var store = {}; // get global
+// todo change glb to variable in next version
 
 function glb() {
-  if (store.glb) {
-    return store.glb;
-  } else {
-    // resolve global
-    var t;
-
-    try {
-      t = global;
-    } catch (e) {
-      t = window;
-    }
-
-    store.glb = t;
-    return t;
-  }
+  return this;
 } // is 各种判断
 
 function isset(v) {
@@ -315,8 +302,8 @@ function newArrayRemoveAt(arr, indexes) {
     _iteratorError = err;
   } finally {
     try {
-      if (!_iteratorNormalCompletion && _iterator.return != null) {
-        _iterator.return();
+      if (!_iteratorNormalCompletion && _iterator["return"] != null) {
+        _iterator["return"]();
       }
     } finally {
       if (_didIteratorError) {
@@ -554,8 +541,8 @@ function objectGet(obj, path, throwError) {
       _iteratorError2 = err;
     } finally {
       try {
-        if (!_iteratorNormalCompletion2 && _iterator2.return != null) {
-          _iterator2.return();
+        if (!_iteratorNormalCompletion2 && _iterator2["return"] != null) {
+          _iterator2["return"]();
         }
       } finally {
         if (_didIteratorError2) {
@@ -626,8 +613,8 @@ function cloneObj(obj, exclude) {
           _iteratorError3 = err;
         } finally {
           try {
-            if (!_iteratorNormalCompletion3 && _iterator3.return != null) {
-              _iterator3.return();
+            if (!_iteratorNormalCompletion3 && _iterator3["return"] != null) {
+              _iterator3["return"]();
             }
           } finally {
             if (_didIteratorError3) {
@@ -733,7 +720,7 @@ function mapObjectTree(obj, handler) {
           _value = t.value;
       val = _value;
 
-      if (t.delete || key2 === false) {
+      if (t["delete"] || key2 === false) {
         // del
         toDelete = true;
       } else if (key2 == null) {
@@ -1014,8 +1001,8 @@ function joinMethods(methods) {
     _iteratorError4 = err;
   } finally {
     try {
-      if (!_iteratorNormalCompletion4 && _iterator4.return != null) {
-        _iterator4.return();
+      if (!_iteratorNormalCompletion4 && _iterator4["return"] != null) {
+        _iterator4["return"]();
       }
     } finally {
       if (_didIteratorError4) {
@@ -1089,14 +1076,14 @@ function getUrlParam(par) {
   // 获取当前URL
   var local_url = document.location.href; // 获取要取得的get参数位置
 
-  var get$$1 = local_url.indexOf(par + '=');
+  var get = local_url.indexOf(par + '=');
 
-  if (get$$1 == -1) {
+  if (get == -1) {
     return false;
   } // 截取字符串
 
 
-  var get_par = local_url.slice(par.length + get$$1 + 1); // 判断截取后的字符串是否还有其他get参数
+  var get_par = local_url.slice(par.length + get + 1); // 判断截取后的字符串是否还有其他get参数
 
   var nextPar = get_par.indexOf('&');
 
@@ -1211,20 +1198,18 @@ function getPositionFromOffset(el, of) {
     y: of.y - parentOf.y
   };
 }
-function findParent(el, callback) {
-  return doFindParent(el, callback);
+function findParent(el, callback, opt) {
+  var cur = opt && opt.withSelf ? el : el.parentElement;
 
-  function doFindParent(el, callback) {
-    if (el.parentElement) {
-      var r = callback(el.parentElement);
+  while (cur) {
+    var r = callback(cur);
 
-      if (r === 'break') {
-        return;
-      } else if (r) {
-        return el.parentElement;
-      } else {
-        return doFindParent(el.parentElement, callback);
-      }
+    if (r === 'break') {
+      return;
+    } else if (r) {
+      return cur;
+    } else {
+      cur = cur.parentElement;
     }
   }
 }
@@ -1417,8 +1402,8 @@ function onDOMMany(els, names, handler) {
         _iteratorError8 = err;
       } finally {
         try {
-          if (!_iteratorNormalCompletion8 && _iterator8.return != null) {
-            _iterator8.return();
+          if (!_iteratorNormalCompletion8 && _iterator8["return"] != null) {
+            _iterator8["return"]();
           }
         } finally {
           if (_didIteratorError8) {
@@ -1432,8 +1417,8 @@ function onDOMMany(els, names, handler) {
     _iteratorError5 = err;
   } finally {
     try {
-      if (!_iteratorNormalCompletion5 && _iterator5.return != null) {
-        _iterator5.return();
+      if (!_iteratorNormalCompletion5 && _iterator5["return"] != null) {
+        _iterator5["return"]();
       }
     } finally {
       if (_didIteratorError5) {
@@ -1464,8 +1449,8 @@ function onDOMMany(els, names, handler) {
           _iteratorError7 = err;
         } finally {
           try {
-            if (!_iteratorNormalCompletion7 && _iterator7.return != null) {
-              _iterator7.return();
+            if (!_iteratorNormalCompletion7 && _iterator7["return"] != null) {
+              _iterator7["return"]();
             }
           } finally {
             if (_didIteratorError7) {
@@ -1479,8 +1464,8 @@ function onDOMMany(els, names, handler) {
       _iteratorError6 = err;
     } finally {
       try {
-        if (!_iteratorNormalCompletion6 && _iterator6.return != null) {
-          _iterator6.return();
+        if (!_iteratorNormalCompletion6 && _iterator6["return"] != null) {
+          _iterator6["return"]();
         }
       } finally {
         if (_didIteratorError6) {
@@ -1632,7 +1617,7 @@ function retry(func) {
     return func(arg1, arg2, arg3).then(function (data) {
       delete counters[name];
       return data;
-    }).catch(function (e) {
+    })["catch"](function (e) {
       counters[name]++;
 
       if (counters[name] >= limitTimes) {
@@ -1917,7 +1902,7 @@ function makeStorageHelper(storage) {
         }));
       }
     },
-    get: function get$$1(name) {
+    get: function get(name) {
       var t = this.storage.getItem(name);
 
       if (t) {
@@ -2056,8 +2041,8 @@ function () {
         _iteratorError9 = err;
       } finally {
         try {
-          if (!_iteratorNormalCompletion9 && _iterator9.return != null) {
-            _iterator9.return();
+          if (!_iteratorNormalCompletion9 && _iterator9["return"] != null) {
+            _iterator9["return"]();
           }
         } finally {
           if (_didIteratorError9) {
@@ -2260,4 +2245,4 @@ function (_EventProcessor) {
 
 var CrossWindow = CrossWindowEventProcessor;
 
-export { store, glb, isset, isArray, isBool, isNumber, isNumeric, isString, isObject, isFunction, isPromise, empty, numRand, numPad, min, max, studlyCase, kebabCase, snakeCase, camelCase, camelToWords, titleCase, strRand, replaceMultiple, arrayRemove, arrayRemoveBySortedIndexes, newArrayRemoveAt, arrayAt, arrayFirst, arrayLast, arrayDiff, arraySibling, toArrayIfNot, splitArray, groupArray, arrayDistinct, assignIfDifferent, objectMerge, objectMap, objectOnly, objectExcept, forAll, objectGet, objectSet, unset, cloneObj, mapObjectTree, mapObjects, pairRows, executeWithCount, watchChange, store_executeOnceInScopeByName, executeOnceInScopeByName, debounceTrailing, debounceImmediate, debounce, joinMethods, executePromiseGetters, promiseTimeout, getUrlParam, uniqueId, isDescendantOf, removeEl, getScroll, getOffset, getOffsetParent, getPosition, getPositionFromOffset, findParent, backupAttr, restoreAttr, hasClass, addClass, removeClass, getElSize, isOffsetInEl, getBorder, setElChildByIndex, getCss3Prefix, onDOM, offDOM, onDOMMany, binarySearch, windowLoaded, waitTime, waitFor, retry, copyTextToClipboard, jqFixedSize, jqMakeCarousel, openWindow, openCenterWindow, URLHelper, resolveArgsByType, makeStorageHelper, getLocalStorage2, getSessionStorage2, EventProcessor, CrossWindowEventProcessor, CrossWindow };
+export { CrossWindow, CrossWindowEventProcessor, EventProcessor, URLHelper, addClass, arrayAt, arrayDiff, arrayDistinct, arrayFirst, arrayLast, arrayRemove, arrayRemoveBySortedIndexes, arraySibling, assignIfDifferent, backupAttr, binarySearch, camelCase, camelToWords, cloneObj, copyTextToClipboard, debounce, debounceImmediate, debounceTrailing, empty, executeOnceInScopeByName, executePromiseGetters, executeWithCount, findParent, forAll, getBorder, getCss3Prefix, getElSize, getLocalStorage2, getOffset, getOffsetParent, getPosition, getPositionFromOffset, getScroll, getSessionStorage2, getUrlParam, glb, groupArray, hasClass, isArray, isBool, isDescendantOf, isFunction, isNumber, isNumeric, isObject, isOffsetInEl, isPromise, isString, isset, joinMethods, jqFixedSize, jqMakeCarousel, kebabCase, makeStorageHelper, mapObjectTree, mapObjects, max, min, newArrayRemoveAt, numPad, numRand, objectExcept, objectGet, objectMap, objectMerge, objectOnly, objectSet, offDOM, onDOM, onDOMMany, openCenterWindow, openWindow, pairRows, promiseTimeout, removeClass, removeEl, replaceMultiple, resolveArgsByType, restoreAttr, retry, setElChildByIndex, snakeCase, splitArray, store, store_executeOnceInScopeByName, strRand, studlyCase, titleCase, toArrayIfNot, uniqueId, unset, waitFor, waitTime, watchChange, windowLoaded };
