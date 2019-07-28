@@ -795,18 +795,16 @@ export function getPositionFromOffset(el, of) {
   }
 }
 
-export function findParent(el, callback) {
-  return doFindParent(el, callback)
-  function doFindParent(el, callback) {
-    if (el.parentElement) {
-      const r = callback(el.parentElement)
-      if (r === 'break') {
-        return
-      } else if(r) {
-        return el.parentElement
-      } else {
-        return doFindParent(el.parentElement, callback)
-      }
+export function findParent(el, callback, opt) {
+  let cur = (opt && opt.withSelf) ? el : el.parentElement
+  while (cur) {
+    const r = callback(cur)
+    if (r === 'break') {
+      return
+    } else if(r) {
+      return cur
+    } else {
+      cur = cur.parentElement
     }
   }
 }
