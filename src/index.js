@@ -2,9 +2,7 @@
 export const store = {}
 // get global
 // todo change glb to variable in next version
-export function glb() {
-  return this
-}
+export const glb = () => this
 // is 各种判断
 export function isset (v) {
   return typeof v !== 'undefined'
@@ -271,6 +269,7 @@ export function objectExcept(obj, keys) {
   return r
 }
 // loop for all type
+// todo change reverse to opt in next version
 export function forAll(val, handler, reverse) {
   if (!reverse) {
     if (isArray(val) || isString(val)) {
