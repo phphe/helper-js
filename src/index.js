@@ -1,8 +1,22 @@
 // local store
 export const store = {}
 // get global
-// todo change glb to variable in next version
-export const glb = () => this
+// `this` !== global or window because of build tool
+export function glb() {
+  if (store.glb) {
+    return store.glb
+  } else {
+    // resolve global
+    let t
+    try {
+      t = global
+    } catch (e) {
+      t = window
+    }
+    store.glb = t
+    return t
+  }
+}
 // is 各种判断
 export function isset (v) {
   return typeof v !== 'undefined'
