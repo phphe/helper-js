@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.4.0
+ * helper-js v1.4.1
  * (c) phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -157,13 +157,15 @@
     throw new TypeError("Invalid attempt to spread non-iterable instance");
   }
 
+  var _this = undefined;
+
   // local store
   var store = {}; // get global
   // todo change glb to variable in next version
 
-  function glb() {
-    return this;
-  } // is 各种判断
+  var glb = function glb() {
+    return _this;
+  }; // is 各种判断
 
   function isset(v) {
     return typeof v !== 'undefined';
@@ -476,6 +478,7 @@
 
     return r;
   } // loop for all type
+  // todo change reverse to opt in next version
 
   function forAll(val, handler, reverse) {
     if (!reverse) {
@@ -877,7 +880,7 @@
     var rejects = [];
 
     var wrappedAction = function wrappedAction() {
-      var _this = this;
+      var _this2 = this;
 
       for (var _len3 = arguments.length, args = new Array(_len3), _key4 = 0; _key4 < _len3; _key4++) {
         args[_key4] = arguments[_key4];
@@ -892,7 +895,7 @@
         if (!delaying) {
           delaying = true;
           t = setTimeout(function () {
-            var result = action.call.apply(action, [_this].concat(_toConsumableArray(lastArgs)));
+            var result = action.call.apply(action, [_this2].concat(_toConsumableArray(lastArgs)));
             t = null;
             delaying = false;
             resolves.forEach(function (resolve) {
@@ -928,14 +931,14 @@
     var result;
 
     var wrappedAction = function wrappedAction() {
-      var _this2 = this;
+      var _this3 = this;
 
       return new Promise(function (resolve, reject) {
         if (delaying) {
           resolve(result);
         } else {
           delaying = true;
-          result = action.call.apply(action, [_this2].concat(_toConsumableArray(lastArgs)));
+          result = action.call.apply(action, [_this3].concat(_toConsumableArray(lastArgs)));
           resolve(result);
           t = setTimeout(function () {
             t = null;
@@ -1814,7 +1817,7 @@
   function () {
     // protocol, hostname, port, pastname
     function URLHelper(baseUrl) {
-      var _this3 = this;
+      var _this4 = this;
 
       _classCallCheck(this, URLHelper);
 
@@ -1828,7 +1831,7 @@
       if (t[1]) {
         t[1].split('&').forEach(function (v) {
           var t2 = v.split('=');
-          _this3.search[t2[0]] = t2[1] == null ? '' : decodeURIComponent(t2[1]);
+          _this4.search[t2[0]] = t2[1] == null ? '' : decodeURIComponent(t2[1]);
         });
       }
     }
@@ -1836,11 +1839,11 @@
     _createClass(URLHelper, [{
       key: "getHref",
       value: function getHref() {
-        var _this4 = this;
+        var _this5 = this;
 
         var t = [this.baseUrl];
         var searchStr = Object.keys(this.search).map(function (k) {
-          return "".concat(k, "=").concat(encodeURIComponent(_this4.search[k]));
+          return "".concat(k, "=").concat(encodeURIComponent(_this5.search[k]));
         }).join('&');
 
         if (searchStr) {
@@ -1963,10 +1966,10 @@
     }, {
       key: "once",
       value: function once(name, handler) {
-        var _this5 = this;
+        var _this6 = this;
 
         var off = function off() {
-          _this5.off(name, wrappedHandler);
+          _this6.off(name, wrappedHandler);
         };
 
         var wrappedHandler = function wrappedHandler() {
@@ -1980,7 +1983,7 @@
     }, {
       key: "onceTimeout",
       value: function onceTimeout(name, handler, timeout) {
-        var _this6 = this;
+        var _this7 = this;
 
         var off;
         var promise = new Promise(function (resolve, reject) {
@@ -1989,7 +1992,7 @@
             resolve();
           };
 
-          off = _this6.once(name, wrappedHandler);
+          off = _this7.once(name, wrappedHandler);
           waitTime(timeout).then(function () {
             off();
             reject();
@@ -2078,60 +2081,60 @@
 
     // id
     function CrossWindowEventProcessor() {
-      var _this7;
+      var _this8;
 
       _classCallCheck(this, CrossWindowEventProcessor);
 
-      _this7 = _possibleConstructorReturn(this, _getPrototypeOf(CrossWindowEventProcessor).call(this));
+      _this8 = _possibleConstructorReturn(this, _getPrototypeOf(CrossWindowEventProcessor).call(this));
 
-      _defineProperty(_assertThisInitialized(_this7), "storageName", '_crossWindow');
+      _defineProperty(_assertThisInitialized(_this8), "storageName", '_crossWindow');
 
-      _defineProperty(_assertThisInitialized(_this7), "windows", []);
+      _defineProperty(_assertThisInitialized(_this8), "windows", []);
 
-      _defineProperty(_assertThisInitialized(_this7), "BROADCAST", '__BROADCAST__');
+      _defineProperty(_assertThisInitialized(_this8), "BROADCAST", '__BROADCAST__');
 
       onDOM(window, 'storage', function (ev) {
-        if (ev.key === _this7.storageName) {
+        if (ev.key === _this8.storageName) {
           var event = JSON.parse(ev.newValue);
 
-          if (!event.targets || event.targets.includes(_this7.id)) {
-            var _this8;
+          if (!event.targets || event.targets.includes(_this8.id)) {
+            var _this9;
 
-            (_this8 = _this7).emitLocal.apply(_this8, [event.name].concat(_toConsumableArray(event.args)));
+            (_this9 = _this8).emitLocal.apply(_this9, [event.name].concat(_toConsumableArray(event.args)));
           }
         }
       }); // social parts 集体部分
       // join
 
-      _this7.id = strRand();
-      _this7.windows = [_this7.id];
-      _this7.ready = new Promise(function (resolve, reject) {
-        _this7.onceTimeout('_windows_updated', function (_ref) {
+      _this8.id = strRand();
+      _this8.windows = [_this8.id];
+      _this8.ready = new Promise(function (resolve, reject) {
+        _this8.onceTimeout('_windows_updated', function (_ref) {
           var windows = _ref.windows;
-          _this7.windows = windows;
+          _this8.windows = windows;
         }, 80).promise.then(function () {
           resolve(); // responsed 被响应
         }, function () {
           // no response 无响应
           resolve(); // try again
 
-          _this7.onceTimeout('_windows_updated', function (_ref2) {
+          _this8.onceTimeout('_windows_updated', function (_ref2) {
             var windows = _ref2.windows;
-            _this7.windows = windows;
+            _this8.windows = windows;
           }, 200);
         });
 
-        _this7.broadcast('_join', _this7.id);
+        _this8.broadcast('_join', _this8.id);
       });
 
-      _this7.ready.then(function () {
+      _this8.ready.then(function () {
         // on join
-        _this7.on('_join', function (id) {
-          _this7.windows.push(id);
+        _this8.on('_join', function (id) {
+          _this8.windows.push(id);
 
-          if (_this7.isMain()) {
-            _this7.broadcast('_windows_updated', {
-              windows: _this7.windows,
+          if (_this8.isMain()) {
+            _this8.broadcast('_windows_updated', {
+              windows: _this8.windows,
               type: 'join',
               id: id
             });
@@ -2139,41 +2142,41 @@
         }); // on _windows_updated
 
 
-        _this7.on('_windows_updated', function (_ref3) {
+        _this8.on('_windows_updated', function (_ref3) {
           var windows = _ref3.windows;
-          _this7.windows = windows;
+          _this8.windows = windows;
         }); // on exit
 
 
-        _this7.on('_exit', function (id) {
-          var oldMain = _this7.windows[0];
-          arrayRemove(_this7.windows, id);
+        _this8.on('_exit', function (id) {
+          var oldMain = _this8.windows[0];
+          arrayRemove(_this8.windows, id);
 
-          if (_this7.isMain()) {
-            _this7.emit('_windows_updated', {
-              windows: _this7.windows,
+          if (_this8.isMain()) {
+            _this8.emit('_windows_updated', {
+              windows: _this8.windows,
               type: 'exit',
               id: id
             });
 
-            if (oldMain != _this7.id) {
+            if (oldMain != _this8.id) {
               console.log('_main_updated');
 
-              _this7.emit('_main_updated', {
-                windows: _this7.windows,
+              _this8.emit('_main_updated', {
+                windows: _this8.windows,
                 old: oldMain,
-                'new': _this7.id
+                'new': _this8.id
               });
             }
           }
         });
 
         onDOM(window, 'beforeunload', function () {
-          _this7.exitGroup();
+          _this8.exitGroup();
         });
       });
 
-      return _this7;
+      return _this8;
     }
 
     _createClass(CrossWindowEventProcessor, [{
