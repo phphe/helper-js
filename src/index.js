@@ -971,6 +971,7 @@ export function onDOMMany(els, names, handler, ...args) {
 }
 // advance
 // binarySearch 二分查找
+// callback(mid, i) should return mid - your_value
 export function binarySearch(arr, callback, start, end, returnNearestIfNoHit, max = 1000) {
   let midNum
   let mid

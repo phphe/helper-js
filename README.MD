@@ -139,6 +139,9 @@ opt: {
 ###### offDOM (el, name, handler, ...args)   // removeEventListener
 ###### onDOMMany(els, names, handler, ...args)   // return destroy
 ###### binarySearch   (arr, callback, start, end, returnNearestIfNoHit, max = 1000) // binary search 二分查找
+```js
+// callback(mid, i) should return mid - your_value
+```
 ###### windowLoaded   // return a promise
 ###### waitTime(milliseconds, [callback: optional]) // return a promise
 ###### waitFor   (name, condition, time = 100, maxCount = 1000)
