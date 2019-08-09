@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.4.2
+ * helper-js v1.4.3
  * (c) phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -1497,6 +1497,7 @@ function onDOMMany(els, names, handler) {
   return destroy;
 } // advance
 // binarySearch 二分查找
+// callback(mid, i) should return mid - your_value
 
 function binarySearch(arr, callback, start, end, returnNearestIfNoHit) {
   var max = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : 1000;
@@ -2122,16 +2123,11 @@ function (_EventProcessor) {
       _this7.onceTimeout('_windows_updated', function (_ref) {
         var windows = _ref.windows;
         _this7.windows = windows;
-      }, 80).promise.then(function () {
+      }, 200).promise.then(function () {
         resolve(); // responsed 被响应
       }, function () {
         // no response 无响应
-        resolve(); // try again
-
-        _this7.onceTimeout('_windows_updated', function (_ref2) {
-          var windows = _ref2.windows;
-          _this7.windows = windows;
-        }, 200);
+        resolve();
       });
 
       _this7.broadcast('_join', _this7.id);
@@ -2152,8 +2148,8 @@ function (_EventProcessor) {
       }); // on _windows_updated
 
 
-      _this7.on('_windows_updated', function (_ref3) {
-        var windows = _ref3.windows;
+      _this7.on('_windows_updated', function (_ref2) {
+        var windows = _ref2.windows;
         _this7.windows = windows;
       }); // on exit
 
