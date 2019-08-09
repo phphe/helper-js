@@ -1442,16 +1442,12 @@ export class CrossWindowEventProcessor extends EventProcessor{
      this.ready = new Promise((resolve, reject) => {
        this.onceTimeout('_windows_updated', ({windows}) => {
          this.windows = windows
-       }, 80).promise.then(() => {
+       }, 200).promise.then(() => {
          resolve()
          // responsed 被响应
        }, () => {
          // no response 无响应
          resolve()
-         // try again
-         this.onceTimeout('_windows_updated', ({windows}) => {
-           this.windows = windows
-         }, 200)
        })
        this.broadcast('_join', this.id)
      })
