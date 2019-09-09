@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.4.4
+ * helper-js v1.4.5
  * (c) phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -2091,7 +2091,7 @@ function (_EventProcessor) {
   _inherits(CrossWindowEventProcessor, _EventProcessor);
 
   // id
-  function CrossWindowEventProcessor(timeout) {
+  function CrossWindowEventProcessor(opt) {
     var _this7;
 
     _classCallCheck(this, CrossWindowEventProcessor);
@@ -2106,7 +2106,10 @@ function (_EventProcessor) {
 
     _defineProperty(_assertThisInitialized(_this7), "BROADCAST", '__BROADCAST__');
 
-    _this7.timeout = timeout;
+    if (opt) {
+      Object.assign(_assertThisInitialized(_this7), opt);
+    }
+
     onDOM(window, 'storage', function (ev) {
       if (ev.key === _this7.storageName) {
         var event = JSON.parse(ev.newValue);
