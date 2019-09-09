@@ -1424,9 +1424,11 @@ export class EventProcessor {
 export class CrossWindowEventProcessor extends EventProcessor{
   storageName = '_crossWindow';
   windows = [];
+  timeout = 200;
   // id
-  constructor() {
+  constructor(timeout) {
      super()
+     this.timeout = timeout
      onDOM(window, 'storage', (ev) => {
        if (ev.key === this.storageName) {
          const event = JSON.parse(ev.newValue)
@@ -1442,7 +1444,7 @@ export class CrossWindowEventProcessor extends EventProcessor{
      this.ready = new Promise((resolve, reject) => {
        this.onceTimeout('_windows_updated', ({windows}) => {
          this.windows = windows
-       }, 200).promise.then(() => {
+       }, this.timeout).promise.then(() => {
          resolve()
          // responsed 被响应
        }, () => {
