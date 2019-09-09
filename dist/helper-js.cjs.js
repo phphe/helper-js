@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.4.3
+ * helper-js v1.4.4
  * (c) phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -2091,7 +2091,7 @@ function (_EventProcessor) {
   _inherits(CrossWindowEventProcessor, _EventProcessor);
 
   // id
-  function CrossWindowEventProcessor() {
+  function CrossWindowEventProcessor(timeout) {
     var _this7;
 
     _classCallCheck(this, CrossWindowEventProcessor);
@@ -2102,8 +2102,11 @@ function (_EventProcessor) {
 
     _defineProperty(_assertThisInitialized(_this7), "windows", []);
 
+    _defineProperty(_assertThisInitialized(_this7), "timeout", 200);
+
     _defineProperty(_assertThisInitialized(_this7), "BROADCAST", '__BROADCAST__');
 
+    _this7.timeout = timeout;
     onDOM(window, 'storage', function (ev) {
       if (ev.key === _this7.storageName) {
         var event = JSON.parse(ev.newValue);
@@ -2123,7 +2126,7 @@ function (_EventProcessor) {
       _this7.onceTimeout('_windows_updated', function (_ref) {
         var windows = _ref.windows;
         _this7.windows = windows;
-      }, 200).promise.then(function () {
+      }, _this7.timeout).promise.then(function () {
         resolve(); // responsed 被响应
       }, function () {
         // no response 无响应
