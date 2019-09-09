@@ -1426,9 +1426,11 @@ export class CrossWindowEventProcessor extends EventProcessor{
   windows = [];
   timeout = 200;
   // id
-  constructor(timeout) {
+  constructor(opt) {
      super()
-     this.timeout = timeout
+     if (opt) {
+       Object.assign(this, opt)
+     }
      onDOM(window, 'storage', (ev) => {
        if (ev.key === this.storageName) {
          const event = JSON.parse(ev.newValue)
