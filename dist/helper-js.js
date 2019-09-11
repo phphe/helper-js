@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.4.6
+ * helper-js v1.4.7
  * (c) phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -2282,6 +2282,35 @@
   }(EventProcessor); // Deprecated in next version
 
   var CrossWindow = CrossWindowEventProcessor;
+  function onQuickKeydown(handler) {
+    var opt = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    opt = Object.assign({
+      timeout: 1000
+    }, opt);
+    var input = '';
+    var timeoutId;
+
+    var keydownHandler = function keydownHandler(e) {
+      if (e.key && e.key.length === 1) {
+        input = "".concat(input).concat(e.key);
+        handler(input);
+
+        if (timeoutId) {
+          clearTimeout(timeoutId);
+          timeoutId = null;
+        }
+
+        setTimeout(function () {
+          input = '';
+        }, opt.timeout);
+      }
+    };
+
+    onDOM(document, 'keydown', keydownHandler);
+    return function () {
+      offDOM(document, 'keydown', keydownHandler);
+    };
+  }
 
   exports.CrossWindow = CrossWindow;
   exports.CrossWindowEventProcessor = CrossWindowEventProcessor;
@@ -2359,6 +2388,7 @@
   exports.offDOM = offDOM;
   exports.onDOM = onDOM;
   exports.onDOMMany = onDOMMany;
+  exports.onQuickKeydown = onQuickKeydown;
   exports.openCenterWindow = openCenterWindow;
   exports.openWindow = openWindow;
   exports.pairRows = pairRows;
