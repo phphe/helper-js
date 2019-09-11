@@ -1535,3 +1535,29 @@ export class CrossWindowEventProcessor extends EventProcessor{
 }
 // Deprecated in next version
 export const CrossWindow = CrossWindowEventProcessor
+
+export function onQuickKeydown(handler, opt={}) {
+  opt = {
+    timeout: 1000,
+    ...opt,
+  }
+  let input = ''
+  let timeoutId
+  const keydownHandler = (e) => {
+    if (e.key && e.key.length === 1) {
+      input = `${input}${e.key}`
+      handler(input)
+      if (timeoutId) {
+        clearTimeout(timeoutId)
+        timeoutId = null
+      }
+      setTimeout(() => {
+        input = ''
+      }, opt.timeout)
+    }
+  }
+  onDOM(document, 'keydown', keydownHandler)
+  return () => {
+    offDOM(document, 'keydown', keydownHandler)
+  }
+}

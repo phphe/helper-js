@@ -2,7 +2,7 @@ const packageInfo = require('./package.json')
 
 module.exports = {
   output: {
-    moduleName: 'helper-js',
+    moduleName: packageInfo.name,
     fileName: ({format}, template) => {
       if (format === 'cjs') {
         template = template.replace('[name]', '[name].[format]')
