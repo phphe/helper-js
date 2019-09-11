@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.4.5
+ * helper-js v1.4.6
  * (c) phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -1497,6 +1497,21 @@
     };
 
     return destroy;
+  }
+  function getImageSizeByUrl(url) {
+    var image = document.createElement('img');
+    return new Promise(function (resolve, reject) {
+      onDOM(image, 'load', function () {
+        resolve({
+          width: image.width,
+          height: image.height
+        });
+      });
+      onDOM(image, 'error', function (e) {
+        reject(e);
+      });
+      image.src = url;
+    });
   } // advance
   // binarySearch 二分查找
   // callback(mid, i) should return mid - your_value
@@ -2300,6 +2315,7 @@
   exports.getBorder = getBorder;
   exports.getCss3Prefix = getCss3Prefix;
   exports.getElSize = getElSize;
+  exports.getImageSizeByUrl = getImageSizeByUrl;
   exports.getLocalStorage2 = getLocalStorage2;
   exports.getOffset = getOffset;
   exports.getOffsetParent = getOffsetParent;
