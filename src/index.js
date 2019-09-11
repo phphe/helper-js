@@ -969,6 +969,18 @@ export function onDOMMany(els, names, handler, ...args) {
   }
   return destroy
 }
+export function getImageSizeByUrl(url) {
+  const image = document.createElement('img')
+  return new Promise(function(resolve, reject) {
+    onDOM(image, 'load', () => {
+      resolve({width: image.width, height: image.height})
+    })
+    onDOM(image, 'error', (e) => {
+      reject(e)
+    })
+    image.src = url
+  })
+}
 // advance
 // binarySearch 二分查找
 // callback(mid, i) should return mid - your_value

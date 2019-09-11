@@ -8,7 +8,7 @@ npm install helper-js -S
 ```
 ### usage 使用
 ```
-import {function1, function2} from'helper-js
+import {function1, function2} from 'helper-js'
 
 ```
 ### some functions. pls check source to get more 常用方法, 请查看源码获取更多方法
@@ -138,6 +138,7 @@ opt: {
 ###### onDOM (el, name, handler, ...args)   // addEventListener
 ###### offDOM (el, name, handler, ...args)   // removeEventListener
 ###### onDOMMany(els, names, handler, ...args)   // return destroy
+###### getImageSizeByUrl(url)   // return promise {width, height}
 ###### binarySearch   (arr, callback, start, end, returnNearestIfNoHit, max = 1000) // binary search 二分查找
 ```js
 // callback(mid, i) should return mid - your_value
