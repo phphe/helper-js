@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.4.7
+ * helper-js v1.4.8
  * (c) phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -2305,5 +2305,8 @@ function onQuickKeydown(handler) {
     offDOM(document, 'keydown', keydownHandler);
   };
 }
+function getUserLanguage() {
+  return navigator.language || navigator.userLanguage;
+}
 
-export { CrossWindow, CrossWindowEventProcessor, EventProcessor, URLHelper, addClass, arrayAt, arrayDiff, arrayDistinct, arrayFirst, arrayLast, arrayRemove, arrayRemoveBySortedIndexes, arraySibling, assignIfDifferent, backupAttr, binarySearch, camelCase, camelToWords, cloneObj, copyTextToClipboard, debounce, debounceImmediate, debounceTrailing, empty, executeOnceInScopeByName, executePromiseGetters, executeWithCount, findParent, forAll, getBorder, getCss3Prefix, getElSize, getImageSizeByUrl, getLocalStorage2, getOffset, getOffsetParent, getPosition, getPositionFromOffset, getScroll, getSessionStorage2, getUrlParam, glb, groupArray, hasClass, isArray, isBool, isDescendantOf, isFunction, isNumber, isNumeric, isObject, isOffsetInEl, isPromise, isString, isset, joinMethods, jqFixedSize, jqMakeCarousel, kebabCase, makeStorageHelper, mapObjectTree, mapObjects, max, min, newArrayRemoveAt, numPad, numRand, objectExcept, objectGet, objectMap, objectMerge, objectOnly, objectSet, offDOM, onDOM, onDOMMany, onQuickKeydown, openCenterWindow, openWindow, pairRows, promiseTimeout, removeClass, removeEl, replaceMultiple, resolveArgsByType, restoreAttr, retry, setElChildByIndex, snakeCase, splitArray, store, store_executeOnceInScopeByName, strRand, studlyCase, titleCase, toArrayIfNot, uniqueId, unset, waitFor, waitTime, watchChange, windowLoaded };
+export { CrossWindow, CrossWindowEventProcessor, EventProcessor, URLHelper, addClass, arrayAt, arrayDiff, arrayDistinct, arrayFirst, arrayLast, arrayRemove, arrayRemoveBySortedIndexes, arraySibling, assignIfDifferent, backupAttr, binarySearch, camelCase, camelToWords, cloneObj, copyTextToClipboard, debounce, debounceImmediate, debounceTrailing, empty, executeOnceInScopeByName, executePromiseGetters, executeWithCount, findParent, forAll, getBorder, getCss3Prefix, getElSize, getImageSizeByUrl, getLocalStorage2, getOffset, getOffsetParent, getPosition, getPositionFromOffset, getScroll, getSessionStorage2, getUrlParam, getUserLanguage, glb, groupArray, hasClass, isArray, isBool, isDescendantOf, isFunction, isNumber, isNumeric, isObject, isOffsetInEl, isPromise, isString, isset, joinMethods, jqFixedSize, jqMakeCarousel, kebabCase, makeStorageHelper, mapObjectTree, mapObjects, max, min, newArrayRemoveAt, numPad, numRand, objectExcept, objectGet, objectMap, objectMerge, objectOnly, objectSet, offDOM, onDOM, onDOMMany, onQuickKeydown, openCenterWindow, openWindow, pairRows, promiseTimeout, removeClass, removeEl, replaceMultiple, resolveArgsByType, restoreAttr, retry, setElChildByIndex, snakeCase, splitArray, store, store_executeOnceInScopeByName, strRand, studlyCase, titleCase, toArrayIfNot, uniqueId, unset, waitFor, waitTime, watchChange, windowLoaded };

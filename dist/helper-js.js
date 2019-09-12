@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.4.7
+ * helper-js v1.4.8
  * (c) phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -2311,6 +2311,9 @@
       offDOM(document, 'keydown', keydownHandler);
     };
   }
+  function getUserLanguage() {
+    return navigator.language || navigator.userLanguage;
+  }
 
   exports.CrossWindow = CrossWindow;
   exports.CrossWindowEventProcessor = CrossWindowEventProcessor;
@@ -2353,6 +2356,7 @@
   exports.getScroll = getScroll;
   exports.getSessionStorage2 = getSessionStorage2;
   exports.getUrlParam = getUrlParam;
+  exports.getUserLanguage = getUserLanguage;
   exports.glb = glb;
   exports.groupArray = groupArray;
   exports.hasClass = hasClass;
