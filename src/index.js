@@ -1561,3 +1561,7 @@ export function onQuickKeydown(handler, opt={}) {
     offDOM(document, 'keydown', keydownHandler)
   }
 }
+
+export function getUserLanguage() {
+  return navigator.language || navigator.userLanguage
+}
