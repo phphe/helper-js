@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.4.8
+ * helper-js v1.4.9
  * (c) phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -1162,7 +1162,7 @@ function getScroll() {
 } // refer: https://gist.github.com/aderaaij/89547e34617b95ac29d1
 
 function getOffset(el) {
-  var rect = el.getBoundingClientRect();
+  var rect = getBoundingClientRect(el);
   var scroll = getScroll();
   return {
     x: rect.left + scroll.left,
@@ -1211,6 +1211,52 @@ function getPositionFromOffset(el, of) {
   return {
     x: of.x - parentOf.x,
     y: of.y - parentOf.y
+  };
+}
+function getBoundingClientRect(el) {
+  // refer: http://www.51xuediannao.com/javascript/getBoundingClientRect.html
+  var xy = el.getBoundingClientRect();
+  var top = xy.top - document.documentElement.clientTop,
+      //document.documentElement.clientTop 在IE67中始终为2，其他高级点的浏览器为0
+  bottom = xy.bottom,
+      left = xy.left - document.documentElement.clientLeft,
+      //document.documentElement.clientLeft 在IE67中始终为2，其他高级点的浏览器为0
+  right = xy.right,
+      width = xy.width || right - left,
+      //IE67不存在width 使用right - left获得
+  height = xy.height || bottom - top;
+  var x = left;
+  var y = top;
+  return {
+    top: top,
+    right: right,
+    bottom: bottom,
+    left: left,
+    width: width,
+    height: height,
+    x: x,
+    y: y
+  };
+}
+var getViewportPosition = getBoundingClientRect; // todo not tested
+
+function viewportPositionToOffset(position) {
+  var body = document.body;
+  var bodyOf = getOffset(body);
+  var bodyVP = getViewportPosition(body);
+  return {
+    x: position.x + bodyOf.x - bodyVP.x,
+    y: position.y + bodyOf.y - bodyVP.y
+  };
+} // todo not tested
+
+function offsetToViewportPosition(offset) {
+  var body = document.body;
+  var bodyOf = getOffset(body);
+  var bodyVP = getViewportPosition(body);
+  return {
+    x: offset.x + bodyVP.x - bodyOf.x,
+    y: offset.y + bodyVP.y - bodyOf.y
   };
 }
 function findParent(el, callback, opt) {
@@ -2309,4 +2355,4 @@ function getUserLanguage() {
   return navigator.language || navigator.userLanguage;
 }
 
-export { CrossWindow, CrossWindowEventProcessor, EventProcessor, URLHelper, addClass, arrayAt, arrayDiff, arrayDistinct, arrayFirst, arrayLast, arrayRemove, arrayRemoveBySortedIndexes, arraySibling, assignIfDifferent, backupAttr, binarySearch, camelCase, camelToWords, cloneObj, copyTextToClipboard, debounce, debounceImmediate, debounceTrailing, empty, executeOnceInScopeByName, executePromiseGetters, executeWithCount, findParent, forAll, getBorder, getCss3Prefix, getElSize, getImageSizeByUrl, getLocalStorage2, getOffset, getOffsetParent, getPosition, getPositionFromOffset, getScroll, getSessionStorage2, getUrlParam, getUserLanguage, glb, groupArray, hasClass, isArray, isBool, isDescendantOf, isFunction, isNumber, isNumeric, isObject, isOffsetInEl, isPromise, isString, isset, joinMethods, jqFixedSize, jqMakeCarousel, kebabCase, makeStorageHelper, mapObjectTree, mapObjects, max, min, newArrayRemoveAt, numPad, numRand, objectExcept, objectGet, objectMap, objectMerge, objectOnly, objectSet, offDOM, onDOM, onDOMMany, onQuickKeydown, openCenterWindow, openWindow, pairRows, promiseTimeout, removeClass, removeEl, replaceMultiple, resolveArgsByType, restoreAttr, retry, setElChildByIndex, snakeCase, splitArray, store, store_executeOnceInScopeByName, strRand, studlyCase, titleCase, toArrayIfNot, uniqueId, unset, waitFor, waitTime, watchChange, windowLoaded };
+export { CrossWindow, CrossWindowEventProcessor, EventProcessor, URLHelper, addClass, arrayAt, arrayDiff, arrayDistinct, arrayFirst, arrayLast, arrayRemove, arrayRemoveBySortedIndexes, arraySibling, assignIfDifferent, backupAttr, binarySearch, camelCase, camelToWords, cloneObj, copyTextToClipboard, debounce, debounceImmediate, debounceTrailing, empty, executeOnceInScopeByName, executePromiseGetters, executeWithCount, findParent, forAll, getBorder, getBoundingClientRect, getCss3Prefix, getElSize, getImageSizeByUrl, getLocalStorage2, getOffset, getOffsetParent, getPosition, getPositionFromOffset, getScroll, getSessionStorage2, getUrlParam, getUserLanguage, getViewportPosition, glb, groupArray, hasClass, isArray, isBool, isDescendantOf, isFunction, isNumber, isNumeric, isObject, isOffsetInEl, isPromise, isString, isset, joinMethods, jqFixedSize, jqMakeCarousel, kebabCase, makeStorageHelper, mapObjectTree, mapObjects, max, min, newArrayRemoveAt, numPad, numRand, objectExcept, objectGet, objectMap, objectMerge, objectOnly, objectSet, offDOM, offsetToViewportPosition, onDOM, onDOMMany, onQuickKeydown, openCenterWindow, openWindow, pairRows, promiseTimeout, removeClass, removeEl, replaceMultiple, resolveArgsByType, restoreAttr, retry, setElChildByIndex, snakeCase, splitArray, store, store_executeOnceInScopeByName, strRand, studlyCase, titleCase, toArrayIfNot, uniqueId, unset, viewportPositionToOffset, waitFor, waitTime, watchChange, windowLoaded };

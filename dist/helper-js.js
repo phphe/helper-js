@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.4.8
+ * helper-js v1.4.9
  * (c) phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -1168,7 +1168,7 @@
   } // refer: https://gist.github.com/aderaaij/89547e34617b95ac29d1
 
   function getOffset(el) {
-    var rect = el.getBoundingClientRect();
+    var rect = getBoundingClientRect(el);
     var scroll = getScroll();
     return {
       x: rect.left + scroll.left,
@@ -1217,6 +1217,52 @@
     return {
       x: of.x - parentOf.x,
       y: of.y - parentOf.y
+    };
+  }
+  function getBoundingClientRect(el) {
+    // refer: http://www.51xuediannao.com/javascript/getBoundingClientRect.html
+    var xy = el.getBoundingClientRect();
+    var top = xy.top - document.documentElement.clientTop,
+        //document.documentElement.clientTop 在IE67中始终为2，其他高级点的浏览器为0
+    bottom = xy.bottom,
+        left = xy.left - document.documentElement.clientLeft,
+        //document.documentElement.clientLeft 在IE67中始终为2，其他高级点的浏览器为0
+    right = xy.right,
+        width = xy.width || right - left,
+        //IE67不存在width 使用right - left获得
+    height = xy.height || bottom - top;
+    var x = left;
+    var y = top;
+    return {
+      top: top,
+      right: right,
+      bottom: bottom,
+      left: left,
+      width: width,
+      height: height,
+      x: x,
+      y: y
+    };
+  }
+  var getViewportPosition = getBoundingClientRect; // todo not tested
+
+  function viewportPositionToOffset(position) {
+    var body = document.body;
+    var bodyOf = getOffset(body);
+    var bodyVP = getViewportPosition(body);
+    return {
+      x: position.x + bodyOf.x - bodyVP.x,
+      y: position.y + bodyOf.y - bodyVP.y
+    };
+  } // todo not tested
+
+  function offsetToViewportPosition(offset) {
+    var body = document.body;
+    var bodyOf = getOffset(body);
+    var bodyVP = getViewportPosition(body);
+    return {
+      x: offset.x + bodyVP.x - bodyOf.x,
+      y: offset.y + bodyVP.y - bodyOf.y
     };
   }
   function findParent(el, callback, opt) {
@@ -2345,6 +2391,7 @@
   exports.findParent = findParent;
   exports.forAll = forAll;
   exports.getBorder = getBorder;
+  exports.getBoundingClientRect = getBoundingClientRect;
   exports.getCss3Prefix = getCss3Prefix;
   exports.getElSize = getElSize;
   exports.getImageSizeByUrl = getImageSizeByUrl;
@@ -2357,6 +2404,7 @@
   exports.getSessionStorage2 = getSessionStorage2;
   exports.getUrlParam = getUrlParam;
   exports.getUserLanguage = getUserLanguage;
+  exports.getViewportPosition = getViewportPosition;
   exports.glb = glb;
   exports.groupArray = groupArray;
   exports.hasClass = hasClass;
@@ -2390,6 +2438,7 @@
   exports.objectOnly = objectOnly;
   exports.objectSet = objectSet;
   exports.offDOM = offDOM;
+  exports.offsetToViewportPosition = offsetToViewportPosition;
   exports.onDOM = onDOM;
   exports.onDOMMany = onDOMMany;
   exports.onQuickKeydown = onQuickKeydown;
@@ -2414,6 +2463,7 @@
   exports.toArrayIfNot = toArrayIfNot;
   exports.uniqueId = uniqueId;
   exports.unset = unset;
+  exports.viewportPositionToOffset = viewportPositionToOffset;
   exports.waitFor = waitFor;
   exports.waitTime = waitTime;
   exports.watchChange = watchChange;
