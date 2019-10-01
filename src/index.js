@@ -857,8 +857,18 @@ export function backupAttr(el, name) {
 }
 
 export function restoreAttr(el, name) {
-  const key = `original_${name}`
-  el.setAttribute(name, el[key])
+  const key = "original_".concat(name)
+  if (name === 'style' && !el[key]) {
+    //== clear all styles, CSP save
+    const elementStyle= el.style
+    for (let prop of elementStyle) {
+      if (elementStyle.hasOwnProperty(prop) && elementStyle[prop]) {
+        elementStyle[prop] = ""
+      }
+    }
+  } else {
+    el.setAttribute(name, el[key]);
+  }
 }
 
 // source: http://youmightnotneedjquery.com/
