@@ -286,7 +286,7 @@ export function objectExcept(obj, keys) {
 // todo change reverse to opt in next version
 export function forAll(val, handler, reverse) {
   if (!reverse) {
-    if (isArray(val) || isString(val)) {
+    if (isArray(val) || isString(val) || val.hasOwnProperty('length')) {
       for (let i = 0; i < val.length; i++) {
         if (handler(val[i], i) === false) {
           break
@@ -306,7 +306,7 @@ export function forAll(val, handler, reverse) {
       }
     }
   } else {
-    if (isArray(val) || isString(val)) {
+    if (isArray(val) || isString(val) || val.hasOwnProperty('length')) {
       for (let i = val.length - 1; i >= 0 ; i--) {
         if (handler(val[i], i) === false) {
           break
@@ -329,7 +329,49 @@ export function forAll(val, handler, reverse) {
     }
   }
 }
-
+// loop for Array, Object, NodeList, String
+export function* iterateALL(val, opt = {}) {
+  // opt: {reverse, exclude}
+  if (!opt.reverse) {
+    if (val.length != null) {
+      for (let i = 0; i < val.length; i++) {
+        const info = {value: val[i], index: i}
+        if (!opt.exclude || !opt.exclude(info)) {
+          yield info
+        }
+      }
+    } else if (isObject(val)) {
+      for (const key of Object.keys(val)) {
+        const info = {value: val[key], key}
+        if (!opt.exclude || !opt.exclude(info)) {
+          yield info
+        }
+      }
+    } else {
+      throw 'Unsupported type'
+    }
+  } else {
+    if (val.length != null) {
+      for (let i = val.length - 1; i >= 0 ; i--) {
+        const info = {value: val[i], index: i}
+        if (!opt.exclude || !opt.exclude(info)) {
+          yield info
+        }
+      }
+    } else if (isObject(val)) {
+      const keys = Object.keys(val)
+      keys.reverse()
+      for (const key of keys) {
+        const info = {value: val[key], key}
+        if (!opt.exclude || !opt.exclude(info)) {
+          yield info
+        }
+      }
+    } else {
+      throw 'Unsupported type'
+    }
+  }
+}
 // source: http://stackoverflow.com/questions/8817394/javascript-get-deep-value-from-object-by-passing-path-to-it-as-string
 export function objectGet(obj, path, throwError) {
   const paths = isArray(path) ? path : path.split('.')
@@ -886,16 +928,19 @@ export function removeClass(el, className) {
   else
   { el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ') }
 }
+// todo rename to getElSizeEvenInvisible in next version
 export function getElSize(el) {
-  const originDisplay = el.style.display
+  backupAttr(el, 'style')
   el.style.display = 'block'
+  const t = getBoundingClientRect(el)
   const size = {
-    width: el.offsetWidth,
-    height: el.offsetHeight
+    width: t.width,
+    height: t.height,
   }
-  el.style.display = originDisplay
+  restoreAttr(el, 'style')
   return size
 }
+export const getElSizeEvenInvisible = getElSize
 /**
  * [isOffsetInEl]
  * @param {Number} x
@@ -1010,6 +1055,99 @@ export function getImageSizeByUrl(url) {
     })
     image.src = url
   })
+}
+
+export function findNodeList(list, callback, opt = {}) {
+  const iterator = iterateALL(list, {
+    reverse: opt.reverse
+  })
+  for (const {value, index} of iterator) {
+    if (callback(value, index)) {
+      return value
+    }
+  }
+}
+
+export function findNodeListReverse(list, callback, opt = {}) {
+  opt.reverse = true
+  return findNodeList(list, callback, opt)
+}
+
+export function elementsFromPoint(...args) {
+  const func = document.elementsFromPoint || document.msElementsFromPoint || elementsFromPoint
+  return func(...args)
+  function elementsFromPoint(x, y) {
+      const parents = [];
+      let parent = void 0;
+      do {
+          if (parent !== document.elementFromPoint(x, y)) {
+              parent = document.elementFromPoint(x, y);
+              parents.push(parent);
+              parent.style.pointerEvents = 'none';
+          } else {
+              parent = false;
+          }
+      } while (parent);
+      parents.forEach(function (parent) {
+          return parent.style.pointerEvents = 'all';
+      });
+      return parents;
+  }
+}
+
+export function getOuterAttachedHeight(el, opt = {}) {
+  opt = {
+    margin: true,
+    border: true,
+    ...opt,
+  }
+  const stl = getComputedStyle(el)
+  let r = 0
+  const arr = []
+  if (opt.margin) {
+    arr.push('margin-top', 'margin-bottom')
+  }
+  if (opt.border) {
+    arr.push('border-top-width', 'border-bottom-width')
+  }
+  arr.forEach(key => {
+    r += parseFloat(stl[key])
+  })
+  return r
+}
+
+export function getOuterAttachedWidth(el, opt = {}) {
+  opt = {
+    margin: true,
+    border: true,
+    ...opt,
+  }
+  const stl = getComputedStyle(el)
+  let r = 0
+  const arr = []
+  if (opt.margin) {
+    arr.push('margin-left', 'margin-right')
+  }
+  if (opt.border) {
+    arr.push('border-left-width', 'border-right-width')
+  }
+  arr.forEach(key => {
+    r += parseFloat(stl[key])
+  })
+  return r
+}
+// DOM structure
+export function insertBefore(el, target) {
+  target.parentElement.insertBefore(el, target)
+}
+export function insertAfter(el, target) {
+  target.parentElement.insertBefore(el, target.nextSibling)
+}
+export function prependTo(el, target) {
+  target.insertBefore(el, target.firstChild);
+}
+export function appendTo(el, target) {
+  target.appendChild(el)
 }
 // advance
 // binarySearch 二分查找

@@ -64,6 +64,9 @@ helloWorldNice => Hello World Nice
 ###### objectExcept   (obj, keys) // return new object
 ###### forAll(val, handler) // loop array, object or integer, return false in handler can break loop
 handler(item, index/key)
+###### * iterateALL(val, opt = {}) // loop for Array, Object, NodeList, String
+  * opt {reverse}
+
 ###### objectGet   (obj, path, throwError = false) // get by dot path
 ({a:{b:1}}, 'a.b') => 1
 ###### objectSet   (obj, path, value)
@@ -110,7 +113,7 @@ opt: {
 ###### executePromiseGetters(getters, concurrent = 1) // return {promise, destroy}
 ###### promiseTimeout(promise, timeout) // timeout unit is millisecond. return a new promise, which throw error named 'timeout' if timeout
 ###### getUrlParam   // get current url param by name
-##3 DOM
+### DOM
 ###### uniqueId  (prefix = 'id_') // html element id
 ###### isDescendantOf (el, parent)  // if el === parent or is descendant of parent
 ###### removeEl (el)
@@ -143,6 +146,15 @@ opt: {
 ###### offDOM (el, name, handler, ...args)   // removeEventListener
 ###### onDOMMany(els, names, handler, ...args)   // return destroy
 ###### getImageSizeByUrl(url)   // return promise {width, height}
+###### findNodeList(list, callback, opt = {reverse})
+###### findNodeListReverse(list, callback, opt = {})
+###### elementsFromPoint(...)   // document.elementsFromPoint
+###### getOuterAttachedHeight(el, opt={margin: true, border: true}) // get margin and border
+###### getOuterAttachedWidth(el, opt={margin: true, border: true}) // get margin and border
+###### insertBefore(el, target)
+###### insertAfter(el, target)
+###### prependTo(el, target)
+###### appendTo(el, target)
 ###### binarySearch   (arr, callback, start, end, returnNearestIfNoHit, max = 1000) // binary search 二分查找
 ```js
 // callback(mid, i) should return mid - your_value
