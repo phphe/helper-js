@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.4.9
+ * helper-js v1.4.10
  * (c) phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -488,7 +488,7 @@ function objectExcept(obj, keys) {
 
 function forAll(val, handler, reverse) {
   if (!reverse) {
-    if (isArray(val) || isString(val)) {
+    if (isArray(val) || isString(val) || val.hasOwnProperty('length')) {
       for (var i = 0; i < val.length; i++) {
         if (handler(val[i], i) === false) {
           break;
@@ -510,7 +510,7 @@ function forAll(val, handler, reverse) {
       }
     }
   } else {
-    if (isArray(val) || isString(val)) {
+    if (isArray(val) || isString(val) || val.hasOwnProperty('length')) {
       for (var _i4 = val.length - 1; _i4 >= 0; _i4--) {
         if (handler(val[_i4], _i4) === false) {
           break;
@@ -533,6 +533,70 @@ function forAll(val, handler, reverse) {
           break;
         }
       }
+    }
+  }
+} // loop for Array, Object, NodeList, String
+
+function* iterateALL(val) {
+  var opt = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+  // opt: {reverse, exclude}
+  if (!opt.reverse) {
+    if (val.length != null) {
+      for (var i = 0; i < val.length; i++) {
+        var info = {
+          value: val[i],
+          index: i
+        };
+
+        if (!opt.exclude || !opt.exclude(info)) {
+          yield info;
+        }
+      }
+    } else if (isObject(val)) {
+      for (var _i7 = 0, _Object$keys2 = Object.keys(val); _i7 < _Object$keys2.length; _i7++) {
+        var key = _Object$keys2[_i7];
+        var _info = {
+          value: val[key],
+          key: key
+        };
+
+        if (!opt.exclude || !opt.exclude(_info)) {
+          yield _info;
+        }
+      }
+    } else {
+      throw 'Unsupported type';
+    }
+  } else {
+    if (val.length != null) {
+      for (var _i8 = val.length - 1; _i8 >= 0; _i8--) {
+        var _info2 = {
+          value: val[_i8],
+          index: _i8
+        };
+
+        if (!opt.exclude || !opt.exclude(_info2)) {
+          yield _info2;
+        }
+      }
+    } else if (isObject(val)) {
+      var keys = Object.keys(val);
+      keys.reverse();
+
+      for (var _i9 = 0, _keys2 = keys; _i9 < _keys2.length; _i9++) {
+        var _key2 = _keys2[_i9];
+        var _info3 = {
+          value: val[_key2],
+          key: _key2
+        };
+
+        if (!opt.exclude || !opt.exclude(_info3)) {
+          yield _info3;
+        }
+      }
+    } else {
+      throw 'Unsupported type';
     }
   }
 } // source: http://stackoverflow.com/questions/8817394/javascript-get-deep-value-from-object-by-passing-path-to-it-as-string
@@ -640,8 +704,8 @@ function cloneObj(obj, exclude) {
       } else {
         r = {};
 
-        for (var _i7 = 0, _Object$keys2 = Object.keys(obj); _i7 < _Object$keys2.length; _i7++) {
-          var key = _Object$keys2[_i7];
+        for (var _i10 = 0, _Object$keys3 = Object.keys(obj); _i10 < _Object$keys3.length; _i10++) {
+          var key = _Object$keys3[_i10];
 
           if (!exclude || isArray(exclude) && !exclude.includes(key) || !exclude(key, obj[key], obj)) {
             r[key] = cloneObj(obj[key], exclude);
@@ -826,8 +890,8 @@ function pairRows(rows1, rows2, key1, key2) {
 function executeWithCount(func) {
   var count = 0;
   return function () {
-    for (var _len = arguments.length, args = new Array(_len), _key2 = 0; _key2 < _len; _key2++) {
-      args[_key2] = arguments[_key2];
+    for (var _len = arguments.length, args = new Array(_len), _key3 = 0; _key3 < _len; _key3++) {
+      args[_key3] = arguments[_key3];
     }
 
     return func.call.apply(func, [this, count++].concat(args));
@@ -837,8 +901,8 @@ function watchChange(getVal, handler) {
   var oldVal;
 
   var update = function update() {
-    for (var _len2 = arguments.length, args = new Array(_len2), _key3 = 0; _key3 < _len2; _key3++) {
-      args[_key3] = arguments[_key3];
+    for (var _len2 = arguments.length, args = new Array(_len2), _key4 = 0; _key4 < _len2; _key4++) {
+      args[_key4] = arguments[_key4];
     }
 
     var newVal = getVal.apply(void 0, args);
@@ -888,8 +952,8 @@ function debounceTrailing(action) {
   var wrappedAction = function wrappedAction() {
     var _this = this;
 
-    for (var _len3 = arguments.length, args = new Array(_len3), _key4 = 0; _key4 < _len3; _key4++) {
-      args[_key4] = arguments[_key4];
+    for (var _len3 = arguments.length, args = new Array(_len3), _key5 = 0; _key5 < _len3; _key5++) {
+      args[_key5] = arguments[_key5];
     }
 
     return new Promise(function (resolve, reject) {
@@ -997,8 +1061,8 @@ function joinMethods(methods) {
 
       if (old) {
         simpleJoinedMethod = function simpleJoinedMethod() {
-          for (var _len4 = arguments.length, args = new Array(_len4), _key5 = 0; _key5 < _len4; _key5++) {
-            args[_key5] = arguments[_key5];
+          for (var _len4 = arguments.length, args = new Array(_len4), _key6 = 0; _key6 < _len4; _key6++) {
+            args[_key6] = arguments[_key6];
           }
 
           return method.call.apply(method, [this, mode === 'value' ? old.call.apply(old, [this].concat(args)) : old].concat(args));
@@ -1307,17 +1371,20 @@ function removeClass(el, className) {
   } else {
     el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
   }
-}
+} // todo rename to getElSizeEvenInvisible in next version
+
 function getElSize(el) {
-  var originDisplay = el.style.display;
+  backupAttr(el, 'style');
   el.style.display = 'block';
+  var t = getBoundingClientRect(el);
   var size = {
-    width: el.offsetWidth,
-    height: el.offsetHeight
+    width: t.width,
+    height: t.height
   };
-  el.style.display = originDisplay;
+  restoreAttr(el, 'style');
   return size;
 }
+var getElSizeEvenInvisible = getElSize;
 /**
  * [isOffsetInEl]
  * @param {Number} x
@@ -1409,8 +1476,8 @@ function getCss3Prefix() {
 } // dom event
 
 function onDOM(el, name, handler) {
-  for (var _len5 = arguments.length, args = new Array(_len5 > 3 ? _len5 - 3 : 0), _key6 = 3; _key6 < _len5; _key6++) {
-    args[_key6 - 3] = arguments[_key6];
+  for (var _len5 = arguments.length, args = new Array(_len5 > 3 ? _len5 - 3 : 0), _key7 = 3; _key7 < _len5; _key7++) {
+    args[_key7 - 3] = arguments[_key7];
   }
 
   if (el.addEventListener) {
@@ -1422,8 +1489,8 @@ function onDOM(el, name, handler) {
   }
 }
 function offDOM(el, name, handler) {
-  for (var _len6 = arguments.length, args = new Array(_len6 > 3 ? _len6 - 3 : 0), _key7 = 3; _key7 < _len6; _key7++) {
-    args[_key7 - 3] = arguments[_key7];
+  for (var _len6 = arguments.length, args = new Array(_len6 > 3 ? _len6 - 3 : 0), _key8 = 3; _key8 < _len6; _key8++) {
+    args[_key8 - 3] = arguments[_key8];
   }
 
   if (el.removeEventListener) {
@@ -1438,8 +1505,8 @@ function onDOMMany(els, names, handler) {
   els = toArrayIfNot(els);
   names = toArrayIfNot(names);
 
-  for (var _len7 = arguments.length, args = new Array(_len7 > 3 ? _len7 - 3 : 0), _key8 = 3; _key8 < _len7; _key8++) {
-    args[_key8 - 3] = arguments[_key8];
+  for (var _len7 = arguments.length, args = new Array(_len7 > 3 ? _len7 - 3 : 0), _key9 = 3; _key9 < _len7; _key9++) {
+    args[_key9 - 3] = arguments[_key9];
   }
 
   var _iteratorNormalCompletion5 = true;
@@ -1552,6 +1619,128 @@ function getImageSizeByUrl(url) {
     });
     image.src = url;
   });
+}
+function findNodeList(list, callback) {
+  var opt = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+  var iterator = iterateALL(list, {
+    reverse: opt.reverse
+  });
+  var _iteratorNormalCompletion9 = true;
+  var _didIteratorError9 = false;
+  var _iteratorError9 = undefined;
+
+  try {
+    for (var _iterator9 = iterator[Symbol.iterator](), _step9; !(_iteratorNormalCompletion9 = (_step9 = _iterator9.next()).done); _iteratorNormalCompletion9 = true) {
+      var _ref2 = _step9.value;
+      var value = _ref2.value,
+          index = _ref2.index;
+
+      if (callback(value, index)) {
+        return value;
+      }
+    }
+  } catch (err) {
+    _didIteratorError9 = true;
+    _iteratorError9 = err;
+  } finally {
+    try {
+      if (!_iteratorNormalCompletion9 && _iterator9["return"] != null) {
+        _iterator9["return"]();
+      }
+    } finally {
+      if (_didIteratorError9) {
+        throw _iteratorError9;
+      }
+    }
+  }
+}
+function findNodeListReverse(list, callback) {
+  var opt = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+  opt.reverse = true;
+  return findNodeList(list, callback, opt);
+}
+function elementsFromPoint() {
+  var func = document.elementsFromPoint || document.msElementsFromPoint || elementsFromPoint;
+  return func.apply(void 0, arguments);
+
+  function elementsFromPoint(x, y) {
+    var parents = [];
+    var parent = void 0;
+
+    do {
+      if (parent !== document.elementFromPoint(x, y)) {
+        parent = document.elementFromPoint(x, y);
+        parents.push(parent);
+        parent.style.pointerEvents = 'none';
+      } else {
+        parent = false;
+      }
+    } while (parent);
+
+    parents.forEach(function (parent) {
+      return parent.style.pointerEvents = 'all';
+    });
+    return parents;
+  }
+}
+function getOuterAttachedHeight(el) {
+  var opt = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  opt = Object.assign({
+    margin: true,
+    border: true
+  }, opt);
+  var stl = getComputedStyle(el);
+  var r = 0;
+  var arr = [];
+
+  if (opt.margin) {
+    arr.push('margin-top', 'margin-bottom');
+  }
+
+  if (opt.border) {
+    arr.push('border-top-width', 'border-bottom-width');
+  }
+
+  arr.forEach(function (key) {
+    r += parseFloat(stl[key]);
+  });
+  return r;
+}
+function getOuterAttachedWidth(el) {
+  var opt = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  opt = Object.assign({
+    margin: true,
+    border: true
+  }, opt);
+  var stl = getComputedStyle(el);
+  var r = 0;
+  var arr = [];
+
+  if (opt.margin) {
+    arr.push('margin-left', 'margin-right');
+  }
+
+  if (opt.border) {
+    arr.push('border-left-width', 'border-right-width');
+  }
+
+  arr.forEach(function (key) {
+    r += parseFloat(stl[key]);
+  });
+  return r;
+} // DOM structure
+
+function insertBefore(el, target) {
+  target.parentElement.insertBefore(el, target);
+}
+function insertAfter(el, target) {
+  target.parentElement.insertBefore(el, target.nextSibling);
+}
+function prependTo(el, target) {
+  target.insertBefore(el, target.firstChild);
+}
+function appendTo(el, target) {
+  target.appendChild(el);
 } // advance
 // binarySearch 二分查找
 // callback(mid, i) should return mid - your_value
@@ -2091,8 +2280,8 @@ function () {
         }
       }
 
-      for (var _i8 = 0, _indexes = indexes; _i8 < _indexes.length; _i8++) {
-        var index = _indexes[_i8];
+      for (var _i11 = 0, _indexes = indexes; _i11 < _indexes.length; _i11++) {
+        var index = _indexes[_i11];
         this.eventStore.splice(index, 1);
       }
     }
@@ -2101,39 +2290,39 @@ function () {
     value: function emit(name) {
       // 重要: 先找到要执行的项放在新数组里, 因为执行项会改变事件项存储数组
       var items = [];
-      var _iteratorNormalCompletion9 = true;
-      var _didIteratorError9 = false;
-      var _iteratorError9 = undefined;
+      var _iteratorNormalCompletion10 = true;
+      var _didIteratorError10 = false;
+      var _iteratorError10 = undefined;
 
       try {
-        for (var _iterator9 = this.eventStore[Symbol.iterator](), _step9; !(_iteratorNormalCompletion9 = (_step9 = _iterator9.next()).done); _iteratorNormalCompletion9 = true) {
-          var item = _step9.value;
+        for (var _iterator10 = this.eventStore[Symbol.iterator](), _step10; !(_iteratorNormalCompletion10 = (_step10 = _iterator10.next()).done); _iteratorNormalCompletion10 = true) {
+          var item = _step10.value;
 
           if (item.name === name) {
             items.push(item);
           }
         }
       } catch (err) {
-        _didIteratorError9 = true;
-        _iteratorError9 = err;
+        _didIteratorError10 = true;
+        _iteratorError10 = err;
       } finally {
         try {
-          if (!_iteratorNormalCompletion9 && _iterator9["return"] != null) {
-            _iterator9["return"]();
+          if (!_iteratorNormalCompletion10 && _iterator10["return"] != null) {
+            _iterator10["return"]();
           }
         } finally {
-          if (_didIteratorError9) {
-            throw _iteratorError9;
+          if (_didIteratorError10) {
+            throw _iteratorError10;
           }
         }
       }
 
-      for (var _len8 = arguments.length, args = new Array(_len8 > 1 ? _len8 - 1 : 0), _key9 = 1; _key9 < _len8; _key9++) {
-        args[_key9 - 1] = arguments[_key9];
+      for (var _len8 = arguments.length, args = new Array(_len8 > 1 ? _len8 - 1 : 0), _key10 = 1; _key10 < _len8; _key10++) {
+        args[_key10 - 1] = arguments[_key10];
       }
 
-      for (var _i9 = 0, _items = items; _i9 < _items.length; _i9++) {
-        var _item = _items[_i9];
+      for (var _i12 = 0, _items = items; _i12 < _items.length; _i12++) {
+        var _item = _items[_i12];
 
         _item.handler.apply(_item, args);
       }
@@ -2183,8 +2372,8 @@ function (_EventProcessor) {
     _this7.id = strRand();
     _this7.windows = [_this7.id];
     _this7.ready = new Promise(function (resolve, reject) {
-      _this7.onceTimeout('_windows_updated', function (_ref) {
-        var windows = _ref.windows;
+      _this7.onceTimeout('_windows_updated', function (_ref3) {
+        var windows = _ref3.windows;
         _this7.windows = windows;
       }, _this7.timeout).promise.then(function () {
         resolve(); // responsed 被响应
@@ -2211,8 +2400,8 @@ function (_EventProcessor) {
       }); // on _windows_updated
 
 
-      _this7.on('_windows_updated', function (_ref2) {
-        var windows = _ref2.windows;
+      _this7.on('_windows_updated', function (_ref4) {
+        var windows = _ref4.windows;
         _this7.windows = windows;
       }); // on exit
 
@@ -2256,8 +2445,8 @@ function (_EventProcessor) {
   }, {
     key: "emitTo",
     value: function emitTo(name, targets) {
-      for (var _len9 = arguments.length, args = new Array(_len9 > 2 ? _len9 - 2 : 0), _key10 = 2; _key10 < _len9; _key10++) {
-        args[_key10 - 2] = arguments[_key10];
+      for (var _len9 = arguments.length, args = new Array(_len9 > 2 ? _len9 - 2 : 0), _key11 = 2; _key11 < _len9; _key11++) {
+        args[_key11 - 2] = arguments[_key11];
       }
 
       if (targets === this.BROADCAST) {
@@ -2287,8 +2476,8 @@ function (_EventProcessor) {
   }, {
     key: "emitLocal",
     value: function emitLocal(name) {
-      for (var _len10 = arguments.length, args = new Array(_len10 > 1 ? _len10 - 1 : 0), _key11 = 1; _key11 < _len10; _key11++) {
-        args[_key11 - 1] = arguments[_key11];
+      for (var _len10 = arguments.length, args = new Array(_len10 > 1 ? _len10 - 1 : 0), _key12 = 1; _key12 < _len10; _key12++) {
+        args[_key12 - 1] = arguments[_key12];
       }
 
       this.emitTo.apply(this, [name, this.id].concat(args));
@@ -2296,8 +2485,8 @@ function (_EventProcessor) {
   }, {
     key: "broadcast",
     value: function broadcast(name) {
-      for (var _len11 = arguments.length, args = new Array(_len11 > 1 ? _len11 - 1 : 0), _key12 = 1; _key12 < _len11; _key12++) {
-        args[_key12 - 1] = arguments[_key12];
+      for (var _len11 = arguments.length, args = new Array(_len11 > 1 ? _len11 - 1 : 0), _key13 = 1; _key13 < _len11; _key13++) {
+        args[_key13 - 1] = arguments[_key13];
       }
 
       this.emitTo.apply(this, [name, this.BROADCAST].concat(args));
@@ -2305,8 +2494,8 @@ function (_EventProcessor) {
   }, {
     key: "emit",
     value: function emit(name) {
-      for (var _len12 = arguments.length, args = new Array(_len12 > 1 ? _len12 - 1 : 0), _key13 = 1; _key13 < _len12; _key13++) {
-        args[_key13 - 1] = arguments[_key13];
+      for (var _len12 = arguments.length, args = new Array(_len12 > 1 ? _len12 - 1 : 0), _key14 = 1; _key14 < _len12; _key14++) {
+        args[_key14 - 1] = arguments[_key14];
       }
 
       this.emitTo.apply(this, [name, this.windows].concat(args));
@@ -2355,4 +2544,4 @@ function getUserLanguage() {
   return navigator.language || navigator.userLanguage;
 }
 
-export { CrossWindow, CrossWindowEventProcessor, EventProcessor, URLHelper, addClass, arrayAt, arrayDiff, arrayDistinct, arrayFirst, arrayLast, arrayRemove, arrayRemoveBySortedIndexes, arraySibling, assignIfDifferent, backupAttr, binarySearch, camelCase, camelToWords, cloneObj, copyTextToClipboard, debounce, debounceImmediate, debounceTrailing, empty, executeOnceInScopeByName, executePromiseGetters, executeWithCount, findParent, forAll, getBorder, getBoundingClientRect, getCss3Prefix, getElSize, getImageSizeByUrl, getLocalStorage2, getOffset, getOffsetParent, getPosition, getPositionFromOffset, getScroll, getSessionStorage2, getUrlParam, getUserLanguage, getViewportPosition, glb, groupArray, hasClass, isArray, isBool, isDescendantOf, isFunction, isNumber, isNumeric, isObject, isOffsetInEl, isPromise, isString, isset, joinMethods, jqFixedSize, jqMakeCarousel, kebabCase, makeStorageHelper, mapObjectTree, mapObjects, max, min, newArrayRemoveAt, numPad, numRand, objectExcept, objectGet, objectMap, objectMerge, objectOnly, objectSet, offDOM, offsetToViewportPosition, onDOM, onDOMMany, onQuickKeydown, openCenterWindow, openWindow, pairRows, promiseTimeout, removeClass, removeEl, replaceMultiple, resolveArgsByType, restoreAttr, retry, setElChildByIndex, snakeCase, splitArray, store, store_executeOnceInScopeByName, strRand, studlyCase, titleCase, toArrayIfNot, uniqueId, unset, viewportPositionToOffset, waitFor, waitTime, watchChange, windowLoaded };
+export { CrossWindow, CrossWindowEventProcessor, EventProcessor, URLHelper, addClass, appendTo, arrayAt, arrayDiff, arrayDistinct, arrayFirst, arrayLast, arrayRemove, arrayRemoveBySortedIndexes, arraySibling, assignIfDifferent, backupAttr, binarySearch, camelCase, camelToWords, cloneObj, copyTextToClipboard, debounce, debounceImmediate, debounceTrailing, elementsFromPoint, empty, executeOnceInScopeByName, executePromiseGetters, executeWithCount, findNodeList, findNodeListReverse, findParent, forAll, getBorder, getBoundingClientRect, getCss3Prefix, getElSize, getElSizeEvenInvisible, getImageSizeByUrl, getLocalStorage2, getOffset, getOffsetParent, getOuterAttachedHeight, getOuterAttachedWidth, getPosition, getPositionFromOffset, getScroll, getSessionStorage2, getUrlParam, getUserLanguage, getViewportPosition, glb, groupArray, hasClass, insertAfter, insertBefore, isArray, isBool, isDescendantOf, isFunction, isNumber, isNumeric, isObject, isOffsetInEl, isPromise, isString, isset, iterateALL, joinMethods, jqFixedSize, jqMakeCarousel, kebabCase, makeStorageHelper, mapObjectTree, mapObjects, max, min, newArrayRemoveAt, numPad, numRand, objectExcept, objectGet, objectMap, objectMerge, objectOnly, objectSet, offDOM, offsetToViewportPosition, onDOM, onDOMMany, onQuickKeydown, openCenterWindow, openWindow, pairRows, prependTo, promiseTimeout, removeClass, removeEl, replaceMultiple, resolveArgsByType, restoreAttr, retry, setElChildByIndex, snakeCase, splitArray, store, store_executeOnceInScopeByName, strRand, studlyCase, titleCase, toArrayIfNot, uniqueId, unset, viewportPositionToOffset, waitFor, waitTime, watchChange, windowLoaded };
