@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.4.11
+ * helper-js v1.4.12
  * (c) phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -1667,7 +1667,12 @@
   }
   function elementsFromPoint() {
     var func = document.elementsFromPoint || document.msElementsFromPoint || elementsFromPoint;
-    return func.apply(void 0, arguments);
+
+    for (var _len8 = arguments.length, args = new Array(_len8), _key10 = 0; _key10 < _len8; _key10++) {
+      args[_key10] = arguments[_key10];
+    }
+
+    return func.apply(document, args);
 
     function elementsFromPoint(x, y) {
       var parents = [];
@@ -2323,8 +2328,8 @@
           }
         }
 
-        for (var _len8 = arguments.length, args = new Array(_len8 > 1 ? _len8 - 1 : 0), _key10 = 1; _key10 < _len8; _key10++) {
-          args[_key10 - 1] = arguments[_key10];
+        for (var _len9 = arguments.length, args = new Array(_len9 > 1 ? _len9 - 1 : 0), _key11 = 1; _key11 < _len9; _key11++) {
+          args[_key11 - 1] = arguments[_key11];
         }
 
         for (var _i12 = 0, _items = items; _i12 < _items.length; _i12++) {
@@ -2451,8 +2456,8 @@
     }, {
       key: "emitTo",
       value: function emitTo(name, targets) {
-        for (var _len9 = arguments.length, args = new Array(_len9 > 2 ? _len9 - 2 : 0), _key11 = 2; _key11 < _len9; _key11++) {
-          args[_key11 - 2] = arguments[_key11];
+        for (var _len10 = arguments.length, args = new Array(_len10 > 2 ? _len10 - 2 : 0), _key12 = 2; _key12 < _len10; _key12++) {
+          args[_key12 - 2] = arguments[_key12];
         }
 
         if (targets === this.BROADCAST) {
@@ -2482,8 +2487,8 @@
     }, {
       key: "emitLocal",
       value: function emitLocal(name) {
-        for (var _len10 = arguments.length, args = new Array(_len10 > 1 ? _len10 - 1 : 0), _key12 = 1; _key12 < _len10; _key12++) {
-          args[_key12 - 1] = arguments[_key12];
+        for (var _len11 = arguments.length, args = new Array(_len11 > 1 ? _len11 - 1 : 0), _key13 = 1; _key13 < _len11; _key13++) {
+          args[_key13 - 1] = arguments[_key13];
         }
 
         this.emitTo.apply(this, [name, this.id].concat(args));
@@ -2491,8 +2496,8 @@
     }, {
       key: "broadcast",
       value: function broadcast(name) {
-        for (var _len11 = arguments.length, args = new Array(_len11 > 1 ? _len11 - 1 : 0), _key13 = 1; _key13 < _len11; _key13++) {
-          args[_key13 - 1] = arguments[_key13];
+        for (var _len12 = arguments.length, args = new Array(_len12 > 1 ? _len12 - 1 : 0), _key14 = 1; _key14 < _len12; _key14++) {
+          args[_key14 - 1] = arguments[_key14];
         }
 
         this.emitTo.apply(this, [name, this.BROADCAST].concat(args));
@@ -2500,8 +2505,8 @@
     }, {
       key: "emit",
       value: function emit(name) {
-        for (var _len12 = arguments.length, args = new Array(_len12 > 1 ? _len12 - 1 : 0), _key14 = 1; _key14 < _len12; _key14++) {
-          args[_key14 - 1] = arguments[_key14];
+        for (var _len13 = arguments.length, args = new Array(_len13 > 1 ? _len13 - 1 : 0), _key15 = 1; _key15 < _len13; _key15++) {
+          args[_key15 - 1] = arguments[_key15];
         }
 
         this.emitTo.apply(this, [name, this.windows].concat(args));
