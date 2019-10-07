@@ -1075,7 +1075,7 @@ export function findNodeListReverse(list, callback, opt = {}) {
 
 export function elementsFromPoint(...args) {
   const func = document.elementsFromPoint || document.msElementsFromPoint || elementsFromPoint
-  return func(...args)
+  return func.apply(document, args)
   function elementsFromPoint(x, y) {
       const parents = [];
       let parent = void 0;
