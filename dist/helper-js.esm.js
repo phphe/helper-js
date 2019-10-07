@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.4.10
+ * helper-js v1.4.11
  * (c) phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -2544,4 +2544,66 @@ function getUserLanguage() {
   return navigator.language || navigator.userLanguage;
 }
 
-export { CrossWindow, CrossWindowEventProcessor, EventProcessor, URLHelper, addClass, appendTo, arrayAt, arrayDiff, arrayDistinct, arrayFirst, arrayLast, arrayRemove, arrayRemoveBySortedIndexes, arraySibling, assignIfDifferent, backupAttr, binarySearch, camelCase, camelToWords, cloneObj, copyTextToClipboard, debounce, debounceImmediate, debounceTrailing, elementsFromPoint, empty, executeOnceInScopeByName, executePromiseGetters, executeWithCount, findNodeList, findNodeListReverse, findParent, forAll, getBorder, getBoundingClientRect, getCss3Prefix, getElSize, getElSizeEvenInvisible, getImageSizeByUrl, getLocalStorage2, getOffset, getOffsetParent, getOuterAttachedHeight, getOuterAttachedWidth, getPosition, getPositionFromOffset, getScroll, getSessionStorage2, getUrlParam, getUserLanguage, getViewportPosition, glb, groupArray, hasClass, insertAfter, insertBefore, isArray, isBool, isDescendantOf, isFunction, isNumber, isNumeric, isObject, isOffsetInEl, isPromise, isString, isset, iterateALL, joinMethods, jqFixedSize, jqMakeCarousel, kebabCase, makeStorageHelper, mapObjectTree, mapObjects, max, min, newArrayRemoveAt, numPad, numRand, objectExcept, objectGet, objectMap, objectMerge, objectOnly, objectSet, offDOM, offsetToViewportPosition, onDOM, onDOMMany, onQuickKeydown, openCenterWindow, openWindow, pairRows, prependTo, promiseTimeout, removeClass, removeEl, replaceMultiple, resolveArgsByType, restoreAttr, retry, setElChildByIndex, snakeCase, splitArray, store, store_executeOnceInScopeByName, strRand, studlyCase, titleCase, toArrayIfNot, uniqueId, unset, viewportPositionToOffset, waitFor, waitTime, watchChange, windowLoaded };
+var Cache =
+/*#__PURE__*/
+function () {
+  function Cache() {
+    _classCallCheck(this, Cache);
+
+    _defineProperty(this, "store", {});
+  }
+
+  _createClass(Cache, [{
+    key: "has",
+    value: function has(name) {
+      return this.store.hasOwnProperty(name);
+    }
+  }, {
+    key: "remember",
+    value: function remember(name, getter) {
+      if (!this.has(name)) {
+        this.store[name] = {
+          value: getter()
+        };
+      }
+
+      return this.store[name].value;
+    }
+  }, {
+    key: "forget",
+    value: function forget(name) {
+      if (name) {
+        if (this.has(name)) {
+          delete this.store[name];
+        }
+      } else {
+        this.store = {};
+      }
+    }
+  }]);
+
+  return Cache;
+}(); // attach cached getters to an object; can attach to self
+function attachCache(obj, toCache) {
+  var cache = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : new Cache();
+
+  var _loop4 = function _loop4(key) {
+    var getter = toCache[key];
+    Object.defineProperty(obj, key, {
+      get: function get() {
+        var _this9 = this;
+
+        return cache.remember(key, function () {
+          return getter.call(_this9);
+        });
+      }
+    });
+  };
+
+  for (var key in toCache) {
+    _loop4(key);
+  }
+}
+
+export default Cache;
+export { CrossWindow, CrossWindowEventProcessor, EventProcessor, URLHelper, addClass, appendTo, arrayAt, arrayDiff, arrayDistinct, arrayFirst, arrayLast, arrayRemove, arrayRemoveBySortedIndexes, arraySibling, assignIfDifferent, attachCache, backupAttr, binarySearch, camelCase, camelToWords, cloneObj, copyTextToClipboard, debounce, debounceImmediate, debounceTrailing, elementsFromPoint, empty, executeOnceInScopeByName, executePromiseGetters, executeWithCount, findNodeList, findNodeListReverse, findParent, forAll, getBorder, getBoundingClientRect, getCss3Prefix, getElSize, getElSizeEvenInvisible, getImageSizeByUrl, getLocalStorage2, getOffset, getOffsetParent, getOuterAttachedHeight, getOuterAttachedWidth, getPosition, getPositionFromOffset, getScroll, getSessionStorage2, getUrlParam, getUserLanguage, getViewportPosition, glb, groupArray, hasClass, insertAfter, insertBefore, isArray, isBool, isDescendantOf, isFunction, isNumber, isNumeric, isObject, isOffsetInEl, isPromise, isString, isset, iterateALL, joinMethods, jqFixedSize, jqMakeCarousel, kebabCase, makeStorageHelper, mapObjectTree, mapObjects, max, min, newArrayRemoveAt, numPad, numRand, objectExcept, objectGet, objectMap, objectMerge, objectOnly, objectSet, offDOM, offsetToViewportPosition, onDOM, onDOMMany, onQuickKeydown, openCenterWindow, openWindow, pairRows, prependTo, promiseTimeout, removeClass, removeEl, replaceMultiple, resolveArgsByType, restoreAttr, retry, setElChildByIndex, snakeCase, splitArray, store, store_executeOnceInScopeByName, strRand, studlyCase, titleCase, toArrayIfNot, uniqueId, unset, viewportPositionToOffset, waitFor, waitTime, watchChange, windowLoaded };

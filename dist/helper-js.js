@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.4.10
+ * helper-js v1.4.11
  * (c) phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -2550,6 +2550,67 @@
     return navigator.language || navigator.userLanguage;
   }
 
+  var Cache =
+  /*#__PURE__*/
+  function () {
+    function Cache() {
+      _classCallCheck(this, Cache);
+
+      _defineProperty(this, "store", {});
+    }
+
+    _createClass(Cache, [{
+      key: "has",
+      value: function has(name) {
+        return this.store.hasOwnProperty(name);
+      }
+    }, {
+      key: "remember",
+      value: function remember(name, getter) {
+        if (!this.has(name)) {
+          this.store[name] = {
+            value: getter()
+          };
+        }
+
+        return this.store[name].value;
+      }
+    }, {
+      key: "forget",
+      value: function forget(name) {
+        if (name) {
+          if (this.has(name)) {
+            delete this.store[name];
+          }
+        } else {
+          this.store = {};
+        }
+      }
+    }]);
+
+    return Cache;
+  }(); // attach cached getters to an object; can attach to self
+  function attachCache(obj, toCache) {
+    var cache = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : new Cache();
+
+    var _loop4 = function _loop4(key) {
+      var getter = toCache[key];
+      Object.defineProperty(obj, key, {
+        get: function get() {
+          var _this9 = this;
+
+          return cache.remember(key, function () {
+            return getter.call(_this9);
+          });
+        }
+      });
+    };
+
+    for (var key in toCache) {
+      _loop4(key);
+    }
+  }
+
   exports.CrossWindow = CrossWindow;
   exports.CrossWindowEventProcessor = CrossWindowEventProcessor;
   exports.EventProcessor = EventProcessor;
@@ -2565,6 +2626,7 @@
   exports.arrayRemoveBySortedIndexes = arrayRemoveBySortedIndexes;
   exports.arraySibling = arraySibling;
   exports.assignIfDifferent = assignIfDifferent;
+  exports.attachCache = attachCache;
   exports.backupAttr = backupAttr;
   exports.binarySearch = binarySearch;
   exports.camelCase = camelCase;
@@ -2574,6 +2636,7 @@
   exports.debounce = debounce;
   exports.debounceImmediate = debounceImmediate;
   exports.debounceTrailing = debounceTrailing;
+  exports.default = Cache;
   exports.elementsFromPoint = elementsFromPoint;
   exports.empty = empty;
   exports.executeOnceInScopeByName = executeOnceInScopeByName;
