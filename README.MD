@@ -198,3 +198,5 @@ cwep.storageName = '_crossWindow_channel2'
 ###### class CrossWindow = CrossWindowEventProcessor // Deprecated in next version
 ###### onQuickKeydown(handler, opt) // to get quick inputed text 获得用户短时间内连续输入的字符串
 ###### getUserLanguage() // get user browser language
+###### class Cache
+###### attachCache(obj, toCache, cache = new Cache()) // attach cached getters to an object; can attach to self
