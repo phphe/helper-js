@@ -4,10 +4,12 @@
   "description": "",
   "main": "dist/helper-js.cjs.js",
   "module": "dist/helper-js.esm.js",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "build": "bili --format cjs --format umd  --format umd-min --format esm --banner",
-    "dev": "bili --watch"
+    "build": "node build/build.js",
+    "dev": "node build/build.js --watch"
   },
   "author": "phphe <phphe@outlook.com> (https://github.com/phphe)",
   "unpkg": "dist/helper-js.js",
@@ -19,13 +21,19 @@
     "url": "https://github.com/phphe/helper-js.git"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-class-properties": "^7.5.5",
-    "@babel/plugin-proposal-decorators": "^7.4.4",
-    "@babel/plugin-proposal-export-namespace-from": "^7.5.2",
-    "@babel/plugin-proposal-function-sent": "^7.5.0",
-    "@babel/plugin-proposal-numeric-separator": "^7.2.0",
-    "@babel/plugin-proposal-throw-expressions": "^7.2.0",
-    "bili": "^4.8.1"
+    "@babel/core": "^7.7.7",
+    "@babel/plugin-proposal-class-properties": "^7.7.4",
+    "@babel/plugin-proposal-export-namespace-from": "^7.7.4",
+    "@babel/plugin-proposal-json-strings": "^7.7.4",
+    "@babel/plugin-syntax-dynamic-import": "^7.7.4",
+    "@babel/plugin-syntax-import-meta": "^7.7.4",
+    "@babel/preset-env": "^7.7.7",
+    "@rollup/plugin-json": "^4.0.1",
+    "@rollup/plugin-node-resolve": "^6.0.0",
+    "commander": "^4.0.1",
+    "rollup": "^1.27.14",
+    "rollup-plugin-babel": "^4.3.3",
+    "rollup-plugin-terser": "^5.1.3"
   },
   "dependencies": {},
   "license": "MIT"
