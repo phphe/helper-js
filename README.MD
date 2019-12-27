@@ -57,6 +57,8 @@ helloWorldNice => Hello World Nice
 ###### splitArray(arr, n) // n can be getter(number of times); n可以是方法, 参数1是第几次分块
 ###### groupArray(arr, getMark)
 ###### arrayDistinct(arr)
+###### arrayGet(arr, index, endIndex) // index can be negative number; 索引可为负
+###### arrayWithoutEnd(arr, len)
 ###### assignIfDifferent(obj, key, val)   
 ###### objectMerge (obj1, obj2) // merge obj2 to obj1, and merge obj2 chldren to obj1 if it is object
 ###### objectMap   (obj, func)
@@ -98,6 +100,7 @@ eg: mapObjects([{id: 1}, {id:2}], 'id') -> {'1':{id:1},'2':{id:2}}
 eg: mapObjects([{id: 1}, {id:2}], (item, i) => item.id + 100 ) -> {'101':{id:1},'102':{id:2}}
 ```
 ###### pairRows(rows1, rows2, key1, key2 = key1)
+###### resolveValueOrGettter(valueOrGetter, args = []) // return first arg directly if is not function, else return function result
 ###### executeWithCount (func, context = null) // wrap function, the first arg of func is excuted count
 ###### watchChange   (getVal, handler) // wrap getter function, when use getter to get value, it will check value if changed
 ###### executeOnceInScopeByName   (name, action, scope = store_executeOnceInScopeByName, storeResult)
@@ -110,6 +113,8 @@ opt: {
 ###### debounceTrailing(action, wait = 0)
 ###### debounceImmediate(action, wait = 0)
 ###### joinMethods(methods, mode = 'value') // mode: value, pipline
+###### joinFunctionsByResult(funcs) // the returned function only accept one argument
+###### joinFunctionsByNext(funcs) // must pass arguments to `next` manually
 ###### executePromiseGetters(getters, concurrent = 1) // return {promise, destroy}
 ###### promiseTimeout(promise, timeout) // timeout unit is millisecond. return a new promise, which throw error named 'timeout' if timeout
 ###### getUrlParam   // get current url param by name

@@ -239,6 +239,24 @@ export function arrayDistinct(arr) {
     return arr.filter((v, i, a) => a.indexOf(v) === i)
   }
 }
+export function arrayGet(arr, index, endIndex) {
+  if (index < 0) {
+    index += arr.length
+  }
+  if (endIndex == null) {
+    return arr[index]
+  } else {
+    if (endIndex < 0) {
+      endIndex += arr.length
+    }
+    return arr.slice(index, endIndex - index + 1)
+  }
+}
+
+
+export function arrayWithoutEnd(arr, len) {
+  return arr.slice(0, arr.length - len)
+}
 // object
 export function assignIfDifferent(obj, key, val) {
   if (obj[key] !== val) {
@@ -549,7 +567,14 @@ export function pairRows(rows1, rows2, key1, key2) {
   const map = mapObjects(rows2, key2)
   return rows1.map(row1 => [row1, map[row1[key1]]])
 }
-
+//
+export function resolveValueOrGettter(valueOrGetter, args = []) {
+  if (isFunction(valueOrGetter)) {
+    return valueOrGetter(...args)
+  } else {
+    return valueOrGetter
+  }
+}
 // function helper | method helper
 export function executeWithCount(func) {
   let count = 0
@@ -675,6 +700,36 @@ export function joinMethods(methods, mode = 'value') {
     }
   }
   return simpleJoinedMethod
+}
+// the returned function only accept one argument
+export function joinFunctionsByResult(funcs) {
+  let wrappedFunc = funcs[0]
+  for (let i = 1; i < funcs.length; i++) {
+    wrappedFunc = join2func(wrappedFunc, funcs[i])
+  }
+  return wrappedFunc
+  function join2func(func1, func2) {
+    return function (arg) {
+      let result = args
+      const result1 = func1(arg)
+      return func2(result1)
+    }
+  }
+}
+
+// must pass arguments to `next` manually
+export function joinFunctionsByNext(funcs) {
+  let next = () => {}
+  for (const {value: func} of iterateALL(funcs, {reverse: true})) {
+    const currentNext = next
+    next = wrapFuncWithNext(func, currentNext)
+  }
+  return next
+  function wrapFuncWithNext(func, next) {
+    return function (...args) {
+      return func(next, ...args)
+    }
+  }
 }
 // promise
 // execute promise in sequence

@@ -1,7 +1,7 @@
 const packageInfo = require('./package.json')
 
 module.exports = {
-  output: {
+  extendRollupConfig: {
     moduleName: packageInfo.name,
     fileName: ({format}, template) => {
       if (format === 'cjs') {
