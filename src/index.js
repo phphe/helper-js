@@ -1788,7 +1788,7 @@ export function onQuickKeydown(handler, opt={}) {
 export function getUserLanguage() {
   return navigator.language || navigator.userLanguage
 }
-export default class Cache {
+export class Cache {
   store = {};
   has(name) {
     return this.store.hasOwnProperty(name)
