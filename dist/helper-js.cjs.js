@@ -1,5 +1,5 @@
 /*!
-* helper-js v1.4.13
+* helper-js v1.4.14
 * (c) phphe <phphe@outlook.com> (https://github.com/phphe)
 * Released under the MIT License.
 */
@@ -2799,7 +2799,6 @@ function onQuickKeydown(handler) {
 function getUserLanguage() {
   return navigator.language || navigator.userLanguage;
 }
-
 var Cache =
 /*#__PURE__*/
 function () {
@@ -2840,6 +2839,7 @@ function () {
 
   return Cache;
 }(); // attach cached getters to an object; can attach to self
+
 function attachCache(obj, toCache) {
   var cache = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : new Cache();
 
@@ -2861,6 +2861,7 @@ function attachCache(obj, toCache) {
   }
 }
 
+exports.Cache = Cache;
 exports.CrossWindow = CrossWindow;
 exports.CrossWindowEventProcessor = CrossWindowEventProcessor;
 exports.EventProcessor = EventProcessor;
@@ -2888,7 +2889,6 @@ exports.copyTextToClipboard = copyTextToClipboard;
 exports.debounce = debounce;
 exports.debounceImmediate = debounceImmediate;
 exports.debounceTrailing = debounceTrailing;
-exports.default = Cache;
 exports.elementsFromPoint = elementsFromPoint;
 exports.empty = empty;
 exports.executeOnceInScopeByName = executeOnceInScopeByName;
