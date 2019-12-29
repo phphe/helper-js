@@ -2,6 +2,7 @@ const gzipSize = require('gzip-size');
 const rollup = require('rollup');
 const JsonPlugin = require('@rollup/plugin-json');
 const NodeResolvePlugin = require('@rollup/plugin-node-resolve');
+const CommonjsPlugin = require('@rollup/plugin-commonjs');
 const BabelPlugin = require('rollup-plugin-babel');
 const TerserPlugin = require('rollup-plugin-terser'); // minify file
 const path = require('path');
@@ -60,7 +61,11 @@ function watchDir(inputDir, opt={}, eachOpt={}) {
     })
   }
 }
-
+/*
+opt.plugins: Your plugin config will override default by name, or be pushed to end of plugins.
+hooks:
+  opt.afterOptionsResolved(inputOptions, outputOptions)
+ */
 async function buildFile(opt={}) {
   opt = {
     input: get_default_input(),
@@ -68,11 +73,8 @@ async function buildFile(opt={}) {
     outFileName: package.name, // without suffix
     outputDir: './dist',
     formats: ['cjs', 'esm', 'umd', 'umd.min'],
-    plugins: [
-      ...getDefaultPlugins(),
-      ...opt.plugins || [],
-    ],
     ...opt,
+    plugins: resolvePlugins(opt.plugins),
   }
   //
   const report = []
@@ -111,9 +113,9 @@ async function buildFile(opt={}) {
       default:
         outputOptions.file = path.join(opt.outputDir, `${opt.outFileName}.${format}.js`)
     }
+    opt.afterOptionsResolved && opt.afterOptionsResolved(inputOptions, outputOptions)
     const bundle = await rollup.rollup(inputOptions)
     // generate code
-    const { output } = await bundle.generate(outputOptions)
     await bundle.write(outputOptions)
     reportOne(outputOptions.file)
     if (format === 'umd.min') {
@@ -132,6 +134,11 @@ async function buildFile(opt={}) {
   }
 }
 
+/*
+opt.plugins: Your plugin config will override default by name, or be pushed to end of plugins.
+hooks:
+  opt.afterOptionsResolved(watchOptions)
+ */
 async function watchFile(opt={}) {
   opt = {
     input: get_default_input(),
@@ -139,10 +146,7 @@ async function watchFile(opt={}) {
     outFileName: package.name, // without suffix
     outputDir: './dist',
     formats: ['cjs', 'esm', 'umd'],
-    plugins: [
-      ...getDefaultPlugins(),
-      ...opt.plugins || [],
-    ],
+    plugins: resolvePlugins(opt.plugins),
     ...opt,
   }
   const inputOptions = {
@@ -182,6 +186,7 @@ async function watchFile(opt={}) {
     //   include
     // }
   };
+  opt.afterOptionsResolved && opt.afterOptionsResolved(watchOptions)
   console.log(`Start to watch ${inputOptions.input}`);
   const watcher = rollup.watch(watchOptions);
   watcher.on('event', event => {
@@ -210,19 +215,26 @@ function get_default_input() {
   }
   return input
 }
-function getDefaultPlugins() {
+function resolvePlugins(inputPlugins) {
   const defaultPlugins = [
-    JsonPlugin(),
-    NodeResolvePlugin(),
     BabelPlugin({
-      exclude: 'node_modules/**' // only transpile our source code
+      runtimeHelpers: true,
     }),
+    NodeResolvePlugin(),
+    CommonjsPlugin(),
+    JsonPlugin(),
   ];
-  try {
-    const VuePlugin = require('rollup-plugin-vue');
-    defaultPlugins.push(VuePlugin())
-    console.log('rollup-plugin-vue is auto enabled because it is existing.');
-  } catch (e) {}
+  if (inputPlugins) {
+    inputPlugins.forEach(plugin => {
+      const index = defaultPlugins.findIndex(v => v.name === plugin.name)
+      if (index > -1) {
+        // replace with input plugin
+        defaultPlugins.splice(index, 1, plugin)
+      } else {
+        defaultPlugins.push(plugin)
+      }
+    })
+  }
   return defaultPlugins
 }
 function studlyCase (str) {
