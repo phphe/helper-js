@@ -606,6 +606,16 @@ export function depthFirstSearch(obj, handler, childrenKey = 'children', reverse
   }
 }
 export const walkTreeData = depthFirstSearch
+// rootData: Array
+export function getNodeByPathFromTreeData(indexes, rootData, childrenKey='children') {
+  let cur
+  let children = rootData
+  for (const index of indexes) {
+    cur = children[index]
+    children = cur[childrenKey]
+  }
+  return cur
+}
 
 // function helper | method helper ============================
 export function resolveValueOrGettter(valueOrGetter, args = []) {

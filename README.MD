@@ -106,6 +106,7 @@ handler(node, index, parent)
   return 'skip children', 'skip siblings', false // retrun false to stop
 ```
 ###### walkTreeData = depthFirstSearch
+###### getNodeByPathFromTreeData(indexes, rootData, childrenKey='children') // rootData is Array
 ###### resolveValueOrGettter(valueOrGetter, args = []) // return first arg directly if is not function, else return function result
 ###### executeWithCount (func, context = null) // wrap function, the first arg of func is excuted count
 ###### watchChange   (getVal, handler) // wrap getter function, when use getter to get value, it will check value if changed
