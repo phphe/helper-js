@@ -1,5 +1,5 @@
 /*!
-* helper-js v1.4.15
+* helper-js v1.4.16
 * (c) phphe <phphe@outlook.com> (https://github.com/phphe)
 * Released under the MIT License.
 */
@@ -1118,7 +1118,39 @@
       }
     }
   }
-  var walkTreeData = depthFirstSearch; // function helper | method helper ============================
+  var walkTreeData = depthFirstSearch; // rootData: Array
+
+  function getNodeByPathFromTreeData(indexes, rootData) {
+    var childrenKey = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'children';
+    var cur;
+    var children = rootData;
+    var _iteratorNormalCompletion4 = true;
+    var _didIteratorError4 = false;
+    var _iteratorError4 = undefined;
+
+    try {
+      for (var _iterator4 = indexes[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+        var index = _step4.value;
+        cur = children[index];
+        children = cur[childrenKey];
+      }
+    } catch (err) {
+      _didIteratorError4 = true;
+      _iteratorError4 = err;
+    } finally {
+      try {
+        if (!_iteratorNormalCompletion4 && _iterator4["return"] != null) {
+          _iterator4["return"]();
+        }
+      } finally {
+        if (_didIteratorError4) {
+          throw _iteratorError4;
+        }
+      }
+    }
+
+    return cur;
+  } // function helper | method helper ============================
 
   function resolveValueOrGettter(valueOrGetter) {
     var args = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
@@ -1292,13 +1324,13 @@
   function joinMethods(methods) {
     var mode = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'value';
     var simpleJoinedMethod;
-    var _iteratorNormalCompletion4 = true;
-    var _didIteratorError4 = false;
-    var _iteratorError4 = undefined;
+    var _iteratorNormalCompletion5 = true;
+    var _didIteratorError5 = false;
+    var _iteratorError5 = undefined;
 
     try {
       var _loop3 = function _loop3() {
-        var method = _step4.value;
+        var method = _step5.value;
         var old = simpleJoinedMethod;
 
         if (old) {
@@ -1314,20 +1346,20 @@
         }
       };
 
-      for (var _iterator4 = methods[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+      for (var _iterator5 = methods[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
         _loop3();
       }
     } catch (err) {
-      _didIteratorError4 = true;
-      _iteratorError4 = err;
+      _didIteratorError5 = true;
+      _iteratorError5 = err;
     } finally {
       try {
-        if (!_iteratorNormalCompletion4 && _iterator4["return"] != null) {
-          _iterator4["return"]();
+        if (!_iteratorNormalCompletion5 && _iterator5["return"] != null) {
+          _iterator5["return"]();
         }
       } finally {
-        if (_didIteratorError4) {
-          throw _iteratorError4;
+        if (_didIteratorError5) {
+          throw _iteratorError5;
         }
       }
     }
@@ -1356,29 +1388,29 @@
   function joinFunctionsByNext(funcs) {
     var next = function next() {};
 
-    var _iteratorNormalCompletion5 = true;
-    var _didIteratorError5 = false;
-    var _iteratorError5 = undefined;
+    var _iteratorNormalCompletion6 = true;
+    var _didIteratorError6 = false;
+    var _iteratorError6 = undefined;
 
     try {
-      for (var _iterator5 = iterateALL(funcs, {
+      for (var _iterator6 = iterateALL(funcs, {
         reverse: true
-      })[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
-        var func = _step5.value.value;
+      })[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
+        var func = _step6.value.value;
         var currentNext = next;
         next = wrapFuncWithNext(func, currentNext);
       }
     } catch (err) {
-      _didIteratorError5 = true;
-      _iteratorError5 = err;
+      _didIteratorError6 = true;
+      _iteratorError6 = err;
     } finally {
       try {
-        if (!_iteratorNormalCompletion5 && _iterator5["return"] != null) {
-          _iterator5["return"]();
+        if (!_iteratorNormalCompletion6 && _iterator6["return"] != null) {
+          _iterator6["return"]();
         }
       } finally {
-        if (_didIteratorError5) {
-          throw _iteratorError5;
+        if (_didIteratorError6) {
+          throw _iteratorError6;
         }
       }
     }
@@ -1476,8 +1508,19 @@
     return get_par;
   }
   /* eslint-enable */
-  // dom
+  // dom =====================================================
+  // return NodeList if there are multiple top-level nodes
 
+  function createElementFromHTML(htmlString) {
+    var div = document.createElement('div');
+    div.innerHTML = htmlString.trim();
+
+    if (div.childNodes.length > 1) {
+      return div.childNodes;
+    } else {
+      return div.childNodes[0];
+    }
+  }
   function uniqueId() {
     var prefix = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'id_';
     var id = prefix + strRand();
@@ -1812,95 +1855,95 @@
       args[_key10 - 3] = arguments[_key10];
     }
 
-    var _iteratorNormalCompletion6 = true;
-    var _didIteratorError6 = false;
-    var _iteratorError6 = undefined;
+    var _iteratorNormalCompletion7 = true;
+    var _didIteratorError7 = false;
+    var _iteratorError7 = undefined;
 
     try {
-      for (var _iterator6 = els[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
-        var el = _step6.value;
-        var _iteratorNormalCompletion9 = true;
-        var _didIteratorError9 = false;
-        var _iteratorError9 = undefined;
+      for (var _iterator7 = els[Symbol.iterator](), _step7; !(_iteratorNormalCompletion7 = (_step7 = _iterator7.next()).done); _iteratorNormalCompletion7 = true) {
+        var el = _step7.value;
+        var _iteratorNormalCompletion10 = true;
+        var _didIteratorError10 = false;
+        var _iteratorError10 = undefined;
 
         try {
-          for (var _iterator9 = names[Symbol.iterator](), _step9; !(_iteratorNormalCompletion9 = (_step9 = _iterator9.next()).done); _iteratorNormalCompletion9 = true) {
-            var name = _step9.value;
+          for (var _iterator10 = names[Symbol.iterator](), _step10; !(_iteratorNormalCompletion10 = (_step10 = _iterator10.next()).done); _iteratorNormalCompletion10 = true) {
+            var name = _step10.value;
             onDOM.apply(void 0, [el, name, handler].concat(args));
           }
         } catch (err) {
-          _didIteratorError9 = true;
-          _iteratorError9 = err;
+          _didIteratorError10 = true;
+          _iteratorError10 = err;
         } finally {
           try {
-            if (!_iteratorNormalCompletion9 && _iterator9["return"] != null) {
-              _iterator9["return"]();
+            if (!_iteratorNormalCompletion10 && _iterator10["return"] != null) {
+              _iterator10["return"]();
             }
           } finally {
-            if (_didIteratorError9) {
-              throw _iteratorError9;
+            if (_didIteratorError10) {
+              throw _iteratorError10;
             }
           }
         }
       }
     } catch (err) {
-      _didIteratorError6 = true;
-      _iteratorError6 = err;
+      _didIteratorError7 = true;
+      _iteratorError7 = err;
     } finally {
       try {
-        if (!_iteratorNormalCompletion6 && _iterator6["return"] != null) {
-          _iterator6["return"]();
+        if (!_iteratorNormalCompletion7 && _iterator7["return"] != null) {
+          _iterator7["return"]();
         }
       } finally {
-        if (_didIteratorError6) {
-          throw _iteratorError6;
+        if (_didIteratorError7) {
+          throw _iteratorError7;
         }
       }
     }
 
     var destroy = function destroy() {
-      var _iteratorNormalCompletion7 = true;
-      var _didIteratorError7 = false;
-      var _iteratorError7 = undefined;
+      var _iteratorNormalCompletion8 = true;
+      var _didIteratorError8 = false;
+      var _iteratorError8 = undefined;
 
       try {
-        for (var _iterator7 = els[Symbol.iterator](), _step7; !(_iteratorNormalCompletion7 = (_step7 = _iterator7.next()).done); _iteratorNormalCompletion7 = true) {
-          var el = _step7.value;
-          var _iteratorNormalCompletion8 = true;
-          var _didIteratorError8 = false;
-          var _iteratorError8 = undefined;
+        for (var _iterator8 = els[Symbol.iterator](), _step8; !(_iteratorNormalCompletion8 = (_step8 = _iterator8.next()).done); _iteratorNormalCompletion8 = true) {
+          var el = _step8.value;
+          var _iteratorNormalCompletion9 = true;
+          var _didIteratorError9 = false;
+          var _iteratorError9 = undefined;
 
           try {
-            for (var _iterator8 = names[Symbol.iterator](), _step8; !(_iteratorNormalCompletion8 = (_step8 = _iterator8.next()).done); _iteratorNormalCompletion8 = true) {
-              var name = _step8.value;
+            for (var _iterator9 = names[Symbol.iterator](), _step9; !(_iteratorNormalCompletion9 = (_step9 = _iterator9.next()).done); _iteratorNormalCompletion9 = true) {
+              var name = _step9.value;
               offDOM(el, name, handler);
             }
           } catch (err) {
-            _didIteratorError8 = true;
-            _iteratorError8 = err;
+            _didIteratorError9 = true;
+            _iteratorError9 = err;
           } finally {
             try {
-              if (!_iteratorNormalCompletion8 && _iterator8["return"] != null) {
-                _iterator8["return"]();
+              if (!_iteratorNormalCompletion9 && _iterator9["return"] != null) {
+                _iterator9["return"]();
               }
             } finally {
-              if (_didIteratorError8) {
-                throw _iteratorError8;
+              if (_didIteratorError9) {
+                throw _iteratorError9;
               }
             }
           }
         }
       } catch (err) {
-        _didIteratorError7 = true;
-        _iteratorError7 = err;
+        _didIteratorError8 = true;
+        _iteratorError8 = err;
       } finally {
         try {
-          if (!_iteratorNormalCompletion7 && _iterator7["return"] != null) {
-            _iterator7["return"]();
+          if (!_iteratorNormalCompletion8 && _iterator8["return"] != null) {
+            _iterator8["return"]();
           }
         } finally {
-          if (_didIteratorError7) {
-            throw _iteratorError7;
+          if (_didIteratorError8) {
+            throw _iteratorError8;
           }
         }
       }
@@ -1928,31 +1971,31 @@
     var iterator = iterateALL(list, {
       reverse: opt.reverse
     });
-    var _iteratorNormalCompletion10 = true;
-    var _didIteratorError10 = false;
-    var _iteratorError10 = undefined;
+    var _iteratorNormalCompletion11 = true;
+    var _didIteratorError11 = false;
+    var _iteratorError11 = undefined;
 
     try {
-      for (var _iterator10 = iterator[Symbol.iterator](), _step10; !(_iteratorNormalCompletion10 = (_step10 = _iterator10.next()).done); _iteratorNormalCompletion10 = true) {
-        var _step10$value = _step10.value,
-            value = _step10$value.value,
-            index = _step10$value.index;
+      for (var _iterator11 = iterator[Symbol.iterator](), _step11; !(_iteratorNormalCompletion11 = (_step11 = _iterator11.next()).done); _iteratorNormalCompletion11 = true) {
+        var _step11$value = _step11.value,
+            value = _step11$value.value,
+            index = _step11$value.index;
 
         if (callback(value, index)) {
           return value;
         }
       }
     } catch (err) {
-      _didIteratorError10 = true;
-      _iteratorError10 = err;
+      _didIteratorError11 = true;
+      _iteratorError11 = err;
     } finally {
       try {
-        if (!_iteratorNormalCompletion10 && _iterator10["return"] != null) {
-          _iterator10["return"]();
+        if (!_iteratorNormalCompletion11 && _iterator11["return"] != null) {
+          _iterator11["return"]();
         }
       } finally {
-        if (_didIteratorError10) {
-          throw _iteratorError10;
+        if (_didIteratorError11) {
+          throw _iteratorError11;
         }
       }
     }
@@ -2596,29 +2639,29 @@
       value: function emit(name) {
         // 重要: 先找到要执行的项放在新数组里, 因为执行项会改变事件项存储数组
         var items = [];
-        var _iteratorNormalCompletion11 = true;
-        var _didIteratorError11 = false;
-        var _iteratorError11 = undefined;
+        var _iteratorNormalCompletion12 = true;
+        var _didIteratorError12 = false;
+        var _iteratorError12 = undefined;
 
         try {
-          for (var _iterator11 = this.eventStore[Symbol.iterator](), _step11; !(_iteratorNormalCompletion11 = (_step11 = _iterator11.next()).done); _iteratorNormalCompletion11 = true) {
-            var item = _step11.value;
+          for (var _iterator12 = this.eventStore[Symbol.iterator](), _step12; !(_iteratorNormalCompletion12 = (_step12 = _iterator12.next()).done); _iteratorNormalCompletion12 = true) {
+            var item = _step12.value;
 
             if (item.name === name) {
               items.push(item);
             }
           }
         } catch (err) {
-          _didIteratorError11 = true;
-          _iteratorError11 = err;
+          _didIteratorError12 = true;
+          _iteratorError12 = err;
         } finally {
           try {
-            if (!_iteratorNormalCompletion11 && _iterator11["return"] != null) {
-              _iterator11["return"]();
+            if (!_iteratorNormalCompletion12 && _iterator12["return"] != null) {
+              _iterator12["return"]();
             }
           } finally {
-            if (_didIteratorError11) {
-              throw _iteratorError11;
+            if (_didIteratorError12) {
+              throw _iteratorError12;
             }
           }
         }
@@ -2932,6 +2975,7 @@
   exports.camelToWords = camelToWords;
   exports.cloneObj = cloneObj;
   exports.copyTextToClipboard = copyTextToClipboard;
+  exports.createElementFromHTML = createElementFromHTML;
   exports.debounce = debounce;
   exports.debounceImmediate = debounceImmediate;
   exports.debounceTrailing = debounceTrailing;
@@ -2952,6 +2996,7 @@
   exports.getElSizeEvenInvisible = getElSizeEvenInvisible;
   exports.getImageSizeByUrl = getImageSizeByUrl;
   exports.getLocalStorage2 = getLocalStorage2;
+  exports.getNodeByPathFromTreeData = getNodeByPathFromTreeData;
   exports.getOffset = getOffset;
   exports.getOffsetParent = getOffsetParent;
   exports.getOuterAttachedHeight = getOuterAttachedHeight;
