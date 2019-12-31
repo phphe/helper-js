@@ -1,5 +1,5 @@
 /*!
-* helper-js v1.4.14
+* helper-js v1.4.15
 * (c) phphe <phphe@outlook.com> (https://github.com/phphe)
 * Released under the MIT License.
 */
@@ -1073,7 +1073,52 @@
     return rows1.map(function (row1) {
       return [row1, map[row1[key1]]];
     });
-  } //
+  } // 深度优先遍历
+  // Depth-First-Search
+
+  function depthFirstSearch(obj, handler) {
+    var childrenKey = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'children';
+    var reverse = arguments.length > 3 ? arguments[3] : undefined;
+    var rootChildren = hp.isArray(obj) ? obj : [obj]; //
+
+    var StopException = function StopException() {};
+
+    var func = function func(children, parent) {
+      if (reverse) {
+        children = children.slice();
+        children.reverse();
+      }
+
+      var len = children.length;
+
+      for (var i = 0; i < len; i++) {
+        var item = children[i];
+        var r = handler(item, i, parent);
+
+        if (r === false) {
+          // stop
+          throw new StopException();
+        } else if (r === 'skip children') {
+          continue;
+        } else if (r === 'skip siblings') {
+          break;
+        }
+
+        if (item[childrenKey] != null) {
+          func(item[childrenKey], item);
+        }
+      }
+    };
+
+    try {
+      func(rootChildren);
+    } catch (e) {
+      if (e instanceof StopException) ; else {
+        throw e;
+      }
+    }
+  }
+  var walkTreeData = depthFirstSearch; // function helper | method helper ============================
 
   function resolveValueOrGettter(valueOrGetter) {
     var args = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
@@ -1083,8 +1128,7 @@
     } else {
       return valueOrGetter;
     }
-  } // function helper | method helper
-
+  }
   function executeWithCount(func) {
     var count = 0;
     return function () {
@@ -2891,6 +2935,7 @@
   exports.debounce = debounce;
   exports.debounceImmediate = debounceImmediate;
   exports.debounceTrailing = debounceTrailing;
+  exports.depthFirstSearch = depthFirstSearch;
   exports.elementsFromPoint = elementsFromPoint;
   exports.empty = empty;
   exports.executeOnceInScopeByName = executeOnceInScopeByName;
@@ -2986,6 +3031,7 @@
   exports.viewportPositionToOffset = viewportPositionToOffset;
   exports.waitFor = waitFor;
   exports.waitTime = waitTime;
+  exports.walkTreeData = walkTreeData;
   exports.watchChange = watchChange;
   exports.windowLoaded = windowLoaded;
 
