@@ -126,6 +126,7 @@ opt: {
 ###### promiseTimeout(promise, timeout) // timeout unit is millisecond. return a new promise, which throw error named 'timeout' if timeout
 ###### getUrlParam   // get current url param by name
 ### DOM
+###### createElementFromHTML(htmlString) // return NodeList if there are multiple top-level nodes
 ###### uniqueId  (prefix = 'id_') // html element id
 ###### isDescendantOf (el, parent)  // if el === parent or is descendant of parent
 ###### removeEl (el)

@@ -854,7 +854,17 @@ export function getUrlParam(par) {
   return get_par
 }
 /* eslint-enable */
-// dom
+// dom =====================================================
+// return NodeList if there are multiple top-level nodes
+export function createElementFromHTML(htmlString) {
+  var div = document.createElement('div');
+  div.innerHTML = htmlString.trim();
+  if (div.childNodes.length > 1) {
+    return div.childNodes
+  } else {
+    return div.childNodes[0]
+  }
+}
 export function uniqueId (prefix = 'id_') {
   const id = prefix + strRand()
   if (!store.uniqueId) store.uniqueId = {}
