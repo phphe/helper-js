@@ -1,6 +1,6 @@
 {
   "name": "helper-js",
-  "version": "1.4.14",
+  "version": "1.4.15",
   "description": "",
   "main": "dist/helper-js.cjs.js",
   "module": "dist/helper-js.esm.js",
@@ -9,7 +9,8 @@
   ],
   "scripts": {
     "build": "node scripts/build.js",
-    "dev": "node scripts/build.js --watch"
+    "dev": "node scripts/build.js --watch",
+    "build-test": "rollup -c"
   },
   "author": "phphe <phphe@outlook.com> (https://github.com/phphe)",
   "unpkg": "dist/helper-js.js",

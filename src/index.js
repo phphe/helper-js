@@ -567,7 +567,47 @@ export function pairRows(rows1, rows2, key1, key2) {
   const map = mapObjects(rows2, key2)
   return rows1.map(row1 => [row1, map[row1[key1]]])
 }
-//
+// 深度优先遍历
+// Depth-First-Search
+export function depthFirstSearch(obj, handler, childrenKey = 'children', reverse) {
+  const rootChildren = hp.isArray(obj) ? obj : [obj]
+  //
+  const StopException = () => {}
+  const func = (children, parent) => {
+    if (reverse) {
+      children = children.slice()
+      children.reverse()
+    }
+    const len = children.length
+    for (let i = 0; i < len; i++) {
+      const item = children[i]
+      const r = handler(item, i, parent)
+      if (r === false) {
+        // stop
+        throw new StopException()
+      } else if (r === 'skip children') {
+        continue
+      } else if (r === 'skip siblings') {
+        break
+      }
+      if (item[childrenKey] != null) {
+        func(item[childrenKey], item)
+      }
+    }
+  }
+  try {
+    func(rootChildren)
+  } catch (e) {
+    if (e instanceof StopException) {
+     // stop
+   } else {
+     throw e
+   }
+  }
+}
+export const walkTreeData = depthFirstSearch
+
+// function helper | method helper ============================
 export function resolveValueOrGettter(valueOrGetter, args = []) {
   if (isFunction(valueOrGetter)) {
     return valueOrGetter(...args)
@@ -575,7 +615,6 @@ export function resolveValueOrGettter(valueOrGetter, args = []) {
     return valueOrGetter
   }
 }
-// function helper | method helper
 export function executeWithCount(func) {
   let count = 0
   return function(...args) {

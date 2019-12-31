@@ -100,6 +100,12 @@ eg: mapObjects([{id: 1}, {id:2}], 'id') -> {'1':{id:1},'2':{id:2}}
 eg: mapObjects([{id: 1}, {id:2}], (item, i) => item.id + 100 ) -> {'101':{id:1},'102':{id:2}}
 ```
 ###### pairRows(rows1, rows2, key1, key2 = key1)
+###### depthFirstSearch(obj, handler, childrenKey = 'children', reverse) // 深度优先遍历; Depth-First-Search
+```js
+handler(node, index, parent)
+  return 'skip children', 'skip siblings', false // retrun false to stop
+```
+###### walkTreeData = depthFirstSearch
 ###### resolveValueOrGettter(valueOrGetter, args = []) // return first arg directly if is not function, else return function result
 ###### executeWithCount (func, context = null) // wrap function, the first arg of func is excuted count
 ###### watchChange   (getVal, handler) // wrap getter function, when use getter to get value, it will check value if changed
