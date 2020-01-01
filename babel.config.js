@@ -2,6 +2,6 @@ module.exports = {
   presets: ["@vue/cli-plugin-babel/preset"],
   plugins: [
     // if use es6 generator
-    "@babel/plugin-transform-runtime",
+    '@babel/plugin-transform-regenerator'
   ],
 }
