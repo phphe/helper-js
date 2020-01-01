@@ -766,7 +766,7 @@ var runtime = (function (exports) {
   // as the regeneratorRuntime namespace. Otherwise create a new empty
   // object. Either way, the resulting object will be used to initialize
   // the regeneratorRuntime variable at the top of this file.
-   module.exports 
+   module.exports
 ));
 
 try {
@@ -3027,8 +3027,10 @@ function () {
 
     _classCallCheck(this, URLHelper);
 
-    this.baseUrl = '';
-    this.search = {};
+    _defineProperty(this, "baseUrl", '');
+
+    _defineProperty(this, "search", {});
+
     var t = decodeURI(baseUrl).split('?');
     this.baseUrl = t[0];
 
@@ -3156,7 +3158,7 @@ function () {
   function EventProcessor() {
     _classCallCheck(this, EventProcessor);
 
-    this.eventStore = [];
+    _defineProperty(this, "eventStore", []);
   }
 
   _createClass(EventProcessor, [{
@@ -3290,10 +3292,14 @@ function (_EventProcessor) {
     _classCallCheck(this, CrossWindowEventProcessor);
 
     _this7 = _possibleConstructorReturn(this, _getPrototypeOf(CrossWindowEventProcessor).call(this));
-    _this7.storageName = '_crossWindow';
-    _this7.windows = [];
-    _this7.timeout = 200;
-    _this7.BROADCAST = '__BROADCAST__';
+
+    _defineProperty(_assertThisInitialized(_this7), "storageName", '_crossWindow');
+
+    _defineProperty(_assertThisInitialized(_this7), "windows", []);
+
+    _defineProperty(_assertThisInitialized(_this7), "timeout", 200);
+
+    _defineProperty(_assertThisInitialized(_this7), "BROADCAST", '__BROADCAST__');
 
     if (opt) {
       Object.assign(_assertThisInitialized(_this7), opt);
@@ -3492,7 +3498,7 @@ function () {
   function Cache() {
     _classCallCheck(this, Cache);
 
-    this.store = {};
+    _defineProperty(this, "store", {});
   }
 
   _createClass(Cache, [{
