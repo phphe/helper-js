@@ -3,6 +3,8 @@ module.exports = {
     '@babel/preset-env',
   ],
   plugins: [
+    // if use es6 generator
+    "@babel/plugin-transform-runtime",
     // Stage 2
    '@babel/plugin-proposal-export-namespace-from',
     // Stage 3
