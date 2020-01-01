@@ -8,7 +8,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "node scripts/build.js",
+    "build": "bili",
     "dev": "node scripts/build.js --watch",
     "build-test": "rollup -c"
   },
@@ -22,7 +22,9 @@
     "url": "https://github.com/phphe/helper-js.git"
   },
   "devDependencies": {
-    "rollup-helper": "^2.0.2"
+    "@babel/plugin-transform-runtime": "^7.7.6",
+    "@vue/cli-plugin-babel": "^4.1.0",
+    "bili": "^4.8.1"
   },
   "dependencies": {
     "@babel/runtime": "^7.7.7"
