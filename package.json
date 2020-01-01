@@ -1,6 +1,6 @@
 {
   "name": "helper-js",
-  "version": "1.4.16",
+  "version": "1.4.18-beta",
   "description": "",
   "main": "dist/helper-js.cjs.js",
   "module": "dist/helper-js.esm.js",
@@ -9,8 +9,9 @@
   ],
   "scripts": {
     "build": "node scripts/build.js",
-    "dev": "node scripts/build.js --watch",
-    "build-test": "rollup -c"
+    "dev": "rollup -w -c scripts/config.js --environment TARGET:umd",
+    "build:esm": "rollup -c scripts/config.js --environment TARGET:esm",
+    "dev:esm": "rollup -w -c scripts/config.js --environment TARGET:esm"
   },
   "author": "phphe <phphe@outlook.com> (https://github.com/phphe)",
   "unpkg": "dist/helper-js.js",
@@ -22,8 +23,11 @@
     "url": "https://github.com/phphe/helper-js.git"
   },
   "devDependencies": {
-    "rollup-helper": "^2.0.1"
+    "rollup-helper": "^2.0.4"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@babel/runtime": "^7.7.7",
+    "core-js": "^2.6.11"
+  },
   "license": "MIT"
 }
