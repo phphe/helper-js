@@ -8,6 +8,7 @@ const cjs = require('@rollup/plugin-commonjs')
 const replace = require('@rollup/plugin-replace')
 const node = require('@rollup/plugin-node-resolve')
 const json = require('@rollup/plugin-json')
+const {terser} = require('rollup-plugin-terser')
 const pkg = require('../package.json')
 const resolve = p => path.resolve(__dirname, '../', p)
 
@@ -23,14 +24,12 @@ const builds = {
     dest: resolve(`dist/${options.outputName}.cjs.js`),
     format: 'cjs',
     plugins: defaultPlugins(),
-    external: name => name.startsWith('core-js') || name.startsWith('@babel/runtime'),
   },
   'esm': {
     entry: options.input,
     dest: resolve(`dist/${options.outputName}.esm.js`),
     format: 'es',
     plugins: defaultPlugins(),
-    external: name => name.startsWith('core-js') || name.startsWith('@babel/runtime'),
   },
   'umd': {
     entry: options.input,
@@ -79,6 +78,10 @@ function genConfig (name) {
   }
   if (Object.keys(vars).length > 0) {
     config.plugins.push(replace(vars))
+  }
+  const isProd = /(min|prod)\.js$/.test(config.output.file)
+  if (isProd) {
+    config.plugins.push(terser())
   }
 
   Object.defineProperty(config, '_name', {

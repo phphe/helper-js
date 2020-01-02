@@ -2,7 +2,6 @@ const fs = require('fs')
 const path = require('path')
 const zlib = require('zlib')
 const rollup = require('rollup')
-const terser = require('terser')
 
 if (!fs.existsSync('dist')) {
   fs.mkdirSync('dist')
@@ -38,24 +37,10 @@ function build (builds) {
 function buildEntry (config) {
   const output = config.output
   const { file, banner } = output
-  const isProd = /(min|prod)\.js$/.test(file)
   return rollup.rollup(config)
     .then(bundle => bundle.generate(output))
     .then(({ output: [{ code }] }) => {
-      if (isProd) {
-        const minified = (banner ? banner + '\n' : '') + terser.minify(code, {
-          toplevel: true,
-          output: {
-            ascii_only: true
-          },
-          compress: {
-            pure_funcs: ['makeMap']
-          }
-        }).code
-        return write(file, minified, true)
-      } else {
-        return write(file, code)
-      }
+      return write(file, code)
     })
 }
 
