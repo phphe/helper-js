@@ -1,51 +1,62 @@
 /*!
- * helper-js v1.4.19
+ * helper-js v1.4.20
  * (c) phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
-import 'core-js/modules/es6.object.define-properties';
-import 'core-js/modules/es7.object.get-own-property-descriptors';
-import 'core-js/modules/es6.object.define-property';
+import 'core-js/modules/es.symbol';
+import 'core-js/modules/es.symbol.description';
+import 'core-js/modules/es.symbol.iterator';
+import 'core-js/modules/es.array.concat';
+import 'core-js/modules/es.array.filter';
+import 'core-js/modules/es.array.find';
+import 'core-js/modules/es.array.for-each';
+import 'core-js/modules/es.array.includes';
+import 'core-js/modules/es.array.index-of';
+import 'core-js/modules/es.array.iterator';
+import 'core-js/modules/es.array.join';
+import 'core-js/modules/es.array.map';
+import 'core-js/modules/es.array.reverse';
+import 'core-js/modules/es.array.slice';
+import 'core-js/modules/es.array.splice';
+import 'core-js/modules/es.date.to-string';
+import 'core-js/modules/es.function.name';
+import 'core-js/modules/es.map';
+import 'core-js/modules/es.number.constructor';
+import 'core-js/modules/es.number.is-integer';
+import 'core-js/modules/es.object.assign';
+import 'core-js/modules/es.object.define-properties';
+import 'core-js/modules/es.object.define-property';
+import 'core-js/modules/es.object.get-own-property-descriptor';
+import 'core-js/modules/es.object.get-own-property-descriptors';
+import 'core-js/modules/es.object.keys';
+import 'core-js/modules/es.object.to-string';
+import 'core-js/modules/es.parse-float';
+import 'core-js/modules/es.promise';
+import 'core-js/modules/es.regexp.constructor';
+import 'core-js/modules/es.regexp.exec';
+import 'core-js/modules/es.regexp.to-string';
+import 'core-js/modules/es.set';
+import 'core-js/modules/es.string.includes';
+import 'core-js/modules/es.string.iterator';
+import 'core-js/modules/es.string.match';
+import 'core-js/modules/es.string.replace';
+import 'core-js/modules/es.string.search';
+import 'core-js/modules/es.string.split';
+import 'core-js/modules/es.string.trim';
+import 'core-js/modules/web.dom-collections.for-each';
+import 'core-js/modules/web.dom-collections.iterator';
+import 'core-js/modules/web.timers';
 import _possibleConstructorReturn from '@babel/runtime/helpers/possibleConstructorReturn';
 import _assertThisInitialized from '@babel/runtime/helpers/assertThisInitialized';
 import _getPrototypeOf from '@babel/runtime/helpers/getPrototypeOf';
 import _get from '@babel/runtime/helpers/get';
 import _inherits from '@babel/runtime/helpers/inherits';
-import 'core-js/modules/es6.regexp.search';
 import _classCallCheck from '@babel/runtime/helpers/classCallCheck';
 import _createClass from '@babel/runtime/helpers/createClass';
-import 'core-js/modules/es6.array.find';
-import 'core-js/modules/es6.regexp.match';
 import _defineProperty from '@babel/runtime/helpers/defineProperty';
-import 'core-js/modules/es6.function.name';
-import 'core-js/modules/es6.promise';
-import 'core-js/modules/es7.array.includes';
-import 'core-js/modules/es6.string.includes';
 import _typeof from '@babel/runtime/helpers/typeof';
 import _regeneratorRuntime from '@babel/runtime/regenerator';
-import 'core-js/modules/es6.number.constructor';
-import 'core-js/modules/es6.number.is-integer';
-import 'core-js/modules/es6.object.assign';
-import 'core-js/modules/es6.array.filter';
-import 'core-js/modules/es6.set';
 import _toConsumableArray from '@babel/runtime/helpers/toConsumableArray';
-import 'core-js/modules/es6.array.for-each';
-import 'core-js/modules/es6.string.iterator';
-import 'core-js/modules/es6.map';
-import 'core-js/modules/es6.array.map';
-import 'core-js/modules/es7.symbol.async-iterator';
-import 'core-js/modules/es6.symbol';
-import 'core-js/modules/es6.array.index-of';
-import 'core-js/modules/es6.regexp.constructor';
-import 'core-js/modules/es6.string.trim';
-import 'core-js/modules/es6.regexp.split';
-import 'core-js/modules/es6.regexp.replace';
-import 'core-js/modules/web.dom.iterable';
-import 'core-js/modules/es6.array.iterator';
-import 'core-js/modules/es6.object.keys';
-import 'core-js/modules/es6.regexp.to-string';
-import 'core-js/modules/es6.date.to-string';
-import 'core-js/modules/es6.object.to-string';
 
 function createCommonjsModule(fn, module) {
 	return module = { exports: {} }, fn(module, module.exports), module.exports;

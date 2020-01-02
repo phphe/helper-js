@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.4.19
+ * helper-js v1.4.20
  * (c) phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -9,49 +9,60 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
-require('core-js/modules/es6.object.define-properties');
-require('core-js/modules/es7.object.get-own-property-descriptors');
-require('core-js/modules/es6.object.define-property');
+require('core-js/modules/es.symbol');
+require('core-js/modules/es.symbol.description');
+require('core-js/modules/es.symbol.iterator');
+require('core-js/modules/es.array.concat');
+require('core-js/modules/es.array.filter');
+require('core-js/modules/es.array.find');
+require('core-js/modules/es.array.for-each');
+require('core-js/modules/es.array.includes');
+require('core-js/modules/es.array.index-of');
+require('core-js/modules/es.array.iterator');
+require('core-js/modules/es.array.join');
+require('core-js/modules/es.array.map');
+require('core-js/modules/es.array.reverse');
+require('core-js/modules/es.array.slice');
+require('core-js/modules/es.array.splice');
+require('core-js/modules/es.date.to-string');
+require('core-js/modules/es.function.name');
+require('core-js/modules/es.map');
+require('core-js/modules/es.number.constructor');
+require('core-js/modules/es.number.is-integer');
+require('core-js/modules/es.object.assign');
+require('core-js/modules/es.object.define-properties');
+require('core-js/modules/es.object.define-property');
+require('core-js/modules/es.object.get-own-property-descriptor');
+require('core-js/modules/es.object.get-own-property-descriptors');
+require('core-js/modules/es.object.keys');
+require('core-js/modules/es.object.to-string');
+require('core-js/modules/es.parse-float');
+require('core-js/modules/es.promise');
+require('core-js/modules/es.regexp.constructor');
+require('core-js/modules/es.regexp.exec');
+require('core-js/modules/es.regexp.to-string');
+require('core-js/modules/es.set');
+require('core-js/modules/es.string.includes');
+require('core-js/modules/es.string.iterator');
+require('core-js/modules/es.string.match');
+require('core-js/modules/es.string.replace');
+require('core-js/modules/es.string.search');
+require('core-js/modules/es.string.split');
+require('core-js/modules/es.string.trim');
+require('core-js/modules/web.dom-collections.for-each');
+require('core-js/modules/web.dom-collections.iterator');
+require('core-js/modules/web.timers');
 var _possibleConstructorReturn = _interopDefault(require('@babel/runtime/helpers/possibleConstructorReturn'));
 var _assertThisInitialized = _interopDefault(require('@babel/runtime/helpers/assertThisInitialized'));
 var _getPrototypeOf = _interopDefault(require('@babel/runtime/helpers/getPrototypeOf'));
 var _get = _interopDefault(require('@babel/runtime/helpers/get'));
 var _inherits = _interopDefault(require('@babel/runtime/helpers/inherits'));
-require('core-js/modules/es6.regexp.search');
 var _classCallCheck = _interopDefault(require('@babel/runtime/helpers/classCallCheck'));
 var _createClass = _interopDefault(require('@babel/runtime/helpers/createClass'));
-require('core-js/modules/es6.array.find');
-require('core-js/modules/es6.regexp.match');
 var _defineProperty = _interopDefault(require('@babel/runtime/helpers/defineProperty'));
-require('core-js/modules/es6.function.name');
-require('core-js/modules/es6.promise');
-require('core-js/modules/es7.array.includes');
-require('core-js/modules/es6.string.includes');
 var _typeof = _interopDefault(require('@babel/runtime/helpers/typeof'));
 var _regeneratorRuntime = _interopDefault(require('@babel/runtime/regenerator'));
-require('core-js/modules/es6.number.constructor');
-require('core-js/modules/es6.number.is-integer');
-require('core-js/modules/es6.object.assign');
-require('core-js/modules/es6.array.filter');
-require('core-js/modules/es6.set');
 var _toConsumableArray = _interopDefault(require('@babel/runtime/helpers/toConsumableArray'));
-require('core-js/modules/es6.array.for-each');
-require('core-js/modules/es6.string.iterator');
-require('core-js/modules/es6.map');
-require('core-js/modules/es6.array.map');
-require('core-js/modules/es7.symbol.async-iterator');
-require('core-js/modules/es6.symbol');
-require('core-js/modules/es6.array.index-of');
-require('core-js/modules/es6.regexp.constructor');
-require('core-js/modules/es6.string.trim');
-require('core-js/modules/es6.regexp.split');
-require('core-js/modules/es6.regexp.replace');
-require('core-js/modules/web.dom.iterable');
-require('core-js/modules/es6.array.iterator');
-require('core-js/modules/es6.object.keys');
-require('core-js/modules/es6.regexp.to-string');
-require('core-js/modules/es6.date.to-string');
-require('core-js/modules/es6.object.to-string');
 
 function createCommonjsModule(fn, module) {
 	return module = { exports: {} }, fn(module, module.exports), module.exports;

@@ -1,4 +1,4 @@
-const {genConfig: genConfig0, camelCase, defaultPlugins} = require('rollup-helper')
+const {genConfig: genConfig0, camelCase, defaultPlugins, parseIntFloat} = require('rollup-helper')
 const path = require('path')
 const fs = require('fs')
 const pkg = require('../package.json')
@@ -37,6 +37,7 @@ const builds = {
     format: 'umd',
     plugins: defaultPlugins(),
     moduleName: options.moduleName,
+    external: parseIntFloat,
   },
   'umd-min': {
     entry: options.input,
@@ -45,6 +46,7 @@ const builds = {
     plugins: defaultPlugins(),
     moduleName: options.moduleName,
     sourcemap: true,
+    external: parseIntFloat,
   },
 }
 

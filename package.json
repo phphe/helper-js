@@ -1,6 +1,6 @@
 {
   "name": "helper-js",
-  "version": "1.4.19",
+  "version": "1.4.20",
   "description": "",
   "main": "dist/helper-js.cjs.js",
   "module": "dist/helper-js.esm.js",
@@ -23,11 +23,11 @@
     "url": "https://github.com/phphe/helper-js.git"
   },
   "devDependencies": {
-    "rollup-helper": "^2.0.9"
+    "rollup-helper": "^2.0.10"
   },
   "dependencies": {
-    "core-js": "^2.6.11",
-    "@babel/runtime": "^7.7.7"
+    "@babel/runtime": "^7.7.7",
+    "core-js": "^3.6.1"
   },
   "license": "MIT"
 }
