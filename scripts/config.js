@@ -10,7 +10,7 @@ const options = {
   moduleName: camelCase(pkg.name),
   external_cjs_esm: source => {
     const external = [/^core-js/, /^@babel\/runtime/]
-    if (external.find(re => re === source || re.test(source))) {
+    if (external.find(re => re === source || (re.test && re.test(source)))) {
       return true
     }
   },
