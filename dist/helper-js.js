@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.4.21-beta
+ * helper-js v1.4.21
  * (c) phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
