@@ -1,12 +1,9 @@
+const {
+  camelCase, defaultBanner, defaultPlugins, babelTargetEsmodules, belongsTo,
+  alias, replace, terser, // rollup plugins
+} = require('rollup-helper')
 const path = require('path')
 const fs = require('fs')
-const babel = require('rollup-plugin-babel')
-const alias = require('@rollup/plugin-alias')
-const cjs = require('@rollup/plugin-commonjs')
-const replace = require('@rollup/plugin-replace')
-const node = require('@rollup/plugin-node-resolve')
-const json = require('@rollup/plugin-json')
-const {terser} = require('rollup-plugin-terser')
 const pkg = require('../package.json')
 const resolve = p => path.resolve(__dirname, '../', p)
 
@@ -14,24 +11,6 @@ const options = {
   input: fs.existsSync(resolve('src/index.js')) ? resolve(`src/index.js`) : resolve(`src/${pkg.name}.js`),
   outputName: pkg.name,
   moduleName: camelCase(pkg.name),
-  external_cjs_esm: source => {
-    const external = [/^core-js/, /^@babel\/runtime/, ...Object.keys(pkg.dependencies)]
-    if (external.find(re => re === source || (re.test && re.test(source)))) {
-      return true
-    }
-  },
-}
-
-const babelTargetEsmodules = {
-  babelrc: false,
-  presets: [
-    ['@babel/preset-env', {
-      useBuiltIns: false,
-      "targets": {
-        "esmodules": true,
-      },
-    }]
-  ],
 }
 
 const builds = {
@@ -40,14 +19,14 @@ const builds = {
     dest: resolve(`dist/${options.outputName}.cjs.js`),
     format: 'cjs',
     plugins: defaultPlugins({babel: babelTargetEsmodules}),
-    external: options.external_cjs_esm,
+    external: source => belongsTo(source, Object.keys(pkg.dependencies)),
   },
   'esm': {
     entry: options.input,
     dest: resolve(`dist/${options.outputName}.esm.js`),
     format: 'es',
     plugins: defaultPlugins({babel: babelTargetEsmodules}),
-    external: options.external_cjs_esm,
+    external: source => belongsTo(source, Object.keys(pkg.dependencies)),
   },
   'umd': {
     entry: options.input,
@@ -79,7 +58,7 @@ function genConfig (name) {
     output: {
       file: opts.dest,
       format: opts.format,
-      banner: opts.banner || defaultBanner(),
+      banner: opts.banner || defaultBanner(pkg),
       name: opts.moduleName,
       sourcemap: opts.sourcemap,
     },
@@ -117,36 +96,4 @@ if (process.env.TARGET) {
 } else {
   exports.getBuild = genConfig
   exports.getAllBuilds = () => Object.keys(builds).map(genConfig)
-}
-function studlyCase (str) {
-  return str && (str[0].toUpperCase() + str.substr(1))
-}
-function camelCase (str) {
-  const temp = str.toString().split(/[-_]/)
-  for (let i = 1; i < temp.length; i++) {
-    temp[i] = studlyCase(temp[i])
-  }
-  return temp.join('')
-}
-
-function defaultBanner() {
-  return `
-/*!
- * ${pkg.name} v${pkg.version}
- * (c) ${pkg.author}
- * Released under the ${pkg.license} License.
- */`.trim()
-}
-
-function defaultPlugins(opt = {}) {
-  return [
-    babel({
-      runtimeHelpers: true,
-      exclude: ['node_modules/**'],
-      ...opt.babel
-    }),
-    node({...opt.node}),
-    cjs({...opt.cjs}),
-    json({...opt.json}),
-  ];
 }
