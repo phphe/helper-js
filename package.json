@@ -1,6 +1,6 @@
 {
   "name": "helper-js",
-  "version": "1.4.20",
+  "version": "1.4.21-beta",
   "description": "",
   "main": "dist/helper-js.cjs.js",
   "module": "dist/helper-js.esm.js",
@@ -26,8 +26,7 @@
     "rollup-helper": "^2.0.10"
   },
   "dependencies": {
-    "@babel/runtime": "^7.7.7",
-    "core-js": "^3.6.1"
+    "@babel/runtime": "^7.7.7"
   },
   "license": "MIT"
 }
