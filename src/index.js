@@ -570,7 +570,7 @@ export function pairRows(rows1, rows2, key1, key2) {
 // 深度优先遍历
 // Depth-First-Search
 export function depthFirstSearch(obj, handler, childrenKey = 'children', reverse) {
-  const rootChildren = hp.isArray(obj) ? obj : [obj]
+  const rootChildren = isArray(obj) ? obj : [obj]
   //
   const StopException = () => {}
   const func = (children, parent) => {
