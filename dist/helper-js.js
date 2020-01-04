@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.4.21
+ * helper-js v1.4.23
  * (c) phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -1822,7 +1822,7 @@
 	function depthFirstSearch(obj, handler) {
 	  var childrenKey = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'children';
 	  var reverse = arguments.length > 3 ? arguments[3] : undefined;
-	  var rootChildren = hp.isArray(obj) ? obj : [obj]; //
+	  var rootChildren = isArray(obj) ? obj : [obj]; //
 
 	  var StopException = function StopException() {};
 
