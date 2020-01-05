@@ -348,7 +348,7 @@ export function forAll(val, handler, reverse) {
   }
 }
 // loop for Array, Object, NodeList, String
-export function* iterateALL(val, opt = {}) {
+export function* iterateAll(val, opt = {}) {
   // opt: {reverse, exclude}
   if (!opt.reverse) {
     if (val.length != null) {
@@ -390,6 +390,8 @@ export function* iterateALL(val, opt = {}) {
     }
   }
 }
+// Deprecated in next version
+export const iterateALL = iterateAll
 // source: http://stackoverflow.com/questions/8817394/javascript-get-deep-value-from-object-by-passing-path-to-it-as-string
 export function objectGet(obj, path, throwError) {
   const paths = isArray(path) ? path : path.split('.')
@@ -769,7 +771,7 @@ export function joinFunctionsByResult(funcs) {
 // must pass arguments to `next` manually
 export function joinFunctionsByNext(funcs) {
   let next = () => {}
-  for (const {value: func} of iterateALL(funcs, {reverse: true})) {
+  for (const {value: func} of iterateAll(funcs, {reverse: true})) {
     const currentNext = next
     next = wrapFuncWithNext(func, currentNext)
   }
@@ -1172,7 +1174,7 @@ export function getImageSizeByUrl(url) {
 }
 
 export function findNodeList(list, callback, opt = {}) {
-  const iterator = iterateALL(list, {
+  const iterator = iterateAll(list, {
     reverse: opt.reverse
   })
   for (const {value, index} of iterator) {

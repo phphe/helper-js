@@ -66,8 +66,9 @@ helloWorldNice => Hello World Nice
 ###### objectExcept   (obj, keys) // return new object
 ###### forAll(val, handler) // loop array, object or integer, return false in handler can break loop
 handler(item, index/key)
-###### * iterateALL(val, opt = {}) // loop for Array, Object, NodeList, String
+###### * iterateAll(val, opt = {}) // loop for Array, Object, NodeList, String
   * opt {reverse}
+###### iterateALL = iterateAll // Deprecated
 
 ###### objectGet   (obj, path, throwError = false) // get by dot path
 ({a:{b:1}}, 'a.b') => 1
