@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.4.25
+ * helper-js v1.4.26
  * (c) phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -700,7 +700,7 @@ function depthFirstSearch(obj, handler) {
   var reverse = arguments.length > 3 ? arguments[3] : undefined;
   var rootChildren = isArray(obj) ? obj : [obj]; //
 
-  var StopException = () => {};
+  class StopException {}
 
   var func = (children, parent, parentPath) => {
     if (reverse) {
@@ -727,7 +727,7 @@ function depthFirstSearch(obj, handler) {
       }
 
       if (item[childrenKey] != null) {
-        func(item[childrenKey], item);
+        func(item[childrenKey], item, path);
       }
     }
   };
@@ -750,7 +750,14 @@ class TreeData {
 
   get rootChildren() {
     var {
-      childrenKey,
+      childrenKey
+    } = this;
+
+    if (!this.data) {
+      this.data = [];
+    }
+
+    var {
       data
     } = this;
     return isArray(data) ? data : data[childrenKey];
@@ -826,16 +833,20 @@ class TreeData {
   }
 
   setPathNode(path, node) {
-    var {
-      childrenKey,
-      rootChildren
-    } = this;
-    var {
-      parent,
-      index
-    } = this.getNodeIndexAndParent(path);
-    var parentChildren = path.length === 1 ? rootChildren : parent[childrenKey];
-    parentChildren[index] = node;
+    if (path == null || path.length === 0) {
+      this.data = node;
+    } else {
+      var {
+        childrenKey,
+        rootChildren
+      } = this;
+      var {
+        parent,
+        index
+      } = this.getNodeIndexAndParent(path);
+      var parentChildren = path.length === 1 ? rootChildren : parent[childrenKey];
+      parentChildren[index] = node;
+    }
   }
 
   removeNode(path) {
@@ -870,8 +881,7 @@ class TreeData {
     var {
       childrenKey
     } = this;
-    var newData = [];
-    var td = new TreeData(newData);
+    var td = new TreeData();
     this.walk((node, index, parent, path) => {
       var newNode = Object.assign({}, node);
 
@@ -890,7 +900,7 @@ class TreeData {
 
       td.setPathNode(path, newNode);
     });
-    return newData;
+    return td.data;
   }
 
 } // function helper | method helper ============================

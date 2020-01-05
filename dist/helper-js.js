@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.4.25
+ * helper-js v1.4.26
  * (c) phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -144,14 +144,6 @@
 
 	var defineProperty = _defineProperty;
 
-	function _classCallCheck(instance, Constructor) {
-	  if (!(instance instanceof Constructor)) {
-	    throw new TypeError("Cannot call a class as a function");
-	  }
-	}
-
-	var classCallCheck = _classCallCheck;
-
 	function _defineProperties(target, props) {
 	  for (var i = 0; i < props.length; i++) {
 	    var descriptor = props[i];
@@ -169,6 +161,14 @@
 	}
 
 	var createClass = _createClass;
+
+	function _classCallCheck(instance, Constructor) {
+	  if (!(instance instanceof Constructor)) {
+	    throw new TypeError("Cannot call a class as a function");
+	  }
+	}
+
+	var classCallCheck = _classCallCheck;
 
 	var runtime_1 = createCommonjsModule(function (module) {
 	/**
@@ -1827,7 +1827,9 @@
 	  var reverse = arguments.length > 3 ? arguments[3] : undefined;
 	  var rootChildren = isArray(obj) ? obj : [obj]; //
 
-	  var StopException = function StopException() {};
+	  var StopException = function StopException() {
+	    classCallCheck(this, StopException);
+	  };
 
 	  var func = function func(children, parent, parentPath) {
 	    if (reverse) {
@@ -1854,7 +1856,7 @@
 	      }
 
 	      if (item[childrenKey] != null) {
-	        func(item[childrenKey], item);
+	        func(item[childrenKey], item, path);
 	      }
 	    }
 	  };
@@ -2114,15 +2116,19 @@
 	  }, {
 	    key: "setPathNode",
 	    value: function setPathNode(path, node) {
-	      var childrenKey = this.childrenKey,
-	          rootChildren = this.rootChildren;
+	      if (path == null || path.length === 0) {
+	        this.data = node;
+	      } else {
+	        var childrenKey = this.childrenKey,
+	            rootChildren = this.rootChildren;
 
-	      var _this$getNodeIndexAnd = this.getNodeIndexAndParent(path),
-	          parent = _this$getNodeIndexAnd.parent,
-	          index = _this$getNodeIndexAnd.index;
+	        var _this$getNodeIndexAnd = this.getNodeIndexAndParent(path),
+	            parent = _this$getNodeIndexAnd.parent,
+	            index = _this$getNodeIndexAnd.index;
 
-	      var parentChildren = path.length === 1 ? rootChildren : parent[childrenKey];
-	      parentChildren[index] = node;
+	        var parentChildren = path.length === 1 ? rootChildren : parent[childrenKey];
+	        parentChildren[index] = node;
+	      }
 	    }
 	  }, {
 	    key: "removeNode",
@@ -2155,8 +2161,7 @@
 	      // opt.afterNodeCreated(newNode, {oldNode: node, index, parent, path})
 	      // todo change args in next version
 	      var childrenKey = this.childrenKey;
-	      var newData = [];
-	      var td = new TreeData(newData);
+	      var td = new TreeData();
 	      this.walk(function (node, index, parent, path) {
 	        var newNode = Object.assign({}, node);
 
@@ -2175,13 +2180,18 @@
 
 	        td.setPathNode(path, newNode);
 	      });
-	      return newData;
+	      return td.data;
 	    }
 	  }, {
 	    key: "rootChildren",
 	    get: function get() {
-	      var childrenKey = this.childrenKey,
-	          data = this.data;
+	      var childrenKey = this.childrenKey;
+
+	      if (!this.data) {
+	        this.data = [];
+	      }
+
+	      var data = this.data;
 	      return isArray(data) ? data : data[childrenKey];
 	    }
 	  }]);
