@@ -1,6 +1,6 @@
 {
   "name": "helper-js",
-  "version": "1.4.25",
+  "version": "1.4.26",
   "description": "",
   "main": "dist/helper-js.cjs.js",
   "module": "dist/helper-js.esm.js",
@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "build": "node scripts/build.js",
-    "dev": "rollup -w -c scripts/config.js --environment TARGET:umd",
+    "dev": "rollup -w -c scripts/config.js --environment TARGET:cjs",
     "build:esm": "rollup -c scripts/config.js --environment TARGET:esm",
     "dev:esm": "rollup -w -c scripts/config.js --environment TARGET:esm"
   },

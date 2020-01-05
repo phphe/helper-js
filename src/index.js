@@ -575,7 +575,7 @@ export function pairRows(rows1, rows2, key1, key2) {
 export function depthFirstSearch(obj, handler, childrenKey = 'children', reverse) {
   const rootChildren = isArray(obj) ? obj : [obj]
   //
-  const StopException = () => {}
+  class StopException{}
   const func = (children, parent, parentPath) => {
     if (reverse) {
       children = children.slice()
@@ -597,7 +597,7 @@ export function depthFirstSearch(obj, handler, childrenKey = 'children', reverse
         break
       }
       if (item[childrenKey] != null) {
-        func(item[childrenKey], item)
+        func(item[childrenKey], item, path)
       }
     }
   }
@@ -619,7 +619,11 @@ export class TreeData {
     this.data = data
   }
   get rootChildren() {
-    const {childrenKey, data} = this
+    const {childrenKey} = this
+    if (!this.data) {
+      this.data = []
+    }
+    const {data} = this
     return isArray(data) ? data : data[childrenKey]
   }
   * iteratePath(path, opt = {}) {
@@ -663,10 +667,14 @@ export class TreeData {
     return this.getNodeIndexAndParent(path).parent
   }
   setPathNode(path, node) {
-    const {childrenKey, rootChildren} = this
-    const {parent, index} = this.getNodeIndexAndParent(path)
-    const parentChildren = path.length === 1 ? rootChildren : parent[childrenKey]
-    parentChildren[index] = node
+    if (path == null || path.length === 0) {
+      this.data = node
+    } else {
+      const {childrenKey, rootChildren} = this
+      const {parent, index} = this.getNodeIndexAndParent(path)
+      const parentChildren = path.length === 1 ? rootChildren : parent[childrenKey]
+      parentChildren[index] = node
+    }
   }
   removeNode(path) {
     const {childrenKey, rootChildren} = this
@@ -685,8 +693,7 @@ export class TreeData {
     // opt.afterNodeCreated(newNode, {oldNode: node, index, parent, path})
     // todo change args in next version
     const {childrenKey} = this
-    const newData = [];
-    const td = new TreeData(newData)
+    const td = new TreeData()
     this.walk((node, index, parent, path) => {
       const newNode = Object.assign({}, node)
       if (newNode[childrenKey]) {
@@ -697,7 +704,7 @@ export class TreeData {
       }
       td.setPathNode(path, newNode)
     })
-    return newData
+    return td.data
   }
 }
 
