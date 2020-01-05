@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.4.23
+ * helper-js v1.4.24
  * (c) phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -392,7 +392,7 @@ function forAll(val, handler, reverse) {
   }
 } // loop for Array, Object, NodeList, String
 
-function* iterateALL(val) {
+function* iterateAll(val) {
   var opt = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
   // opt: {reverse, exclude}
@@ -452,7 +452,9 @@ function* iterateALL(val) {
       throw 'Unsupported type';
     }
   }
-} // source: http://stackoverflow.com/questions/8817394/javascript-get-deep-value-from-object-by-passing-path-to-it-as-string
+} // Deprecated in next version
+
+var iterateALL = iterateAll; // source: http://stackoverflow.com/questions/8817394/javascript-get-deep-value-from-object-by-passing-path-to-it-as-string
 
 function objectGet(obj, path, throwError) {
   var paths = isArray(path) ? path : path.split('.');
@@ -966,7 +968,7 @@ function joinFunctionsByNext(funcs) {
 
   for (var {
     value: func
-  } of iterateALL(funcs, {
+  } of iterateAll(funcs, {
     reverse: true
   })) {
     var currentNext = next;
@@ -1445,7 +1447,7 @@ function getImageSizeByUrl(url) {
 }
 function findNodeList(list, callback) {
   var opt = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-  var iterator = iterateALL(list, {
+  var iterator = iterateAll(list, {
     reverse: opt.reverse
   });
 
@@ -2389,6 +2391,7 @@ exports.isPromise = isPromise;
 exports.isString = isString;
 exports.isset = isset;
 exports.iterateALL = iterateALL;
+exports.iterateAll = iterateAll;
 exports.joinFunctionsByNext = joinFunctionsByNext;
 exports.joinFunctionsByResult = joinFunctionsByResult;
 exports.joinMethods = joinMethods;

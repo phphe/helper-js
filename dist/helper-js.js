@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.4.23
+ * helper-js v1.4.24
  * (c) phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -936,7 +936,7 @@
 
 	var _marked =
 	/*#__PURE__*/
-	regenerator.mark(iterateALL);
+	regenerator.mark(iterateAll);
 
 	// local store
 	var store = {}; // get global
@@ -1342,7 +1342,7 @@
 	  }
 	} // loop for Array, Object, NodeList, String
 
-	function iterateALL(val) {
+	function iterateAll(val) {
 	  var opt,
 	      i,
 	      info,
@@ -1359,7 +1359,7 @@
 	      _info3,
 	      _args = arguments;
 
-	  return regenerator.wrap(function iterateALL$(_context) {
+	  return regenerator.wrap(function iterateAll$(_context) {
 	    while (1) {
 	      switch (_context.prev = _context.next) {
 	        case 0:
@@ -1533,7 +1533,9 @@
 	      }
 	    }
 	  }, _marked);
-	} // source: http://stackoverflow.com/questions/8817394/javascript-get-deep-value-from-object-by-passing-path-to-it-as-string
+	} // Deprecated in next version
+
+	var iterateALL = iterateAll; // source: http://stackoverflow.com/questions/8817394/javascript-get-deep-value-from-object-by-passing-path-to-it-as-string
 
 	function objectGet(obj, path, throwError) {
 	  var paths = isArray(path) ? path : path.split('.');
@@ -2136,7 +2138,7 @@
 	  var _iteratorError6 = undefined;
 
 	  try {
-	    for (var _iterator6 = iterateALL(funcs, {
+	    for (var _iterator6 = iterateAll(funcs, {
 	      reverse: true
 	    })[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
 	      var func = _step6.value.value;
@@ -2711,7 +2713,7 @@
 	}
 	function findNodeList(list, callback) {
 	  var opt = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-	  var iterator = iterateALL(list, {
+	  var iterator = iterateAll(list, {
 	    reverse: opt.reverse
 	  });
 	  var _iteratorNormalCompletion11 = true;
@@ -3768,6 +3770,7 @@
 	exports.isString = isString;
 	exports.isset = isset;
 	exports.iterateALL = iterateALL;
+	exports.iterateAll = iterateAll;
 	exports.joinFunctionsByNext = joinFunctionsByNext;
 	exports.joinFunctionsByResult = joinFunctionsByResult;
 	exports.joinMethods = joinMethods;
