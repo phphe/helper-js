@@ -571,11 +571,12 @@ export function pairRows(rows1, rows2, key1, key2) {
 }
 // 深度优先遍历
 // Depth-First-Search
+// todo change args in next version
 export function depthFirstSearch(obj, handler, childrenKey = 'children', reverse) {
   const rootChildren = isArray(obj) ? obj : [obj]
   //
   const StopException = () => {}
-  const func = (children, parent) => {
+  const func = (children, parent, parentPath) => {
     if (reverse) {
       children = children.slice()
       children.reverse()
@@ -583,7 +584,10 @@ export function depthFirstSearch(obj, handler, childrenKey = 'children', reverse
     const len = children.length
     for (let i = 0; i < len; i++) {
       const item = children[i]
-      const r = handler(item, i, parent)
+      const index = reverse ? len - i - 1 : i
+      const path = parentPath ? [...parentPath, index] : []
+      // todo change args in next version
+      const r = handler(item, index, parent, path)
       if (r === false) {
         // stop
         throw new StopException()
@@ -598,7 +602,7 @@ export function depthFirstSearch(obj, handler, childrenKey = 'children', reverse
     }
   }
   try {
-    func(rootChildren)
+    func(rootChildren, null, isArray(obj) ? [] : null)
   } catch (e) {
     if (e instanceof StopException) {
      // stop
@@ -608,15 +612,87 @@ export function depthFirstSearch(obj, handler, childrenKey = 'children', reverse
   }
 }
 export const walkTreeData = depthFirstSearch
-// rootData: Array
-export function getNodeByPathFromTreeData(indexes, rootData, childrenKey='children') {
-  let cur
-  let children = rootData
-  for (const index of indexes) {
-    cur = children[index]
-    children = cur[childrenKey]
+export class TreeData {
+  childrenKey = 'children';
+  // data = null;
+  constructor(data) {
+    this.data = data
   }
-  return cur
+  get rootChildren() {
+    const {childrenKey, data} = this
+    return isArray(data) ? data : data[childrenKey]
+  }
+  * iteratePath(path, opt = {}) {
+    const {rootChildren} = this
+    if (!opt.reverse) {
+      let prevPath = []
+      let prevNode
+      let prevChildren = rootChildren
+      for (const index of path) {
+        const currentPath = [...prevPath, index]
+        const currentNode = prevChildren[index]
+        yield {path: currentPath, node: currentNode}
+        prevPath = currentPath
+        prevNode = currentNode
+        prevChildren = currentNode[childrenKey]
+      }
+    } else {
+      const allReversedNodes = [...iterateTreeDataPath(rootChildren, path, {...opt, reverse: false})];
+      allReversedNodes.reverse()
+      let currentPath = path.slice()
+      for (const node of allReversedNodes) {
+        yield {path: currentPath, node: node}
+        currentPath = arrayWithoutEnd(currentPath, 1)
+      }
+    }
+  }
+  getNode(path) {
+    return [...this.iteratePath(path, {reverse: true})][0]
+  }
+  getNodeIndexAndParent(path) {
+    const parentPath = path.slice()
+    const index = parentPath.pop()
+    return {parent: this.getNode(parentPath), index, parentPath}
+  }
+  getNodeParent(path) {
+    return this.getNodeIndexAndParent(path).parent
+  }
+  setPathNode(path, node) {
+    const {childrenKey, rootChildren} = this
+    const {parent, index} = this.getNodeIndexAndParent(path)
+    const parentChildren = path.length === 1 ? rootChildren : parent[childrenKey]
+    parentChildren[index] = node
+  }
+  removeNode(path) {
+    const {childrenKey, rootChildren} = this
+    const {parent, index} = this.getNodeIndexAndParent(path)
+    const parentChildren = path.length === 1 ? rootChildren : parent[childrenKey]
+    const node = parentChildren[index]
+    parentChildren.splice(index, 1)
+    return node
+  }
+  walk(handler, opt={}) {
+    const {childrenKey, data} = this
+    // todo change args in next version
+    return walkTreeData(data, handler, childrenKey, opt.reverse)
+  }
+  clone(opt={}) {
+    // opt.afterNodeCreated(newNode, {oldNode: node, index, parent, path})
+    // todo change args in next version
+    const newData = [];
+    const td = new TreeData(newData)
+    this.walk((node, index, parent, path) => {
+      const newNode = Object.assign({}, node)
+      if (newNode[childrenKey]) {
+        newNode[childrenKey] = []
+      }
+      if (opt.afterNodeCreated) {
+        opt.afterNodeCreated(newNode, {oldNode: node, index, parent, path})
+      }
+      td.setPathNode(path, newNode)
+    })
+    return newData
+  }
 }
 
 // function helper | method helper ============================

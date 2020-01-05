@@ -103,11 +103,30 @@ eg: mapObjects([{id: 1}, {id:2}], (item, i) => item.id + 100 ) -> {'101':{id:1},
 ###### pairRows(rows1, rows2, key1, key2 = key1)
 ###### depthFirstSearch(obj, handler, childrenKey = 'children', reverse) // 深度优先遍历; Depth-First-Search
 ```js
-handler(node, index, parent)
+handler(node, index, parent, path)
+  // path: [0, 1]
   return 'skip children', 'skip siblings', false // retrun false to stop
 ```
 ###### walkTreeData = depthFirstSearch
-###### getNodeByPathFromTreeData(indexes, rootData, childrenKey='children') // rootData is Array
+###### class TreeData
+```js
+childrenKey = 'children'
+data
+constructor(data)
+get rootChildren()
+* iteratePath(path, opt = {})
+  opt.reverse // bool
+getNode(path)
+getNodeIndexAndParent(path)
+  return {parent, parentPath, index}
+getNodeParent(path)
+setPathNode(path, node)
+removeNode(path)
+walk(handler, opt={})
+  handler(node, index, parent, path)
+clone(opt={})
+  opt.afterNodeCreated(newNode, {oldNode: node, index, parent, path})
+```
 ###### resolveValueOrGettter(valueOrGetter, args = []) // return first arg directly if is not function, else return function result
 ###### executeWithCount (func, context = null) // wrap function, the first arg of func is excuted count
 ###### watchChange   (getVal, handler) // wrap getter function, when use getter to get value, it will check value if changed
