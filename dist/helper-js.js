@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.4.24
+ * helper-js v1.4.25
  * (c) phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -127,6 +127,23 @@
 
 	var inherits = _inherits;
 
+	function _defineProperty(obj, key, value) {
+	  if (key in obj) {
+	    Object.defineProperty(obj, key, {
+	      value: value,
+	      enumerable: true,
+	      configurable: true,
+	      writable: true
+	    });
+	  } else {
+	    obj[key] = value;
+	  }
+
+	  return obj;
+	}
+
+	var defineProperty = _defineProperty;
+
 	function _classCallCheck(instance, Constructor) {
 	  if (!(instance instanceof Constructor)) {
 	    throw new TypeError("Cannot call a class as a function");
@@ -152,23 +169,6 @@
 	}
 
 	var createClass = _createClass;
-
-	function _defineProperty(obj, key, value) {
-	  if (key in obj) {
-	    Object.defineProperty(obj, key, {
-	      value: value,
-	      enumerable: true,
-	      configurable: true,
-	      writable: true
-	    });
-	  } else {
-	    obj[key] = value;
-	  }
-
-	  return obj;
-	}
-
-	var defineProperty = _defineProperty;
 
 	var runtime_1 = createCommonjsModule(function (module) {
 	/**
@@ -1820,6 +1820,7 @@
 	  });
 	} // 深度优先遍历
 	// Depth-First-Search
+	// todo change args in next version
 
 	function depthFirstSearch(obj, handler) {
 	  var childrenKey = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'children';
@@ -1828,7 +1829,7 @@
 
 	  var StopException = function StopException() {};
 
-	  var func = function func(children, parent) {
+	  var func = function func(children, parent, parentPath) {
 	    if (reverse) {
 	      children = children.slice();
 	      children.reverse();
@@ -1838,7 +1839,10 @@
 
 	    for (var i = 0; i < len; i++) {
 	      var item = children[i];
-	      var r = handler(item, i, parent);
+	      var index = reverse ? len - i - 1 : i;
+	      var path = parentPath ? [].concat(toConsumableArray(parentPath), [index]) : []; // todo change args in next version
+
+	      var r = handler(item, index, parent, path);
 
 	      if (r === false) {
 	        // stop
@@ -1856,46 +1860,334 @@
 	  };
 
 	  try {
-	    func(rootChildren);
+	    func(rootChildren, null, isArray(obj) ? [] : null);
 	  } catch (e) {
 	    if (e instanceof StopException) ; else {
 	      throw e;
 	    }
 	  }
 	}
-	var walkTreeData = depthFirstSearch; // rootData: Array
+	var walkTreeData = depthFirstSearch;
+	var TreeData =
+	/*#__PURE__*/
+	function () {
+	  // data = null;
+	  function TreeData(data) {
+	    classCallCheck(this, TreeData);
 
-	function getNodeByPathFromTreeData(indexes, rootData) {
-	  var childrenKey = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'children';
-	  var cur;
-	  var children = rootData;
-	  var _iteratorNormalCompletion4 = true;
-	  var _didIteratorError4 = false;
-	  var _iteratorError4 = undefined;
-
-	  try {
-	    for (var _iterator4 = indexes[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
-	      var index = _step4.value;
-	      cur = children[index];
-	      children = cur[childrenKey];
-	    }
-	  } catch (err) {
-	    _didIteratorError4 = true;
-	    _iteratorError4 = err;
-	  } finally {
-	    try {
-	      if (!_iteratorNormalCompletion4 && _iterator4["return"] != null) {
-	        _iterator4["return"]();
-	      }
-	    } finally {
-	      if (_didIteratorError4) {
-	        throw _iteratorError4;
-	      }
-	    }
+	    this.childrenKey = 'children';
+	    this.data = data;
 	  }
 
-	  return cur;
-	} // function helper | method helper ============================
+	  createClass(TreeData, [{
+	    key: "iteratePath",
+	    value:
+	    /*#__PURE__*/
+	    regenerator.mark(function iteratePath(path) {
+	      var opt,
+	          childrenKey,
+	          rootChildren,
+	          prevPath,
+	          prevChildren,
+	          _iteratorNormalCompletion4,
+	          _didIteratorError4,
+	          _iteratorError4,
+	          _iterator4,
+	          _step4,
+	          index,
+	          currentPath,
+	          currentNode,
+	          list,
+	          _iteratorNormalCompletion5,
+	          _didIteratorError5,
+	          _iteratorError5,
+	          _iterator5,
+	          _step5,
+	          _step5$value,
+	          _path,
+	          node,
+	          _args2 = arguments;
+
+	      return regenerator.wrap(function iteratePath$(_context2) {
+	        while (1) {
+	          switch (_context2.prev = _context2.next) {
+	            case 0:
+	              opt = _args2.length > 1 && _args2[1] !== undefined ? _args2[1] : {};
+	              childrenKey = this.childrenKey, rootChildren = this.rootChildren;
+
+	              if (opt.reverse) {
+	                _context2.next = 38;
+	                break;
+	              }
+
+	              prevPath = [];
+	              prevChildren = rootChildren;
+	              _iteratorNormalCompletion4 = true;
+	              _didIteratorError4 = false;
+	              _iteratorError4 = undefined;
+	              _context2.prev = 8;
+	              _iterator4 = path[Symbol.iterator]();
+
+	            case 10:
+	              if (_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done) {
+	                _context2.next = 22;
+	                break;
+	              }
+
+	              index = _step4.value;
+	              currentPath = [].concat(toConsumableArray(prevPath), [index]);
+	              currentNode = prevChildren[index];
+	              _context2.next = 16;
+	              return {
+	                path: currentPath,
+	                node: currentNode
+	              };
+
+	            case 16:
+	              prevPath = currentPath;
+	              prevChildren = currentNode[childrenKey];
+
+	            case 19:
+	              _iteratorNormalCompletion4 = true;
+	              _context2.next = 10;
+	              break;
+
+	            case 22:
+	              _context2.next = 28;
+	              break;
+
+	            case 24:
+	              _context2.prev = 24;
+	              _context2.t0 = _context2["catch"](8);
+	              _didIteratorError4 = true;
+	              _iteratorError4 = _context2.t0;
+
+	            case 28:
+	              _context2.prev = 28;
+	              _context2.prev = 29;
+
+	              if (!_iteratorNormalCompletion4 && _iterator4["return"] != null) {
+	                _iterator4["return"]();
+	              }
+
+	            case 31:
+	              _context2.prev = 31;
+
+	              if (!_didIteratorError4) {
+	                _context2.next = 34;
+	                break;
+	              }
+
+	              throw _iteratorError4;
+
+	            case 34:
+	              return _context2.finish(31);
+
+	            case 35:
+	              return _context2.finish(28);
+
+	            case 36:
+	              _context2.next = 66;
+	              break;
+
+	            case 38:
+	              list = toConsumableArray(this.iteratePath(path, _objectSpread({}, opt, {
+	                reverse: false
+	              })));
+	              list.reverse();
+	              _iteratorNormalCompletion5 = true;
+	              _didIteratorError5 = false;
+	              _iteratorError5 = undefined;
+	              _context2.prev = 43;
+	              _iterator5 = list[Symbol.iterator]();
+
+	            case 45:
+	              if (_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done) {
+	                _context2.next = 52;
+	                break;
+	              }
+
+	              _step5$value = _step5.value, _path = _step5$value.path, node = _step5$value.node;
+	              _context2.next = 49;
+	              return {
+	                path: _path,
+	                node: node
+	              };
+
+	            case 49:
+	              _iteratorNormalCompletion5 = true;
+	              _context2.next = 45;
+	              break;
+
+	            case 52:
+	              _context2.next = 58;
+	              break;
+
+	            case 54:
+	              _context2.prev = 54;
+	              _context2.t1 = _context2["catch"](43);
+	              _didIteratorError5 = true;
+	              _iteratorError5 = _context2.t1;
+
+	            case 58:
+	              _context2.prev = 58;
+	              _context2.prev = 59;
+
+	              if (!_iteratorNormalCompletion5 && _iterator5["return"] != null) {
+	                _iterator5["return"]();
+	              }
+
+	            case 61:
+	              _context2.prev = 61;
+
+	              if (!_didIteratorError5) {
+	                _context2.next = 64;
+	                break;
+	              }
+
+	              throw _iteratorError5;
+
+	            case 64:
+	              return _context2.finish(61);
+
+	            case 65:
+	              return _context2.finish(58);
+
+	            case 66:
+	            case "end":
+	              return _context2.stop();
+	          }
+	        }
+	      }, iteratePath, this, [[8, 24, 28, 36], [29,, 31, 35], [43, 54, 58, 66], [59,, 61, 65]]);
+	    })
+	  }, {
+	    key: "getAllNodes",
+	    value: function getAllNodes(path) {
+	      var all = [];
+	      var _iteratorNormalCompletion6 = true;
+	      var _didIteratorError6 = false;
+	      var _iteratorError6 = undefined;
+
+	      try {
+	        for (var _iterator6 = this.iteratePath(path)[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
+	          var node = _step6.value.node;
+	          all.push(node);
+	        }
+	      } catch (err) {
+	        _didIteratorError6 = true;
+	        _iteratorError6 = err;
+	      } finally {
+	        try {
+	          if (!_iteratorNormalCompletion6 && _iterator6["return"] != null) {
+	            _iterator6["return"]();
+	          }
+	        } finally {
+	          if (_didIteratorError6) {
+	            throw _iteratorError6;
+	          }
+	        }
+	      }
+
+	      return all;
+	    }
+	  }, {
+	    key: "getNode",
+	    value: function getNode(path) {
+	      return arrayLast(this.getAllNodes(path));
+	    }
+	  }, {
+	    key: "getNodeIndexAndParent",
+	    value: function getNodeIndexAndParent(path) {
+	      var parentPath = path.slice();
+	      var index = parentPath.pop();
+	      return {
+	        parent: this.getNode(parentPath),
+	        index: index,
+	        parentPath: parentPath
+	      };
+	    }
+	  }, {
+	    key: "getNodeParent",
+	    value: function getNodeParent(path) {
+	      return this.getNodeIndexAndParent(path).parent;
+	    }
+	  }, {
+	    key: "setPathNode",
+	    value: function setPathNode(path, node) {
+	      var childrenKey = this.childrenKey,
+	          rootChildren = this.rootChildren;
+
+	      var _this$getNodeIndexAnd = this.getNodeIndexAndParent(path),
+	          parent = _this$getNodeIndexAnd.parent,
+	          index = _this$getNodeIndexAnd.index;
+
+	      var parentChildren = path.length === 1 ? rootChildren : parent[childrenKey];
+	      parentChildren[index] = node;
+	    }
+	  }, {
+	    key: "removeNode",
+	    value: function removeNode(path) {
+	      var childrenKey = this.childrenKey,
+	          rootChildren = this.rootChildren;
+
+	      var _this$getNodeIndexAnd2 = this.getNodeIndexAndParent(path),
+	          parent = _this$getNodeIndexAnd2.parent,
+	          index = _this$getNodeIndexAnd2.index;
+
+	      var parentChildren = path.length === 1 ? rootChildren : parent[childrenKey];
+	      var node = parentChildren[index];
+	      parentChildren.splice(index, 1);
+	      return node;
+	    }
+	  }, {
+	    key: "walk",
+	    value: function walk(handler) {
+	      var opt = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+	      var childrenKey = this.childrenKey,
+	          data = this.data; // todo change args in next version
+
+	      return walkTreeData(data, handler, childrenKey, opt.reverse);
+	    }
+	  }, {
+	    key: "clone",
+	    value: function clone() {
+	      var opt = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+	      // opt.afterNodeCreated(newNode, {oldNode: node, index, parent, path})
+	      // todo change args in next version
+	      var childrenKey = this.childrenKey;
+	      var newData = [];
+	      var td = new TreeData(newData);
+	      this.walk(function (node, index, parent, path) {
+	        var newNode = Object.assign({}, node);
+
+	        if (newNode[childrenKey]) {
+	          newNode[childrenKey] = [];
+	        }
+
+	        if (opt.afterNodeCreated) {
+	          opt.afterNodeCreated(newNode, {
+	            oldNode: node,
+	            index: index,
+	            parent: parent,
+	            path: path
+	          });
+	        }
+
+	        td.setPathNode(path, newNode);
+	      });
+	      return newData;
+	    }
+	  }, {
+	    key: "rootChildren",
+	    get: function get() {
+	      var childrenKey = this.childrenKey,
+	          data = this.data;
+	      return isArray(data) ? data : data[childrenKey];
+	    }
+	  }]);
+
+	  return TreeData;
+	}(); // function helper | method helper ============================
 
 	function resolveValueOrGettter(valueOrGetter) {
 	  var args = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
@@ -2069,13 +2361,13 @@
 	function joinMethods(methods) {
 	  var mode = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'value';
 	  var simpleJoinedMethod;
-	  var _iteratorNormalCompletion5 = true;
-	  var _didIteratorError5 = false;
-	  var _iteratorError5 = undefined;
+	  var _iteratorNormalCompletion7 = true;
+	  var _didIteratorError7 = false;
+	  var _iteratorError7 = undefined;
 
 	  try {
 	    var _loop3 = function _loop3() {
-	      var method = _step5.value;
+	      var method = _step7.value;
 	      var old = simpleJoinedMethod;
 
 	      if (old) {
@@ -2091,20 +2383,20 @@
 	      }
 	    };
 
-	    for (var _iterator5 = methods[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+	    for (var _iterator7 = methods[Symbol.iterator](), _step7; !(_iteratorNormalCompletion7 = (_step7 = _iterator7.next()).done); _iteratorNormalCompletion7 = true) {
 	      _loop3();
 	    }
 	  } catch (err) {
-	    _didIteratorError5 = true;
-	    _iteratorError5 = err;
+	    _didIteratorError7 = true;
+	    _iteratorError7 = err;
 	  } finally {
 	    try {
-	      if (!_iteratorNormalCompletion5 && _iterator5["return"] != null) {
-	        _iterator5["return"]();
+	      if (!_iteratorNormalCompletion7 && _iterator7["return"] != null) {
+	        _iterator7["return"]();
 	      }
 	    } finally {
-	      if (_didIteratorError5) {
-	        throw _iteratorError5;
+	      if (_didIteratorError7) {
+	        throw _iteratorError7;
 	      }
 	    }
 	  }
@@ -2133,29 +2425,29 @@
 	function joinFunctionsByNext(funcs) {
 	  var next = function next() {};
 
-	  var _iteratorNormalCompletion6 = true;
-	  var _didIteratorError6 = false;
-	  var _iteratorError6 = undefined;
+	  var _iteratorNormalCompletion8 = true;
+	  var _didIteratorError8 = false;
+	  var _iteratorError8 = undefined;
 
 	  try {
-	    for (var _iterator6 = iterateAll(funcs, {
+	    for (var _iterator8 = iterateAll(funcs, {
 	      reverse: true
-	    })[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
-	      var func = _step6.value.value;
+	    })[Symbol.iterator](), _step8; !(_iteratorNormalCompletion8 = (_step8 = _iterator8.next()).done); _iteratorNormalCompletion8 = true) {
+	      var func = _step8.value.value;
 	      var currentNext = next;
 	      next = wrapFuncWithNext(func, currentNext);
 	    }
 	  } catch (err) {
-	    _didIteratorError6 = true;
-	    _iteratorError6 = err;
+	    _didIteratorError8 = true;
+	    _iteratorError8 = err;
 	  } finally {
 	    try {
-	      if (!_iteratorNormalCompletion6 && _iterator6["return"] != null) {
-	        _iterator6["return"]();
+	      if (!_iteratorNormalCompletion8 && _iterator8["return"] != null) {
+	        _iterator8["return"]();
 	      }
 	    } finally {
-	      if (_didIteratorError6) {
-	        throw _iteratorError6;
+	      if (_didIteratorError8) {
+	        throw _iteratorError8;
 	      }
 	    }
 	  }
@@ -2600,95 +2892,95 @@
 	    args[_key10 - 3] = arguments[_key10];
 	  }
 
-	  var _iteratorNormalCompletion7 = true;
-	  var _didIteratorError7 = false;
-	  var _iteratorError7 = undefined;
+	  var _iteratorNormalCompletion9 = true;
+	  var _didIteratorError9 = false;
+	  var _iteratorError9 = undefined;
 
 	  try {
-	    for (var _iterator7 = els[Symbol.iterator](), _step7; !(_iteratorNormalCompletion7 = (_step7 = _iterator7.next()).done); _iteratorNormalCompletion7 = true) {
-	      var el = _step7.value;
-	      var _iteratorNormalCompletion10 = true;
-	      var _didIteratorError10 = false;
-	      var _iteratorError10 = undefined;
+	    for (var _iterator9 = els[Symbol.iterator](), _step9; !(_iteratorNormalCompletion9 = (_step9 = _iterator9.next()).done); _iteratorNormalCompletion9 = true) {
+	      var el = _step9.value;
+	      var _iteratorNormalCompletion12 = true;
+	      var _didIteratorError12 = false;
+	      var _iteratorError12 = undefined;
 
 	      try {
-	        for (var _iterator10 = names[Symbol.iterator](), _step10; !(_iteratorNormalCompletion10 = (_step10 = _iterator10.next()).done); _iteratorNormalCompletion10 = true) {
-	          var name = _step10.value;
+	        for (var _iterator12 = names[Symbol.iterator](), _step12; !(_iteratorNormalCompletion12 = (_step12 = _iterator12.next()).done); _iteratorNormalCompletion12 = true) {
+	          var name = _step12.value;
 	          onDOM.apply(void 0, [el, name, handler].concat(args));
 	        }
 	      } catch (err) {
-	        _didIteratorError10 = true;
-	        _iteratorError10 = err;
+	        _didIteratorError12 = true;
+	        _iteratorError12 = err;
 	      } finally {
 	        try {
-	          if (!_iteratorNormalCompletion10 && _iterator10["return"] != null) {
-	            _iterator10["return"]();
+	          if (!_iteratorNormalCompletion12 && _iterator12["return"] != null) {
+	            _iterator12["return"]();
 	          }
 	        } finally {
-	          if (_didIteratorError10) {
-	            throw _iteratorError10;
+	          if (_didIteratorError12) {
+	            throw _iteratorError12;
 	          }
 	        }
 	      }
 	    }
 	  } catch (err) {
-	    _didIteratorError7 = true;
-	    _iteratorError7 = err;
+	    _didIteratorError9 = true;
+	    _iteratorError9 = err;
 	  } finally {
 	    try {
-	      if (!_iteratorNormalCompletion7 && _iterator7["return"] != null) {
-	        _iterator7["return"]();
+	      if (!_iteratorNormalCompletion9 && _iterator9["return"] != null) {
+	        _iterator9["return"]();
 	      }
 	    } finally {
-	      if (_didIteratorError7) {
-	        throw _iteratorError7;
+	      if (_didIteratorError9) {
+	        throw _iteratorError9;
 	      }
 	    }
 	  }
 
 	  var destroy = function destroy() {
-	    var _iteratorNormalCompletion8 = true;
-	    var _didIteratorError8 = false;
-	    var _iteratorError8 = undefined;
+	    var _iteratorNormalCompletion10 = true;
+	    var _didIteratorError10 = false;
+	    var _iteratorError10 = undefined;
 
 	    try {
-	      for (var _iterator8 = els[Symbol.iterator](), _step8; !(_iteratorNormalCompletion8 = (_step8 = _iterator8.next()).done); _iteratorNormalCompletion8 = true) {
-	        var el = _step8.value;
-	        var _iteratorNormalCompletion9 = true;
-	        var _didIteratorError9 = false;
-	        var _iteratorError9 = undefined;
+	      for (var _iterator10 = els[Symbol.iterator](), _step10; !(_iteratorNormalCompletion10 = (_step10 = _iterator10.next()).done); _iteratorNormalCompletion10 = true) {
+	        var el = _step10.value;
+	        var _iteratorNormalCompletion11 = true;
+	        var _didIteratorError11 = false;
+	        var _iteratorError11 = undefined;
 
 	        try {
-	          for (var _iterator9 = names[Symbol.iterator](), _step9; !(_iteratorNormalCompletion9 = (_step9 = _iterator9.next()).done); _iteratorNormalCompletion9 = true) {
-	            var name = _step9.value;
+	          for (var _iterator11 = names[Symbol.iterator](), _step11; !(_iteratorNormalCompletion11 = (_step11 = _iterator11.next()).done); _iteratorNormalCompletion11 = true) {
+	            var name = _step11.value;
 	            offDOM(el, name, handler);
 	          }
 	        } catch (err) {
-	          _didIteratorError9 = true;
-	          _iteratorError9 = err;
+	          _didIteratorError11 = true;
+	          _iteratorError11 = err;
 	        } finally {
 	          try {
-	            if (!_iteratorNormalCompletion9 && _iterator9["return"] != null) {
-	              _iterator9["return"]();
+	            if (!_iteratorNormalCompletion11 && _iterator11["return"] != null) {
+	              _iterator11["return"]();
 	            }
 	          } finally {
-	            if (_didIteratorError9) {
-	              throw _iteratorError9;
+	            if (_didIteratorError11) {
+	              throw _iteratorError11;
 	            }
 	          }
 	        }
 	      }
 	    } catch (err) {
-	      _didIteratorError8 = true;
-	      _iteratorError8 = err;
+	      _didIteratorError10 = true;
+	      _iteratorError10 = err;
 	    } finally {
 	      try {
-	        if (!_iteratorNormalCompletion8 && _iterator8["return"] != null) {
-	          _iterator8["return"]();
+	        if (!_iteratorNormalCompletion10 && _iterator10["return"] != null) {
+	          _iterator10["return"]();
 	        }
 	      } finally {
-	        if (_didIteratorError8) {
-	          throw _iteratorError8;
+	        if (_didIteratorError10) {
+	          throw _iteratorError10;
 	        }
 	      }
 	    }
@@ -2716,31 +3008,31 @@
 	  var iterator = iterateAll(list, {
 	    reverse: opt.reverse
 	  });
-	  var _iteratorNormalCompletion11 = true;
-	  var _didIteratorError11 = false;
-	  var _iteratorError11 = undefined;
+	  var _iteratorNormalCompletion13 = true;
+	  var _didIteratorError13 = false;
+	  var _iteratorError13 = undefined;
 
 	  try {
-	    for (var _iterator11 = iterator[Symbol.iterator](), _step11; !(_iteratorNormalCompletion11 = (_step11 = _iterator11.next()).done); _iteratorNormalCompletion11 = true) {
-	      var _step11$value = _step11.value,
-	          value = _step11$value.value,
-	          index = _step11$value.index;
+	    for (var _iterator13 = iterator[Symbol.iterator](), _step13; !(_iteratorNormalCompletion13 = (_step13 = _iterator13.next()).done); _iteratorNormalCompletion13 = true) {
+	      var _step13$value = _step13.value,
+	          value = _step13$value.value,
+	          index = _step13$value.index;
 
 	      if (callback(value, index)) {
 	        return value;
 	      }
 	    }
 	  } catch (err) {
-	    _didIteratorError11 = true;
-	    _iteratorError11 = err;
+	    _didIteratorError13 = true;
+	    _iteratorError13 = err;
 	  } finally {
 	    try {
-	      if (!_iteratorNormalCompletion11 && _iterator11["return"] != null) {
-	        _iterator11["return"]();
+	      if (!_iteratorNormalCompletion13 && _iterator13["return"] != null) {
+	        _iterator13["return"]();
 	      }
 	    } finally {
-	      if (_didIteratorError11) {
-	        throw _iteratorError11;
+	      if (_didIteratorError13) {
+	        throw _iteratorError13;
 	      }
 	    }
 	  }
@@ -3384,29 +3676,29 @@
 	    value: function emit(name) {
 	      // 重要: 先找到要执行的项放在新数组里, 因为执行项会改变事件项存储数组
 	      var items = [];
-	      var _iteratorNormalCompletion12 = true;
-	      var _didIteratorError12 = false;
-	      var _iteratorError12 = undefined;
+	      var _iteratorNormalCompletion14 = true;
+	      var _didIteratorError14 = false;
+	      var _iteratorError14 = undefined;
 
 	      try {
-	        for (var _iterator12 = this.eventStore[Symbol.iterator](), _step12; !(_iteratorNormalCompletion12 = (_step12 = _iterator12.next()).done); _iteratorNormalCompletion12 = true) {
-	          var item = _step12.value;
+	        for (var _iterator14 = this.eventStore[Symbol.iterator](), _step14; !(_iteratorNormalCompletion14 = (_step14 = _iterator14.next()).done); _iteratorNormalCompletion14 = true) {
+	          var item = _step14.value;
 
 	          if (item.name === name) {
 	            items.push(item);
 	          }
 	        }
 	      } catch (err) {
-	        _didIteratorError12 = true;
-	        _iteratorError12 = err;
+	        _didIteratorError14 = true;
+	        _iteratorError14 = err;
 	      } finally {
 	        try {
-	          if (!_iteratorNormalCompletion12 && _iterator12["return"] != null) {
-	            _iterator12["return"]();
+	          if (!_iteratorNormalCompletion14 && _iterator14["return"] != null) {
+	            _iterator14["return"]();
 	          }
 	        } finally {
-	          if (_didIteratorError12) {
-	            throw _iteratorError12;
+	          if (_didIteratorError14) {
+	            throw _iteratorError14;
 	          }
 	        }
 	      }
@@ -3508,8 +3800,6 @@
 	          });
 
 	          if (oldMain != _this7.id) {
-	            console.log('_main_updated');
-
 	            _this7.emit('_main_updated', {
 	              windows: _this7.windows,
 	              old: oldMain,
@@ -3699,6 +3989,7 @@
 	exports.CrossWindow = CrossWindow;
 	exports.CrossWindowEventProcessor = CrossWindowEventProcessor;
 	exports.EventProcessor = EventProcessor;
+	exports.TreeData = TreeData;
 	exports.URLHelper = URLHelper;
 	exports.addClass = addClass;
 	exports.appendTo = appendTo;
@@ -3741,7 +4032,6 @@
 	exports.getElSizeEvenInvisible = getElSizeEvenInvisible;
 	exports.getImageSizeByUrl = getImageSizeByUrl;
 	exports.getLocalStorage2 = getLocalStorage2;
-	exports.getNodeByPathFromTreeData = getNodeByPathFromTreeData;
 	exports.getOffset = getOffset;
 	exports.getOffsetParent = getOffsetParent;
 	exports.getOuterAttachedHeight = getOuterAttachedHeight;

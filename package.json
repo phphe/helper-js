@@ -1,6 +1,6 @@
 {
   "name": "helper-js",
-  "version": "1.4.25-beta",
+  "version": "1.4.25",
   "description": "",
   "main": "dist/helper-js.cjs.js",
   "module": "dist/helper-js.esm.js",

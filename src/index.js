@@ -623,7 +623,7 @@ export class TreeData {
     return isArray(data) ? data : data[childrenKey]
   }
   * iteratePath(path, opt = {}) {
-    const {rootChildren} = this
+    const {childrenKey , rootChildren} = this
     if (!opt.reverse) {
       let prevPath = []
       let prevNode
@@ -637,17 +637,22 @@ export class TreeData {
         prevChildren = currentNode[childrenKey]
       }
     } else {
-      const allReversedNodes = [...iterateTreeDataPath(rootChildren, path, {...opt, reverse: false})];
-      allReversedNodes.reverse()
-      let currentPath = path.slice()
-      for (const node of allReversedNodes) {
-        yield {path: currentPath, node: node}
-        currentPath = arrayWithoutEnd(currentPath, 1)
+      const list = [...this.iteratePath(path, {...opt, reverse: false})];
+      list.reverse()
+      for (const {path, node} of list) {
+        yield {path, node}
       }
     }
   }
+  getAllNodes(path) {
+    const all = [];
+    for (const {node} of this.iteratePath(path)) {
+      all.push(node)
+    }
+    return all
+  }
   getNode(path) {
-    return [...this.iteratePath(path, {reverse: true})][0]
+    return arrayLast(this.getAllNodes(path))
   }
   getNodeIndexAndParent(path) {
     const parentPath = path.slice()
@@ -679,6 +684,7 @@ export class TreeData {
   clone(opt={}) {
     // opt.afterNodeCreated(newNode, {oldNode: node, index, parent, path})
     // todo change args in next version
+    const {childrenKey} = this
     const newData = [];
     const td = new TreeData(newData)
     this.walk((node, index, parent, path) => {
@@ -1846,7 +1852,6 @@ export class CrossWindowEventProcessor extends EventProcessor{
          if (this.isMain()) {
            this.emit('_windows_updated', {windows: this.windows, type: 'exit', id})
            if (oldMain != this.id) {
-             console.log('_main_updated');
              this.emit('_main_updated', {windows: this.windows, old: oldMain, 'new': this.id})
            }
          }

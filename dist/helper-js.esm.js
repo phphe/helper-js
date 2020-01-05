@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.4.24
+ * helper-js v1.4.25
  * (c) phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -693,6 +693,7 @@ function pairRows(rows1, rows2, key1, key2) {
   return rows1.map(row1 => [row1, map[row1[key1]]]);
 } // 深度优先遍历
 // Depth-First-Search
+// todo change args in next version
 
 function depthFirstSearch(obj, handler) {
   var childrenKey = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'children';
@@ -701,7 +702,7 @@ function depthFirstSearch(obj, handler) {
 
   var StopException = () => {};
 
-  var func = (children, parent) => {
+  var func = (children, parent, parentPath) => {
     if (reverse) {
       children = children.slice();
       children.reverse();
@@ -711,7 +712,10 @@ function depthFirstSearch(obj, handler) {
 
     for (var i = 0; i < len; i++) {
       var item = children[i];
-      var r = handler(item, i, parent);
+      var index = reverse ? len - i - 1 : i;
+      var path = parentPath ? [...parentPath, index] : []; // todo change args in next version
+
+      var r = handler(item, index, parent, path);
 
       if (r === false) {
         // stop
@@ -729,26 +733,166 @@ function depthFirstSearch(obj, handler) {
   };
 
   try {
-    func(rootChildren);
+    func(rootChildren, null, isArray(obj) ? [] : null);
   } catch (e) {
     if (e instanceof StopException) ; else {
       throw e;
     }
   }
 }
-var walkTreeData = depthFirstSearch; // rootData: Array
-
-function getNodeByPathFromTreeData(indexes, rootData) {
-  var childrenKey = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'children';
-  var cur;
-  var children = rootData;
-
-  for (var index of indexes) {
-    cur = children[index];
-    children = cur[childrenKey];
+var walkTreeData = depthFirstSearch;
+class TreeData {
+  // data = null;
+  constructor(data) {
+    this.childrenKey = 'children';
+    this.data = data;
   }
 
-  return cur;
+  get rootChildren() {
+    var {
+      childrenKey,
+      data
+    } = this;
+    return isArray(data) ? data : data[childrenKey];
+  }
+
+  *iteratePath(path) {
+    var opt = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    var {
+      childrenKey,
+      rootChildren
+    } = this;
+
+    if (!opt.reverse) {
+      var prevPath = [];
+      var prevChildren = rootChildren;
+
+      for (var index of path) {
+        var currentPath = [...prevPath, index];
+        var currentNode = prevChildren[index];
+        yield {
+          path: currentPath,
+          node: currentNode
+        };
+        prevPath = currentPath;
+        prevChildren = currentNode[childrenKey];
+      }
+    } else {
+      var list = [...this.iteratePath(path, _objectSpread({}, opt, {
+        reverse: false
+      }))];
+      list.reverse();
+
+      for (var {
+        path: _path,
+        node
+      } of list) {
+        yield {
+          path: _path,
+          node
+        };
+      }
+    }
+  }
+
+  getAllNodes(path) {
+    var all = [];
+
+    for (var {
+      node
+    } of this.iteratePath(path)) {
+      all.push(node);
+    }
+
+    return all;
+  }
+
+  getNode(path) {
+    return arrayLast(this.getAllNodes(path));
+  }
+
+  getNodeIndexAndParent(path) {
+    var parentPath = path.slice();
+    var index = parentPath.pop();
+    return {
+      parent: this.getNode(parentPath),
+      index,
+      parentPath
+    };
+  }
+
+  getNodeParent(path) {
+    return this.getNodeIndexAndParent(path).parent;
+  }
+
+  setPathNode(path, node) {
+    var {
+      childrenKey,
+      rootChildren
+    } = this;
+    var {
+      parent,
+      index
+    } = this.getNodeIndexAndParent(path);
+    var parentChildren = path.length === 1 ? rootChildren : parent[childrenKey];
+    parentChildren[index] = node;
+  }
+
+  removeNode(path) {
+    var {
+      childrenKey,
+      rootChildren
+    } = this;
+    var {
+      parent,
+      index
+    } = this.getNodeIndexAndParent(path);
+    var parentChildren = path.length === 1 ? rootChildren : parent[childrenKey];
+    var node = parentChildren[index];
+    parentChildren.splice(index, 1);
+    return node;
+  }
+
+  walk(handler) {
+    var opt = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    var {
+      childrenKey,
+      data
+    } = this; // todo change args in next version
+
+    return walkTreeData(data, handler, childrenKey, opt.reverse);
+  }
+
+  clone() {
+    var opt = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    // opt.afterNodeCreated(newNode, {oldNode: node, index, parent, path})
+    // todo change args in next version
+    var {
+      childrenKey
+    } = this;
+    var newData = [];
+    var td = new TreeData(newData);
+    this.walk((node, index, parent, path) => {
+      var newNode = Object.assign({}, node);
+
+      if (newNode[childrenKey]) {
+        newNode[childrenKey] = [];
+      }
+
+      if (opt.afterNodeCreated) {
+        opt.afterNodeCreated(newNode, {
+          oldNode: node,
+          index,
+          parent,
+          path
+        });
+      }
+
+      td.setPathNode(path, newNode);
+    });
+    return newData;
+  }
+
 } // function helper | method helper ============================
 
 function resolveValueOrGettter(valueOrGetter) {
@@ -2152,7 +2296,6 @@ class CrossWindowEventProcessor extends EventProcessor {
           });
 
           if (oldMain != this.id) {
-            console.log('_main_updated');
             this.emit('_main_updated', {
               windows: this.windows,
               old: oldMain,
@@ -2310,4 +2453,4 @@ function attachCache(obj, toCache) {
   }
 }
 
-export { Cache, CrossWindow, CrossWindowEventProcessor, EventProcessor, URLHelper, addClass, appendTo, arrayAt, arrayDiff, arrayDistinct, arrayFirst, arrayGet, arrayLast, arrayRemove, arrayRemoveBySortedIndexes, arraySibling, arrayWithoutEnd, assignIfDifferent, attachCache, backupAttr, binarySearch, camelCase, camelToWords, cloneObj, copyTextToClipboard, createElementFromHTML, debounce, debounceImmediate, debounceTrailing, depthFirstSearch, elementsFromPoint, empty, executeOnceInScopeByName, executePromiseGetters, executeWithCount, findNodeList, findNodeListReverse, findParent, forAll, getBorder, getBoundingClientRect, getCss3Prefix, getElSize, getElSizeEvenInvisible, getImageSizeByUrl, getLocalStorage2, getNodeByPathFromTreeData, getOffset, getOffsetParent, getOuterAttachedHeight, getOuterAttachedWidth, getPosition, getPositionFromOffset, getScroll, getSessionStorage2, getUrlParam, getUserLanguage, getViewportPosition, glb, groupArray, hasClass, insertAfter, insertBefore, isArray, isBool, isDescendantOf, isFunction, isNumber, isNumeric, isObject, isOffsetInEl, isPromise, isString, isset, iterateALL, iterateAll, joinFunctionsByNext, joinFunctionsByResult, joinMethods, jqFixedSize, jqMakeCarousel, kebabCase, makeStorageHelper, mapObjectTree, mapObjects, max, min, newArrayRemoveAt, numPad, numRand, objectExcept, objectGet, objectMap, objectMerge, objectOnly, objectSet, offDOM, offsetToViewportPosition, onDOM, onDOMMany, onQuickKeydown, openCenterWindow, openWindow, pairRows, prependTo, promiseTimeout, removeClass, removeEl, replaceMultiple, resolveArgsByType, resolveValueOrGettter, restoreAttr, retry, setElChildByIndex, snakeCase, splitArray, store, store_executeOnceInScopeByName, strRand, studlyCase, titleCase, toArrayIfNot, uniqueId, unset, viewportPositionToOffset, waitFor, waitTime, walkTreeData, watchChange, windowLoaded };
+export { Cache, CrossWindow, CrossWindowEventProcessor, EventProcessor, TreeData, URLHelper, addClass, appendTo, arrayAt, arrayDiff, arrayDistinct, arrayFirst, arrayGet, arrayLast, arrayRemove, arrayRemoveBySortedIndexes, arraySibling, arrayWithoutEnd, assignIfDifferent, attachCache, backupAttr, binarySearch, camelCase, camelToWords, cloneObj, copyTextToClipboard, createElementFromHTML, debounce, debounceImmediate, debounceTrailing, depthFirstSearch, elementsFromPoint, empty, executeOnceInScopeByName, executePromiseGetters, executeWithCount, findNodeList, findNodeListReverse, findParent, forAll, getBorder, getBoundingClientRect, getCss3Prefix, getElSize, getElSizeEvenInvisible, getImageSizeByUrl, getLocalStorage2, getOffset, getOffsetParent, getOuterAttachedHeight, getOuterAttachedWidth, getPosition, getPositionFromOffset, getScroll, getSessionStorage2, getUrlParam, getUserLanguage, getViewportPosition, glb, groupArray, hasClass, insertAfter, insertBefore, isArray, isBool, isDescendantOf, isFunction, isNumber, isNumeric, isObject, isOffsetInEl, isPromise, isString, isset, iterateALL, iterateAll, joinFunctionsByNext, joinFunctionsByResult, joinMethods, jqFixedSize, jqMakeCarousel, kebabCase, makeStorageHelper, mapObjectTree, mapObjects, max, min, newArrayRemoveAt, numPad, numRand, objectExcept, objectGet, objectMap, objectMerge, objectOnly, objectSet, offDOM, offsetToViewportPosition, onDOM, onDOMMany, onQuickKeydown, openCenterWindow, openWindow, pairRows, prependTo, promiseTimeout, removeClass, removeEl, replaceMultiple, resolveArgsByType, resolveValueOrGettter, restoreAttr, retry, setElChildByIndex, snakeCase, splitArray, store, store_executeOnceInScopeByName, strRand, studlyCase, titleCase, toArrayIfNot, uniqueId, unset, viewportPositionToOffset, waitFor, waitTime, walkTreeData, watchChange, windowLoaded };
