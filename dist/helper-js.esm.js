@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.4.26
+ * helper-js v1.4.27
  * (c) phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -2400,7 +2400,7 @@ function onQuickKeydown(handler) {
         timeoutId = null;
       }
 
-      setTimeout(() => {
+      timeoutId = setTimeout(() => {
         input = '';
       }, opt.timeout);
     }

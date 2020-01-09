@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.4.26
+ * helper-js v1.4.27
  * (c) phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -3919,7 +3919,7 @@
 	        timeoutId = null;
 	      }
 
-	      setTimeout(function () {
+	      timeoutId = setTimeout(function () {
 	        input = '';
 	      }, opt.timeout);
 	    }
