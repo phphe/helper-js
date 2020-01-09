@@ -1923,7 +1923,7 @@ export function onQuickKeydown(handler, opt={}) {
         clearTimeout(timeoutId)
         timeoutId = null
       }
-      setTimeout(() => {
+      timeoutId = setTimeout(() => {
         input = ''
       }, opt.timeout)
     }
