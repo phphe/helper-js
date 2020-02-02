@@ -188,6 +188,22 @@ opt: {
 ###### insertAfter(el, target)
 ###### prependTo(el, target)
 ###### appendTo(el, target)
+
+### Date
+###### cloneDate(dateObj)
+###### addDate(dateObj, n, type)
+```js
+// type: year, month, day, hour, minute, second, millisecond
+addDate(now, 1, 'day')
+addDate(now, -1, 'hour')
+```
+###### getMonthStart(dateObj) // set date to 1
+###### getMonthEnd(dateObj) // set date to end of the month
+###### getCalendar(year, month, startWeekDay = 0)
+###### isIsoFormat(str)
+###### parseISO(timestamp)
+
+### Advance
 ###### binarySearch   (arr, callback, start, end, returnNearestIfNoHit, max = 1000) // binary search 二分查找
 ```js
 // callback(mid, i) should return mid - your_value

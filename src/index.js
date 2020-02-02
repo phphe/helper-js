@@ -1354,7 +1354,121 @@ export function prependTo(el, target) {
 export function appendTo(el, target) {
   target.appendChild(el)
 }
-// advance
+// Date ===================================
+export function cloneDate(dateObj) {
+  return new Date(dateObj.getTime())
+}
+export function addDate(dateObj, n, type) {
+  if (!['year', 'month', 'day'].includes(type)) {
+    type += 's'
+  }
+  type = studlyCase(type)
+  var setFuncName = 'set' + type
+  var getFuncName = 'get' + type
+  dateObj[setFuncName](dateObj[getFuncName]() + n)
+  return dateObj
+}
+export function getMonthStart (dateObj) {
+  const clonedObj = cloneDate(dateObj)
+  clonedObj.setDate(1)
+  return clonedObj
+}
+export function getMonthEnd (dateObj) {
+  const r = cloneDate(dateObj)
+  addDate(r, 1, 'month')
+  r.setDate(0)
+  return r
+}
+/**
+ * [getCalendar description]
+ * @param  {[type]} year         [description]
+ * @param  {[type]} month        [description]
+ * @param  {Number} [startWeekDay=0] [0 is sunday]
+ * @return {[type]}              [description]
+ */
+export function getCalendar(year, month, startWeekDay = 0) {
+  const results = []
+  const date = new Date(year, month - 1)
+  year = date.getFullYear()
+  month = date.getMonth() + 1
+  const monthStart = getMonthStart(date)
+  const monthStartDay = monthStart.getDay()
+  const calendarStart = addDate(clone(monthStart), monthStartDay + startWeekDay, 'day')
+  if (monthStartDay > startWeekDay) {
+    const startDate = calendarStart.getDate()
+    const year = calendarStart.getFullYear()
+    const month = calendarStart.getMonth() + 1
+    for (let i = startWeekDay; i < monthStartDay; i++) {
+      const date = startDate + i
+      results.push({
+        year,
+        month,
+        date: date,
+        text: date,
+        prevMonth: true,
+      })
+    }
+  }
+  //
+  const monthEnd = getMonthEnd(date)
+  const monthEndtDate = monthEnd.getDate()
+  for (let i = 1; i <= monthEndtDate; i++) {
+    const date = i
+    results.push({
+      year: year,
+      month: month,
+      date,
+      text: date,
+      currentMonth: true,
+    })
+  }
+  //
+  const monthEndDay = monthEnd.getDay()
+  const endWeekDay = 6 - startWeekDay
+  if (monthEndDay < endWeekDay) {
+    const nextMonth = addDate(clone(date), 1, 'month')
+    const year = nextMonth.getFullYear()
+    const month = nextMonth.getMonth() + 1
+    for (let i = monthEndDay + 1, date = 1; i <= endWeekDay; i++, date++) {
+      results.push({
+        year: year,
+        month: month,
+        date: date,
+        text: date,
+        nextMonth: true,
+      })
+    }
+  }
+  //
+  return hp.splitArray(results, 7)
+}
+// eg: 2018-09-07T03:38:37.888Z
+// timezone must be UTC
+export function isIsoFormat(str) {
+  return str.length > 15 && str.length < 30 && str.match(/^\d{4}-\d{2}-\d{2}T.*Z$/)
+}
+// timestamp eg: 2018-09-07T03:38:37.888Z
+export function parseISO(timestamp) {
+  const [datePart, timePart] = timestamp.split('T')
+  let y, m, d, h = 0, min = 0, s = 0;
+  [y, m, d] = datePart.split('-').map(v => parseInt(v))
+  m = m - 1
+  if (timePart) {
+    const t = timePart.split('-').map(v => parseFloat(v))
+    h = t[0]
+    if (t[1] != null) {
+      min = t[1]
+    }
+    if (t[2] != null) {
+      s = t[2]
+    }
+  }
+  const dt = new Date(y, m, d, h, min, s)
+  // the dt timezone is current, so reset hour with setUTCHours
+  dt.setUTCHours(h)
+  return dt
+}
+// advance =================================
 // binarySearch 二分查找
 // callback(mid, i) should return mid - your_value
 export function binarySearch(arr, callback, start, end, returnNearestIfNoHit, max = 1000) {
