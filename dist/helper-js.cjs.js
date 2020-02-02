@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.4.27
+ * helper-js v1.4.28
  * (c) phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -1706,7 +1706,146 @@ function prependTo(el, target) {
 }
 function appendTo(el, target) {
   target.appendChild(el);
-} // advance
+} // Date ===================================
+
+function cloneDate(dateObj) {
+  return new Date(dateObj.getTime());
+}
+function addDate(dateObj, n, type) {
+  if (!['year', 'month', 'day'].includes(type)) {
+    type += 's';
+  }
+
+  type = studlyCase(type);
+  var setFuncName = 'set' + type;
+  var getFuncName = 'get' + type;
+  dateObj[setFuncName](dateObj[getFuncName]() + n);
+  return dateObj;
+}
+function getMonthStart(dateObj) {
+  var clonedObj = cloneDate(dateObj);
+  clonedObj.setDate(1);
+  return clonedObj;
+}
+function getMonthEnd(dateObj) {
+  var r = cloneDate(dateObj);
+  addDate(r, 1, 'month');
+  r.setDate(0);
+  return r;
+}
+/**
+ * [getCalendar description]
+ * @param  {[type]} year         [description]
+ * @param  {[type]} month        [description]
+ * @param  {Number} [startWeekDay=0] [0 is sunday]
+ * @return {[type]}              [description]
+ */
+
+function getCalendar(year, month) {
+  var startWeekDay = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
+  var results = [];
+  var date = new Date(year, month - 1);
+  year = date.getFullYear();
+  month = date.getMonth() + 1;
+  var monthStart = getMonthStart(date);
+  var monthStartDay = monthStart.getDay();
+  var calendarStart = addDate(clone(monthStart), monthStartDay + startWeekDay, 'day');
+
+  if (monthStartDay > startWeekDay) {
+    var startDate = calendarStart.getDate();
+
+    var _year = calendarStart.getFullYear();
+
+    var _month = calendarStart.getMonth() + 1;
+
+    for (var i = startWeekDay; i < monthStartDay; i++) {
+      var _date = startDate + i;
+
+      results.push({
+        year: _year,
+        month: _month,
+        date: _date,
+        text: _date,
+        prevMonth: true
+      });
+    }
+  } //
+
+
+  var monthEnd = getMonthEnd(date);
+  var monthEndtDate = monthEnd.getDate();
+
+  for (var _i6 = 1; _i6 <= monthEndtDate; _i6++) {
+    var _date2 = _i6;
+    results.push({
+      year: year,
+      month: month,
+      date: _date2,
+      text: _date2,
+      currentMonth: true
+    });
+  } //
+
+
+  var monthEndDay = monthEnd.getDay();
+  var endWeekDay = 6 - startWeekDay;
+
+  if (monthEndDay < endWeekDay) {
+    var nextMonth = addDate(clone(date), 1, 'month');
+
+    var _year2 = nextMonth.getFullYear();
+
+    var _month2 = nextMonth.getMonth() + 1;
+
+    for (var _i7 = monthEndDay + 1, _date3 = 1; _i7 <= endWeekDay; _i7++, _date3++) {
+      results.push({
+        year: _year2,
+        month: _month2,
+        date: _date3,
+        text: _date3,
+        nextMonth: true
+      });
+    }
+  } //
+
+
+  return hp.splitArray(results, 7);
+} // eg: 2018-09-07T03:38:37.888Z
+// timezone must be UTC
+
+function isIsoFormat(str) {
+  return str.length > 15 && str.length < 30 && str.match(/^\d{4}-\d{2}-\d{2}T.*Z$/);
+} // timestamp eg: 2018-09-07T03:38:37.888Z
+
+function parseISO(timestamp) {
+  var [datePart, timePart] = timestamp.split('T');
+  var y,
+      m,
+      d,
+      h = 0,
+      min = 0,
+      s = 0;
+  [y, m, d] = datePart.split('-').map(v => parseInt(v));
+  m = m - 1;
+
+  if (timePart) {
+    var t = timePart.split('-').map(v => parseFloat(v));
+    h = t[0];
+
+    if (t[1] != null) {
+      min = t[1];
+    }
+
+    if (t[2] != null) {
+      s = t[2];
+    }
+  }
+
+  var dt = new Date(y, m, d, h, min, s); // the dt timezone is current, so reset hour with setUTCHours
+
+  dt.setUTCHours(h);
+  return dt;
+} // advance =================================
 // binarySearch 二分查找
 // callback(mid, i) should return mid - your_value
 
@@ -2476,6 +2615,7 @@ exports.EventProcessor = EventProcessor;
 exports.TreeData = TreeData;
 exports.URLHelper = URLHelper;
 exports.addClass = addClass;
+exports.addDate = addDate;
 exports.appendTo = appendTo;
 exports.arrayAt = arrayAt;
 exports.arrayDiff = arrayDiff;
@@ -2493,6 +2633,7 @@ exports.backupAttr = backupAttr;
 exports.binarySearch = binarySearch;
 exports.camelCase = camelCase;
 exports.camelToWords = camelToWords;
+exports.cloneDate = cloneDate;
 exports.cloneObj = cloneObj;
 exports.copyTextToClipboard = copyTextToClipboard;
 exports.createElementFromHTML = createElementFromHTML;
@@ -2511,11 +2652,14 @@ exports.findParent = findParent;
 exports.forAll = forAll;
 exports.getBorder = getBorder;
 exports.getBoundingClientRect = getBoundingClientRect;
+exports.getCalendar = getCalendar;
 exports.getCss3Prefix = getCss3Prefix;
 exports.getElSize = getElSize;
 exports.getElSizeEvenInvisible = getElSizeEvenInvisible;
 exports.getImageSizeByUrl = getImageSizeByUrl;
 exports.getLocalStorage2 = getLocalStorage2;
+exports.getMonthEnd = getMonthEnd;
+exports.getMonthStart = getMonthStart;
 exports.getOffset = getOffset;
 exports.getOffsetParent = getOffsetParent;
 exports.getOuterAttachedHeight = getOuterAttachedHeight;
@@ -2536,6 +2680,7 @@ exports.isArray = isArray;
 exports.isBool = isBool;
 exports.isDescendantOf = isDescendantOf;
 exports.isFunction = isFunction;
+exports.isIsoFormat = isIsoFormat;
 exports.isNumber = isNumber;
 exports.isNumeric = isNumeric;
 exports.isObject = isObject;
@@ -2573,6 +2718,7 @@ exports.onQuickKeydown = onQuickKeydown;
 exports.openCenterWindow = openCenterWindow;
 exports.openWindow = openWindow;
 exports.pairRows = pairRows;
+exports.parseISO = parseISO;
 exports.prependTo = prependTo;
 exports.promiseTimeout = promiseTimeout;
 exports.removeClass = removeClass;

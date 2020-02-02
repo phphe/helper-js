@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.4.27
+ * helper-js v1.4.28
  * (c) phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -1700,7 +1700,146 @@ function prependTo(el, target) {
 }
 function appendTo(el, target) {
   target.appendChild(el);
-} // advance
+} // Date ===================================
+
+function cloneDate(dateObj) {
+  return new Date(dateObj.getTime());
+}
+function addDate(dateObj, n, type) {
+  if (!['year', 'month', 'day'].includes(type)) {
+    type += 's';
+  }
+
+  type = studlyCase(type);
+  var setFuncName = 'set' + type;
+  var getFuncName = 'get' + type;
+  dateObj[setFuncName](dateObj[getFuncName]() + n);
+  return dateObj;
+}
+function getMonthStart(dateObj) {
+  var clonedObj = cloneDate(dateObj);
+  clonedObj.setDate(1);
+  return clonedObj;
+}
+function getMonthEnd(dateObj) {
+  var r = cloneDate(dateObj);
+  addDate(r, 1, 'month');
+  r.setDate(0);
+  return r;
+}
+/**
+ * [getCalendar description]
+ * @param  {[type]} year         [description]
+ * @param  {[type]} month        [description]
+ * @param  {Number} [startWeekDay=0] [0 is sunday]
+ * @return {[type]}              [description]
+ */
+
+function getCalendar(year, month) {
+  var startWeekDay = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
+  var results = [];
+  var date = new Date(year, month - 1);
+  year = date.getFullYear();
+  month = date.getMonth() + 1;
+  var monthStart = getMonthStart(date);
+  var monthStartDay = monthStart.getDay();
+  var calendarStart = addDate(clone(monthStart), monthStartDay + startWeekDay, 'day');
+
+  if (monthStartDay > startWeekDay) {
+    var startDate = calendarStart.getDate();
+
+    var _year = calendarStart.getFullYear();
+
+    var _month = calendarStart.getMonth() + 1;
+
+    for (var i = startWeekDay; i < monthStartDay; i++) {
+      var _date = startDate + i;
+
+      results.push({
+        year: _year,
+        month: _month,
+        date: _date,
+        text: _date,
+        prevMonth: true
+      });
+    }
+  } //
+
+
+  var monthEnd = getMonthEnd(date);
+  var monthEndtDate = monthEnd.getDate();
+
+  for (var _i6 = 1; _i6 <= monthEndtDate; _i6++) {
+    var _date2 = _i6;
+    results.push({
+      year: year,
+      month: month,
+      date: _date2,
+      text: _date2,
+      currentMonth: true
+    });
+  } //
+
+
+  var monthEndDay = monthEnd.getDay();
+  var endWeekDay = 6 - startWeekDay;
+
+  if (monthEndDay < endWeekDay) {
+    var nextMonth = addDate(clone(date), 1, 'month');
+
+    var _year2 = nextMonth.getFullYear();
+
+    var _month2 = nextMonth.getMonth() + 1;
+
+    for (var _i7 = monthEndDay + 1, _date3 = 1; _i7 <= endWeekDay; _i7++, _date3++) {
+      results.push({
+        year: _year2,
+        month: _month2,
+        date: _date3,
+        text: _date3,
+        nextMonth: true
+      });
+    }
+  } //
+
+
+  return hp.splitArray(results, 7);
+} // eg: 2018-09-07T03:38:37.888Z
+// timezone must be UTC
+
+function isIsoFormat(str) {
+  return str.length > 15 && str.length < 30 && str.match(/^\d{4}-\d{2}-\d{2}T.*Z$/);
+} // timestamp eg: 2018-09-07T03:38:37.888Z
+
+function parseISO(timestamp) {
+  var [datePart, timePart] = timestamp.split('T');
+  var y,
+      m,
+      d,
+      h = 0,
+      min = 0,
+      s = 0;
+  [y, m, d] = datePart.split('-').map(v => parseInt(v));
+  m = m - 1;
+
+  if (timePart) {
+    var t = timePart.split('-').map(v => parseFloat(v));
+    h = t[0];
+
+    if (t[1] != null) {
+      min = t[1];
+    }
+
+    if (t[2] != null) {
+      s = t[2];
+    }
+  }
+
+  var dt = new Date(y, m, d, h, min, s); // the dt timezone is current, so reset hour with setUTCHours
+
+  dt.setUTCHours(h);
+  return dt;
+} // advance =================================
 // binarySearch 二分查找
 // callback(mid, i) should return mid - your_value
 
@@ -2463,4 +2602,4 @@ function attachCache(obj, toCache) {
   }
 }
 
-export { Cache, CrossWindow, CrossWindowEventProcessor, EventProcessor, TreeData, URLHelper, addClass, appendTo, arrayAt, arrayDiff, arrayDistinct, arrayFirst, arrayGet, arrayLast, arrayRemove, arrayRemoveBySortedIndexes, arraySibling, arrayWithoutEnd, assignIfDifferent, attachCache, backupAttr, binarySearch, camelCase, camelToWords, cloneObj, copyTextToClipboard, createElementFromHTML, debounce, debounceImmediate, debounceTrailing, depthFirstSearch, elementsFromPoint, empty, executeOnceInScopeByName, executePromiseGetters, executeWithCount, findNodeList, findNodeListReverse, findParent, forAll, getBorder, getBoundingClientRect, getCss3Prefix, getElSize, getElSizeEvenInvisible, getImageSizeByUrl, getLocalStorage2, getOffset, getOffsetParent, getOuterAttachedHeight, getOuterAttachedWidth, getPosition, getPositionFromOffset, getScroll, getSessionStorage2, getUrlParam, getUserLanguage, getViewportPosition, glb, groupArray, hasClass, insertAfter, insertBefore, isArray, isBool, isDescendantOf, isFunction, isNumber, isNumeric, isObject, isOffsetInEl, isPromise, isString, isset, iterateALL, iterateAll, joinFunctionsByNext, joinFunctionsByResult, joinMethods, jqFixedSize, jqMakeCarousel, kebabCase, makeStorageHelper, mapObjectTree, mapObjects, max, min, newArrayRemoveAt, numPad, numRand, objectExcept, objectGet, objectMap, objectMerge, objectOnly, objectSet, offDOM, offsetToViewportPosition, onDOM, onDOMMany, onQuickKeydown, openCenterWindow, openWindow, pairRows, prependTo, promiseTimeout, removeClass, removeEl, replaceMultiple, resolveArgsByType, resolveValueOrGettter, restoreAttr, retry, setElChildByIndex, snakeCase, splitArray, store, store_executeOnceInScopeByName, strRand, studlyCase, titleCase, toArrayIfNot, uniqueId, unset, viewportPositionToOffset, waitFor, waitTime, walkTreeData, watchChange, windowLoaded };
+export { Cache, CrossWindow, CrossWindowEventProcessor, EventProcessor, TreeData, URLHelper, addClass, addDate, appendTo, arrayAt, arrayDiff, arrayDistinct, arrayFirst, arrayGet, arrayLast, arrayRemove, arrayRemoveBySortedIndexes, arraySibling, arrayWithoutEnd, assignIfDifferent, attachCache, backupAttr, binarySearch, camelCase, camelToWords, cloneDate, cloneObj, copyTextToClipboard, createElementFromHTML, debounce, debounceImmediate, debounceTrailing, depthFirstSearch, elementsFromPoint, empty, executeOnceInScopeByName, executePromiseGetters, executeWithCount, findNodeList, findNodeListReverse, findParent, forAll, getBorder, getBoundingClientRect, getCalendar, getCss3Prefix, getElSize, getElSizeEvenInvisible, getImageSizeByUrl, getLocalStorage2, getMonthEnd, getMonthStart, getOffset, getOffsetParent, getOuterAttachedHeight, getOuterAttachedWidth, getPosition, getPositionFromOffset, getScroll, getSessionStorage2, getUrlParam, getUserLanguage, getViewportPosition, glb, groupArray, hasClass, insertAfter, insertBefore, isArray, isBool, isDescendantOf, isFunction, isIsoFormat, isNumber, isNumeric, isObject, isOffsetInEl, isPromise, isString, isset, iterateALL, iterateAll, joinFunctionsByNext, joinFunctionsByResult, joinMethods, jqFixedSize, jqMakeCarousel, kebabCase, makeStorageHelper, mapObjectTree, mapObjects, max, min, newArrayRemoveAt, numPad, numRand, objectExcept, objectGet, objectMap, objectMerge, objectOnly, objectSet, offDOM, offsetToViewportPosition, onDOM, onDOMMany, onQuickKeydown, openCenterWindow, openWindow, pairRows, parseISO, prependTo, promiseTimeout, removeClass, removeEl, replaceMultiple, resolveArgsByType, resolveValueOrGettter, restoreAttr, retry, setElChildByIndex, snakeCase, splitArray, store, store_executeOnceInScopeByName, strRand, studlyCase, titleCase, toArrayIfNot, uniqueId, unset, viewportPositionToOffset, waitFor, waitTime, walkTreeData, watchChange, windowLoaded };

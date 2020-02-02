@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.4.27
+ * helper-js v1.4.28
  * (c) phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -15,6 +15,8 @@
 
 	var _typeof_1 = createCommonjsModule(function (module) {
 	function _typeof(obj) {
+	  "@babel/helpers - typeof";
+
 	  if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
 	    module.exports = _typeof = function _typeof(obj) {
 	      return typeof obj;
@@ -126,6 +128,56 @@
 	}
 
 	var inherits = _inherits;
+
+	function _arrayWithHoles(arr) {
+	  if (Array.isArray(arr)) return arr;
+	}
+
+	var arrayWithHoles = _arrayWithHoles;
+
+	function _iterableToArrayLimit(arr, i) {
+	  if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) {
+	    return;
+	  }
+
+	  var _arr = [];
+	  var _n = true;
+	  var _d = false;
+	  var _e = undefined;
+
+	  try {
+	    for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+	      _arr.push(_s.value);
+
+	      if (i && _arr.length === i) break;
+	    }
+	  } catch (err) {
+	    _d = true;
+	    _e = err;
+	  } finally {
+	    try {
+	      if (!_n && _i["return"] != null) _i["return"]();
+	    } finally {
+	      if (_d) throw _e;
+	    }
+	  }
+
+	  return _arr;
+	}
+
+	var iterableToArrayLimit = _iterableToArrayLimit;
+
+	function _nonIterableRest() {
+	  throw new TypeError("Invalid attempt to destructure non-iterable instance");
+	}
+
+	var nonIterableRest = _nonIterableRest;
+
+	function _slicedToArray(arr, i) {
+	  return arrayWithHoles(arr) || iterableToArrayLimit(arr, i) || nonIterableRest();
+	}
+
+	var slicedToArray = _slicedToArray;
 
 	function _defineProperty(obj, key, value) {
 	  if (key in obj) {
@@ -3139,7 +3191,161 @@
 	}
 	function appendTo(el, target) {
 	  target.appendChild(el);
-	} // advance
+	} // Date ===================================
+
+	function cloneDate(dateObj) {
+	  return new Date(dateObj.getTime());
+	}
+	function addDate(dateObj, n, type) {
+	  if (!['year', 'month', 'day'].includes(type)) {
+	    type += 's';
+	  }
+
+	  type = studlyCase(type);
+	  var setFuncName = 'set' + type;
+	  var getFuncName = 'get' + type;
+	  dateObj[setFuncName](dateObj[getFuncName]() + n);
+	  return dateObj;
+	}
+	function getMonthStart(dateObj) {
+	  var clonedObj = cloneDate(dateObj);
+	  clonedObj.setDate(1);
+	  return clonedObj;
+	}
+	function getMonthEnd(dateObj) {
+	  var r = cloneDate(dateObj);
+	  addDate(r, 1, 'month');
+	  r.setDate(0);
+	  return r;
+	}
+	/**
+	 * [getCalendar description]
+	 * @param  {[type]} year         [description]
+	 * @param  {[type]} month        [description]
+	 * @param  {Number} [startWeekDay=0] [0 is sunday]
+	 * @return {[type]}              [description]
+	 */
+
+	function getCalendar(year, month) {
+	  var startWeekDay = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
+	  var results = [];
+	  var date = new Date(year, month - 1);
+	  year = date.getFullYear();
+	  month = date.getMonth() + 1;
+	  var monthStart = getMonthStart(date);
+	  var monthStartDay = monthStart.getDay();
+	  var calendarStart = addDate(clone(monthStart), monthStartDay + startWeekDay, 'day');
+
+	  if (monthStartDay > startWeekDay) {
+	    var startDate = calendarStart.getDate();
+
+	    var _year = calendarStart.getFullYear();
+
+	    var _month = calendarStart.getMonth() + 1;
+
+	    for (var i = startWeekDay; i < monthStartDay; i++) {
+	      var _date = startDate + i;
+
+	      results.push({
+	        year: _year,
+	        month: _month,
+	        date: _date,
+	        text: _date,
+	        prevMonth: true
+	      });
+	    }
+	  } //
+
+
+	  var monthEnd = getMonthEnd(date);
+	  var monthEndtDate = monthEnd.getDate();
+
+	  for (var _i11 = 1; _i11 <= monthEndtDate; _i11++) {
+	    var _date2 = _i11;
+	    results.push({
+	      year: year,
+	      month: month,
+	      date: _date2,
+	      text: _date2,
+	      currentMonth: true
+	    });
+	  } //
+
+
+	  var monthEndDay = monthEnd.getDay();
+	  var endWeekDay = 6 - startWeekDay;
+
+	  if (monthEndDay < endWeekDay) {
+	    var nextMonth = addDate(clone(date), 1, 'month');
+
+	    var _year2 = nextMonth.getFullYear();
+
+	    var _month2 = nextMonth.getMonth() + 1;
+
+	    for (var _i12 = monthEndDay + 1, _date3 = 1; _i12 <= endWeekDay; _i12++, _date3++) {
+	      results.push({
+	        year: _year2,
+	        month: _month2,
+	        date: _date3,
+	        text: _date3,
+	        nextMonth: true
+	      });
+	    }
+	  } //
+
+
+	  return hp.splitArray(results, 7);
+	} // eg: 2018-09-07T03:38:37.888Z
+	// timezone must be UTC
+
+	function isIsoFormat(str) {
+	  return str.length > 15 && str.length < 30 && str.match(/^\d{4}-\d{2}-\d{2}T.*Z$/);
+	} // timestamp eg: 2018-09-07T03:38:37.888Z
+
+	function parseISO(timestamp) {
+	  var _timestamp$split = timestamp.split('T'),
+	      _timestamp$split2 = slicedToArray(_timestamp$split, 2),
+	      datePart = _timestamp$split2[0],
+	      timePart = _timestamp$split2[1];
+
+	  var y,
+	      m,
+	      d,
+	      h = 0,
+	      min = 0,
+	      s = 0;
+
+	  var _datePart$split$map = datePart.split('-').map(function (v) {
+	    return parseInt(v);
+	  });
+
+	  var _datePart$split$map2 = slicedToArray(_datePart$split$map, 3);
+
+	  y = _datePart$split$map2[0];
+	  m = _datePart$split$map2[1];
+	  d = _datePart$split$map2[2];
+	  m = m - 1;
+
+	  if (timePart) {
+	    var t = timePart.split('-').map(function (v) {
+	      return parseFloat(v);
+	    });
+	    h = t[0];
+
+	    if (t[1] != null) {
+	      min = t[1];
+	    }
+
+	    if (t[2] != null) {
+	      s = t[2];
+	    }
+	  }
+
+	  var dt = new Date(y, m, d, h, min, s); // the dt timezone is current, so reset hour with setUTCHours
+
+	  dt.setUTCHours(h);
+	  return dt;
+	} // advance =================================
 	// binarySearch 二分查找
 	// callback(mid, i) should return mid - your_value
 
@@ -3676,8 +3882,8 @@
 	        }
 	      }
 
-	      for (var _i11 = 0, _indexes = indexes; _i11 < _indexes.length; _i11++) {
-	        var index = _indexes[_i11];
+	      for (var _i13 = 0, _indexes = indexes; _i13 < _indexes.length; _i13++) {
+	        var index = _indexes[_i13];
 	        this.eventStore.splice(index, 1);
 	      }
 	    }
@@ -3717,8 +3923,8 @@
 	        args[_key12 - 1] = arguments[_key12];
 	      }
 
-	      for (var _i12 = 0, _items = items; _i12 < _items.length; _i12++) {
-	        var _item = _items[_i12];
+	      for (var _i14 = 0, _items = items; _i14 < _items.length; _i14++) {
+	        var _item = _items[_i14];
 
 	        _item.handler.apply(_item, args);
 	      }
@@ -4002,6 +4208,7 @@
 	exports.TreeData = TreeData;
 	exports.URLHelper = URLHelper;
 	exports.addClass = addClass;
+	exports.addDate = addDate;
 	exports.appendTo = appendTo;
 	exports.arrayAt = arrayAt;
 	exports.arrayDiff = arrayDiff;
@@ -4019,6 +4226,7 @@
 	exports.binarySearch = binarySearch;
 	exports.camelCase = camelCase;
 	exports.camelToWords = camelToWords;
+	exports.cloneDate = cloneDate;
 	exports.cloneObj = cloneObj;
 	exports.copyTextToClipboard = copyTextToClipboard;
 	exports.createElementFromHTML = createElementFromHTML;
@@ -4037,11 +4245,14 @@
 	exports.forAll = forAll;
 	exports.getBorder = getBorder;
 	exports.getBoundingClientRect = getBoundingClientRect;
+	exports.getCalendar = getCalendar;
 	exports.getCss3Prefix = getCss3Prefix;
 	exports.getElSize = getElSize;
 	exports.getElSizeEvenInvisible = getElSizeEvenInvisible;
 	exports.getImageSizeByUrl = getImageSizeByUrl;
 	exports.getLocalStorage2 = getLocalStorage2;
+	exports.getMonthEnd = getMonthEnd;
+	exports.getMonthStart = getMonthStart;
 	exports.getOffset = getOffset;
 	exports.getOffsetParent = getOffsetParent;
 	exports.getOuterAttachedHeight = getOuterAttachedHeight;
@@ -4062,6 +4273,7 @@
 	exports.isBool = isBool;
 	exports.isDescendantOf = isDescendantOf;
 	exports.isFunction = isFunction;
+	exports.isIsoFormat = isIsoFormat;
 	exports.isNumber = isNumber;
 	exports.isNumeric = isNumeric;
 	exports.isObject = isObject;
@@ -4099,6 +4311,7 @@
 	exports.openCenterWindow = openCenterWindow;
 	exports.openWindow = openWindow;
 	exports.pairRows = pairRows;
+	exports.parseISO = parseISO;
 	exports.prependTo = prependTo;
 	exports.promiseTimeout = promiseTimeout;
 	exports.removeClass = removeClass;
