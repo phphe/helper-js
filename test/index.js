@@ -1,4 +1,5 @@
-const {TreeData} = require('../dist/helper-js.cjs')
+const hp = require('../dist/helper-js.cjs')
+const {TreeData} = hp
 
 treeData = [
   {text: 'node 1', children: [
@@ -35,3 +36,7 @@ treeData = {text: 'node 0', children: [
 ]}
 td = new TreeData(treeData)
 console.log(td.clone());
+
+// date
+const {getCalendar} = hp
+console.log(getCalendar(2020, 4));

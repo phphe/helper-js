@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.4.32
+ * helper-js v1.4.33
  * (c) phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -3206,11 +3206,16 @@
 	  return new Date(dateObj.getTime());
 	}
 	function addDate(dateObj, n, type) {
-	  if (!['year', 'month', 'day'].includes(type)) {
+	  if (!['year', 'month', 'day', 'date'].includes(type)) {
 	    type += 's';
 	  }
 
 	  type = studlyCase(type);
+
+	  if (type === 'Day') {
+	    type = 'Date';
+	  }
+
 	  var setFuncName = 'set' + type;
 	  var getFuncName = 'get' + type;
 	  dateObj[setFuncName](dateObj[getFuncName]() + n);
@@ -3243,7 +3248,7 @@
 	  month = date.getMonth() + 1;
 	  var monthStart = getMonthStart(date);
 	  var monthStartDay = monthStart.getDay();
-	  var calendarStart = addDate(cloneDate(monthStart), monthStartDay + startWeekDay, 'day');
+	  var calendarStart = addDate(cloneDate(monthStart), -(monthStartDay + startWeekDay), 'day');
 
 	  if (monthStartDay > startWeekDay) {
 	    var startDate = calendarStart.getDate();
@@ -3303,7 +3308,7 @@
 	  } //
 
 
-	  return hp.splitArray(results, 7);
+	  return splitArray(results, 7);
 	} // eg: 2018-09-07T03:38:37.888Z
 	// timezone must be UTC
 
