@@ -19,7 +19,7 @@ export function glb() {
 }
 export function isDocumentExisted() {
   try {
-    t = document
+    let t = document
   } catch (e) {
     return false
   }

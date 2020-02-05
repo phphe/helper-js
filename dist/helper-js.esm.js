@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.4.29
+ * helper-js v1.4.31
  * (c) phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -18,21 +18,21 @@ function glb() {
     return store.glb;
   } else {
     // resolve global
-    var _t;
+    var t;
 
     try {
-      _t = global;
+      t = global;
     } catch (e) {
-      _t = window;
+      t = window;
     }
 
-    store.glb = _t;
-    return _t;
+    store.glb = t;
+    return t;
   }
 }
 function isDocumentExisted() {
   try {
-    t = document;
+    var t = document;
   } catch (e) {
     return false;
   }
@@ -1832,16 +1832,15 @@ function parseISO(timestamp) {
   m = m - 1;
 
   if (timePart) {
-    var _t2 = timePart.split('-').map(v => parseFloat(v));
+    var t = timePart.split('-').map(v => parseFloat(v));
+    h = t[0];
 
-    h = _t2[0];
-
-    if (_t2[1] != null) {
-      min = _t2[1];
+    if (t[1] != null) {
+      min = t[1];
     }
 
-    if (_t2[2] != null) {
-      s = _t2[2];
+    if (t[2] != null) {
+      s = t[2];
     }
   }
 
@@ -2224,9 +2223,9 @@ function resolveArgsByType(args, types) {
       if (rule == null) {
         rule = () => true;
       } else {
-        var _t3 = rule;
+        var t = rule;
 
-        rule = x => Object.prototype.toString.call(x) === "[object ".concat(_t3, "]");
+        rule = x => Object.prototype.toString.call(x) === "[object ".concat(t, "]");
       }
     }
 
