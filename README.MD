@@ -13,6 +13,7 @@ import {function1, function2} from 'helper-js'
 ```
 ### some functions. pls check source to get more 常用方法, 请查看源码获取更多方法
 ###### glb()   // get global cross environment
+###### isDocumentExisted()   // is document existed. detect is the environment browser
 ###### isset   
 typeof v !== 'undefined'
 ###### isArray   

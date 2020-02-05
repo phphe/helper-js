@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.4.28
+ * helper-js v1.4.29
  * (c) phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -999,17 +999,26 @@
 	    return store.glb;
 	  } else {
 	    // resolve global
-	    var t;
+	    var _t;
 
 	    try {
-	      t = global;
+	      _t = global;
 	    } catch (e) {
-	      t = window;
+	      _t = window;
 	    }
 
-	    store.glb = t;
-	    return t;
+	    store.glb = _t;
+	    return _t;
 	  }
+	}
+	function isDocumentExisted() {
+	  try {
+	    t = document;
+	  } catch (e) {
+	    return false;
+	  }
+
+	  return true;
 	} // is 各种判断
 
 	function isset(v) {
@@ -3327,17 +3336,18 @@
 	  m = m - 1;
 
 	  if (timePart) {
-	    var t = timePart.split('-').map(function (v) {
+	    var _t2 = timePart.split('-').map(function (v) {
 	      return parseFloat(v);
 	    });
-	    h = t[0];
 
-	    if (t[1] != null) {
-	      min = t[1];
+	    h = _t2[0];
+
+	    if (_t2[1] != null) {
+	      min = _t2[1];
 	    }
 
-	    if (t[2] != null) {
-	      s = t[2];
+	    if (_t2[2] != null) {
+	      s = _t2[2];
 	    }
 	  }
 
@@ -3738,10 +3748,10 @@
 	          return true;
 	        };
 	      } else {
-	        var t = rule;
+	        var _t3 = rule;
 
 	        rule = function rule(x) {
-	          return Object.prototype.toString.call(x) === "[object ".concat(t, "]");
+	          return Object.prototype.toString.call(x) === "[object ".concat(_t3, "]");
 	        };
 	      }
 	    }
@@ -4272,6 +4282,7 @@
 	exports.isArray = isArray;
 	exports.isBool = isBool;
 	exports.isDescendantOf = isDescendantOf;
+	exports.isDocumentExisted = isDocumentExisted;
 	exports.isFunction = isFunction;
 	exports.isIsoFormat = isIsoFormat;
 	exports.isNumber = isNumber;

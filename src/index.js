@@ -17,6 +17,14 @@ export function glb() {
     return t
   }
 }
+export function isDocumentExisted() {
+  try {
+    t = document
+  } catch (e) {
+    return false
+  }
+  return true
+}
 // is 各种判断
 export function isset (v) {
   return typeof v !== 'undefined'

@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.4.28
+ * helper-js v1.4.29
  * (c) phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -18,17 +18,26 @@ function glb() {
     return store.glb;
   } else {
     // resolve global
-    var t;
+    var _t;
 
     try {
-      t = global;
+      _t = global;
     } catch (e) {
-      t = window;
+      _t = window;
     }
 
-    store.glb = t;
-    return t;
+    store.glb = _t;
+    return _t;
   }
+}
+function isDocumentExisted() {
+  try {
+    t = document;
+  } catch (e) {
+    return false;
+  }
+
+  return true;
 } // is 各种判断
 
 function isset(v) {
@@ -1823,15 +1832,16 @@ function parseISO(timestamp) {
   m = m - 1;
 
   if (timePart) {
-    var t = timePart.split('-').map(v => parseFloat(v));
-    h = t[0];
+    var _t2 = timePart.split('-').map(v => parseFloat(v));
 
-    if (t[1] != null) {
-      min = t[1];
+    h = _t2[0];
+
+    if (_t2[1] != null) {
+      min = _t2[1];
     }
 
-    if (t[2] != null) {
-      s = t[2];
+    if (_t2[2] != null) {
+      s = _t2[2];
     }
   }
 
@@ -2214,9 +2224,9 @@ function resolveArgsByType(args, types) {
       if (rule == null) {
         rule = () => true;
       } else {
-        var t = rule;
+        var _t3 = rule;
 
-        rule = x => Object.prototype.toString.call(x) === "[object ".concat(t, "]");
+        rule = x => Object.prototype.toString.call(x) === "[object ".concat(_t3, "]");
       }
     }
 
@@ -2602,4 +2612,4 @@ function attachCache(obj, toCache) {
   }
 }
 
-export { Cache, CrossWindow, CrossWindowEventProcessor, EventProcessor, TreeData, URLHelper, addClass, addDate, appendTo, arrayAt, arrayDiff, arrayDistinct, arrayFirst, arrayGet, arrayLast, arrayRemove, arrayRemoveBySortedIndexes, arraySibling, arrayWithoutEnd, assignIfDifferent, attachCache, backupAttr, binarySearch, camelCase, camelToWords, cloneDate, cloneObj, copyTextToClipboard, createElementFromHTML, debounce, debounceImmediate, debounceTrailing, depthFirstSearch, elementsFromPoint, empty, executeOnceInScopeByName, executePromiseGetters, executeWithCount, findNodeList, findNodeListReverse, findParent, forAll, getBorder, getBoundingClientRect, getCalendar, getCss3Prefix, getElSize, getElSizeEvenInvisible, getImageSizeByUrl, getLocalStorage2, getMonthEnd, getMonthStart, getOffset, getOffsetParent, getOuterAttachedHeight, getOuterAttachedWidth, getPosition, getPositionFromOffset, getScroll, getSessionStorage2, getUrlParam, getUserLanguage, getViewportPosition, glb, groupArray, hasClass, insertAfter, insertBefore, isArray, isBool, isDescendantOf, isFunction, isIsoFormat, isNumber, isNumeric, isObject, isOffsetInEl, isPromise, isString, isset, iterateALL, iterateAll, joinFunctionsByNext, joinFunctionsByResult, joinMethods, jqFixedSize, jqMakeCarousel, kebabCase, makeStorageHelper, mapObjectTree, mapObjects, max, min, newArrayRemoveAt, numPad, numRand, objectExcept, objectGet, objectMap, objectMerge, objectOnly, objectSet, offDOM, offsetToViewportPosition, onDOM, onDOMMany, onQuickKeydown, openCenterWindow, openWindow, pairRows, parseISO, prependTo, promiseTimeout, removeClass, removeEl, replaceMultiple, resolveArgsByType, resolveValueOrGettter, restoreAttr, retry, setElChildByIndex, snakeCase, splitArray, store, store_executeOnceInScopeByName, strRand, studlyCase, titleCase, toArrayIfNot, uniqueId, unset, viewportPositionToOffset, waitFor, waitTime, walkTreeData, watchChange, windowLoaded };
+export { Cache, CrossWindow, CrossWindowEventProcessor, EventProcessor, TreeData, URLHelper, addClass, addDate, appendTo, arrayAt, arrayDiff, arrayDistinct, arrayFirst, arrayGet, arrayLast, arrayRemove, arrayRemoveBySortedIndexes, arraySibling, arrayWithoutEnd, assignIfDifferent, attachCache, backupAttr, binarySearch, camelCase, camelToWords, cloneDate, cloneObj, copyTextToClipboard, createElementFromHTML, debounce, debounceImmediate, debounceTrailing, depthFirstSearch, elementsFromPoint, empty, executeOnceInScopeByName, executePromiseGetters, executeWithCount, findNodeList, findNodeListReverse, findParent, forAll, getBorder, getBoundingClientRect, getCalendar, getCss3Prefix, getElSize, getElSizeEvenInvisible, getImageSizeByUrl, getLocalStorage2, getMonthEnd, getMonthStart, getOffset, getOffsetParent, getOuterAttachedHeight, getOuterAttachedWidth, getPosition, getPositionFromOffset, getScroll, getSessionStorage2, getUrlParam, getUserLanguage, getViewportPosition, glb, groupArray, hasClass, insertAfter, insertBefore, isArray, isBool, isDescendantOf, isDocumentExisted, isFunction, isIsoFormat, isNumber, isNumeric, isObject, isOffsetInEl, isPromise, isString, isset, iterateALL, iterateAll, joinFunctionsByNext, joinFunctionsByResult, joinMethods, jqFixedSize, jqMakeCarousel, kebabCase, makeStorageHelper, mapObjectTree, mapObjects, max, min, newArrayRemoveAt, numPad, numRand, objectExcept, objectGet, objectMap, objectMerge, objectOnly, objectSet, offDOM, offsetToViewportPosition, onDOM, onDOMMany, onQuickKeydown, openCenterWindow, openWindow, pairRows, parseISO, prependTo, promiseTimeout, removeClass, removeEl, replaceMultiple, resolveArgsByType, resolveValueOrGettter, restoreAttr, retry, setElChildByIndex, snakeCase, splitArray, store, store_executeOnceInScopeByName, strRand, studlyCase, titleCase, toArrayIfNot, uniqueId, unset, viewportPositionToOffset, waitFor, waitTime, walkTreeData, watchChange, windowLoaded };
