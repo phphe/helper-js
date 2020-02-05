@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.4.31
+ * helper-js v1.4.32
  * (c) phphe <phphe@outlook.com> (https://github.com/phphe)
  * Released under the MIT License.
  */
@@ -1758,7 +1758,7 @@ function getCalendar(year, month) {
   month = date.getMonth() + 1;
   var monthStart = getMonthStart(date);
   var monthStartDay = monthStart.getDay();
-  var calendarStart = addDate(clone(monthStart), monthStartDay + startWeekDay, 'day');
+  var calendarStart = addDate(cloneDate(monthStart), monthStartDay + startWeekDay, 'day');
 
   if (monthStartDay > startWeekDay) {
     var startDate = calendarStart.getDate();
@@ -1800,7 +1800,7 @@ function getCalendar(year, month) {
   var endWeekDay = 6 - startWeekDay;
 
   if (monthEndDay < endWeekDay) {
-    var nextMonth = addDate(clone(date), 1, 'month');
+    var nextMonth = addDate(cloneDate(date), 1, 'month');
 
     var _year2 = nextMonth.getFullYear();
 

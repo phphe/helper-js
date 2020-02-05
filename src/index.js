@@ -1401,7 +1401,7 @@ export function getCalendar(year, month, startWeekDay = 0) {
   month = date.getMonth() + 1
   const monthStart = getMonthStart(date)
   const monthStartDay = monthStart.getDay()
-  const calendarStart = addDate(clone(monthStart), monthStartDay + startWeekDay, 'day')
+  const calendarStart = addDate(cloneDate(monthStart), monthStartDay + startWeekDay, 'day')
   if (monthStartDay > startWeekDay) {
     const startDate = calendarStart.getDate()
     const year = calendarStart.getFullYear()
@@ -1434,7 +1434,7 @@ export function getCalendar(year, month, startWeekDay = 0) {
   const monthEndDay = monthEnd.getDay()
   const endWeekDay = 6 - startWeekDay
   if (monthEndDay < endWeekDay) {
-    const nextMonth = addDate(clone(date), 1, 'month')
+    const nextMonth = addDate(cloneDate(date), 1, 'month')
     const year = nextMonth.getFullYear()
     const month = nextMonth.getMonth() + 1
     for (let i = monthEndDay + 1, date = 1; i <= endWeekDay; i++, date++) {
