@@ -309,7 +309,7 @@ export function objectExcept(obj, keys) {
   return r
 }
 // loop for all type
-// todo change reverse to opt in next version
+// TODO change reverse to opt in next version
 export function forAll(val, handler, reverse) {
   if (!reverse) {
     if (isArray(val) || isString(val) || val.hasOwnProperty('length')) {
@@ -579,7 +579,7 @@ export function pairRows(rows1, rows2, key1, key2) {
 }
 // 深度优先遍历
 // Depth-First-Search
-// todo change args in next version
+// TODO change args in next version
 export function depthFirstSearch(obj, handler, childrenKey = 'children', reverse) {
   const rootChildren = isArray(obj) ? obj : [obj]
   //
@@ -594,7 +594,7 @@ export function depthFirstSearch(obj, handler, childrenKey = 'children', reverse
       const item = children[i]
       const index = reverse ? len - i - 1 : i
       const path = parentPath ? [...parentPath, index] : []
-      // todo change args in next version
+      // TODO change args in next version
       const r = handler(item, index, parent, path)
       if (r === false) {
         // stop
@@ -694,12 +694,12 @@ export class TreeData {
   }
   walk(handler, opt={}) {
     const {childrenKey, data} = this
-    // todo change args in next version
+    // TODO change args in next version
     return walkTreeData(data, handler, childrenKey, opt.reverse)
   }
   clone(opt={}) {
     // opt.afterNodeCreated(newNode, {oldNode: node, index, parent, path})
-    // todo change args in next version
+    // TODO change args in next version
     const {childrenKey} = this
     const td = new TreeData()
     this.walk((node, index, parent, path) => {
@@ -1077,7 +1077,7 @@ export function getBoundingClientRect(el){
 }
 export const getViewportPosition = getBoundingClientRect
 
-// todo not tested
+// TODO not tested
 export function viewportPositionToOffset(position){
   const body = document.body
   const bodyOf = getOffset(body)
@@ -1085,7 +1085,7 @@ export function viewportPositionToOffset(position){
   return {x: position.x + bodyOf.x - bodyVP.x, y: position.y + bodyOf.y - bodyVP.y}
 }
 
-// todo not tested
+// TODO not tested
 export function offsetToViewportPosition(offset){
   const body = document.body
   const bodyOf = getOffset(body)
@@ -1141,7 +1141,7 @@ export function removeClass(el, className) {
   else
   { el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ') }
 }
-// todo rename to getElSizeEvenInvisible in next version
+// TODO rename to getElSizeEvenInvisible in next version
 export function getElSize(el) {
   backupAttr(el, 'style')
   el.style.display = 'block'
@@ -1669,6 +1669,13 @@ export function copyTextToClipboard(text) {
   }
 
   document.body.removeChild(textArea)
+}
+
+export function isNode() {
+  return Boolean(typeof module !== 'undefined' && module.exports)
+}
+export function isIE() {
+  return Boolean(window.ActiveXObject || "ActiveXObject" in window)
 }
 
 // jquery

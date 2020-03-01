@@ -214,6 +214,8 @@ addDate(now, -1, 'hour')
 ###### waitFor   (name, condition, time = 100, maxCount = 1000)
 ###### retry   (func, limitTimes = 3)
 ###### copyTextToClipboard   (text) // tested in chrome
+###### isNode()
+###### isIE()
 ### jquery
 ###### jqFixedSize   
 ###### jqMakeCarousel
