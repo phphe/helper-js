@@ -1,4 +1,4 @@
-import {belongsTo, report} from "rogo";
+import {belongsTo, report, camelize} from "rogo";
 import * as rollup from "rollup";
 import * as path from "path";
 const babel = require('rollup-plugin-babel');
@@ -12,8 +12,7 @@ const pkg = require("../package.json")
 const input = 'src/index.js'
 const outDir = 'dist'
 const outputName = pkg.name // the built file name is outDir/outputName.format.js
-const moduleName = 'heTreeVue' // for umd, amd
-const extractCssPath = path.resolve(outDir, `${outputName}.css`)
+const moduleName = camelize(pkg.name) // for umd, amd
 
 const getBabelConfig = () => ({
   // .babelrc

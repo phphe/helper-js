@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.4.34
+ * helper-js v1.4.35
  * (c) phphe <phphe@outlook.com> (https://github.com/phphe)
  * Homepage: undefined
  * Released under the MIT License.
@@ -7,7 +7,7 @@
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
   typeof define === 'function' && define.amd ? define(['exports'], factory) :
-  (global = global || self, factory(global.heTreeVue = {}));
+  (global = global || self, factory(global.helperJs = {}));
 }(this, (function (exports) { 'use strict';
 
   function _assertThisInitialized(self) {

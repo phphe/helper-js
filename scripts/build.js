@@ -12,8 +12,7 @@ const pkg = require("../package.json");
 const input = 'src/index.js';
 const outDir = 'dist';
 const outputName = pkg.name; // the built file name is outDir/outputName.format.js
-const moduleName = 'heTreeVue'; // for umd, amd
-const extractCssPath = path.resolve(outDir, `${outputName}.css`);
+const moduleName = rogo_1.camelize(pkg.name); // for umd, amd
 const getBabelConfig = () => ({
     // .babelrc
     presets: [

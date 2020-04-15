@@ -1,6 +1,6 @@
 {
   "name": "helper-js",
-  "version": "1.4.34",
+  "version": "1.4.35",
   "description": "",
   "main": "dist/helper-js.cjs.js",
   "module": "dist/helper-js.esm.js",
@@ -21,7 +21,7 @@
     "url": "https://github.com/phphe/helper-js.git"
   },
   "devDependencies": {
-    "rogo": "^2.0.1"
+    "rogo": "^2.0.2"
   },
   "dependencies": {
     "@babel/runtime": "^7.7.7"
