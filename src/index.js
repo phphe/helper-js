@@ -1672,7 +1672,7 @@ export function copyTextToClipboard(text) {
 }
 
 export function isNode() {
-  return Boolean(typeof module !== 'undefined' && module.exports)
+  return Boolean(typeof global.module !== 'undefined' && global.module.exports)
 }
 export function isIE() {
   return Boolean(window.ActiveXObject || "ActiveXObject" in window)
