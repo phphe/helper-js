@@ -1,13 +1,37 @@
 /*!
- * helper-js v1.4.33
+ * helper-js v1.4.34
  * (c) phphe <phphe@outlook.com> (https://github.com/phphe)
+ * Homepage: undefined
  * Released under the MIT License.
  */
+import _assertThisInitialized from '@babel/runtime/helpers/assertThisInitialized';
+import _get from '@babel/runtime/helpers/get';
+import _inherits from '@babel/runtime/helpers/inherits';
+import _possibleConstructorReturn from '@babel/runtime/helpers/possibleConstructorReturn';
+import _getPrototypeOf from '@babel/runtime/helpers/getPrototypeOf';
+import _slicedToArray from '@babel/runtime/helpers/slicedToArray';
 import _defineProperty from '@babel/runtime/helpers/defineProperty';
+import _createClass from '@babel/runtime/helpers/createClass';
+import _classCallCheck from '@babel/runtime/helpers/classCallCheck';
+import _typeof from '@babel/runtime/helpers/typeof';
+import _regeneratorRuntime from '@babel/runtime/regenerator';
+import _toConsumableArray from '@babel/runtime/helpers/toConsumableArray';
+
+function _createSuper(Derived) { return function () { var Super = _getPrototypeOf(Derived), result; if (_isNativeReflectConstruct()) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+var _marked = /*#__PURE__*/_regeneratorRuntime.mark(iterateAll);
+
+function _createForOfIteratorHelper(o) { if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (o = _unsupportedIterableToArray(o))) { var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var it, normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(n); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
 // local store
 var store = {}; // get global
@@ -170,8 +194,18 @@ function newArrayRemoveAt(arr, indexes) {
   indexes = toArrayIfNot(indexes);
   var mapping = {};
 
-  for (var index of indexes) {
-    mapping[index] = true;
+  var _iterator = _createForOfIteratorHelper(indexes),
+      _step;
+
+  try {
+    for (_iterator.s(); !(_step = _iterator.n()).done;) {
+      var index = _step.value;
+      mapping[index] = true;
+    }
+  } catch (err) {
+    _iterator.e(err);
+  } finally {
+    _iterator.f();
   }
 
   var newArr = [];
@@ -215,7 +249,9 @@ function arraySibling(arr, item, offset) {
   }
 
   if (isArray(offset)) {
-    return offset.map(v => arr[index + v]);
+    return offset.map(function (v) {
+      return arr[index + v];
+    });
   }
 
   return arr[index + offset];
@@ -256,7 +292,7 @@ function splitArray(arr, n) {
 }
 function groupArray(arr, getMark) {
   var groups = new Map();
-  arr.forEach(v => {
+  arr.forEach(function (v) {
     var mark = getMark(v);
 
     if (!groups.has(mark)) {
@@ -266,16 +302,18 @@ function groupArray(arr, getMark) {
     groups.get(mark).push(v);
   });
   var r = [];
-  groups.forEach((value, key) => {
+  groups.forEach(function (value, key) {
     r.push([key, value]);
   });
   return r;
 }
 function arrayDistinct(arr) {
   if (glb().Set) {
-    return [...new Set(arr)];
+    return _toConsumableArray(new Set(arr));
   } else {
-    return arr.filter((v, i, a) => a.indexOf(v) === i);
+    return arr.filter(function (v, i, a) {
+      return a.indexOf(v) === i;
+    });
   }
 }
 function arrayGet(arr, index, endIndex) {
@@ -346,7 +384,7 @@ function objectExcept(obj, keys) {
 
   return r;
 } // loop for all type
-// todo change reverse to opt in next version
+// TODO change reverse to opt in next version
 
 function forAll(val, handler, reverse) {
   if (!reverse) {
@@ -357,22 +395,24 @@ function forAll(val, handler, reverse) {
         }
       }
     } else if (isObject(val)) {
-      for (var key of Object.keys(val)) {
+      for (var _i2 = 0, _Object$keys = Object.keys(val); _i2 < _Object$keys.length; _i2++) {
+        var key = _Object$keys[_i2];
+
         if (handler(val[key], key) === false) {
           break;
         }
       }
     } else if (Number.isInteger(val)) {
-      for (var _i2 = 0; _i2 < val; _i2++) {
-        if (handler(_i2, _i2) === false) {
+      for (var _i3 = 0; _i3 < val; _i3++) {
+        if (handler(_i3, _i3) === false) {
           break;
         }
       }
     }
   } else {
     if (isArray(val) || isString(val) || val.hasOwnProperty('length')) {
-      for (var _i3 = val.length - 1; _i3 >= 0; _i3--) {
-        if (handler(val[_i3], _i3) === false) {
+      for (var _i4 = val.length - 1; _i4 >= 0; _i4--) {
+        if (handler(val[_i4], _i4) === false) {
           break;
         }
       }
@@ -380,14 +420,16 @@ function forAll(val, handler, reverse) {
       var keys = Object.keys(val);
       keys.reverse();
 
-      for (var _key of keys) {
+      for (var _i5 = 0, _keys = keys; _i5 < _keys.length; _i5++) {
+        var _key = _keys[_i5];
+
         if (handler(val[_key], _key) === false) {
           break;
         }
       }
     } else if (Number.isInteger(val)) {
-      for (var _i4 = val - 1; _i4 >= 0; _i4--) {
-        if (handler(_i4, _i4) === false) {
+      for (var _i6 = val - 1; _i6 >= 0; _i6--) {
+        if (handler(_i6, _i6) === false) {
           break;
         }
       }
@@ -395,66 +437,197 @@ function forAll(val, handler, reverse) {
   }
 } // loop for Array, Object, NodeList, String
 
-function* iterateAll(val) {
-  var opt = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+function iterateAll(val) {
+  var opt,
+      i,
+      info,
+      _i7,
+      _Object$keys2,
+      key,
+      _info,
+      _i8,
+      _info2,
+      keys,
+      _i9,
+      _keys2,
+      _key2,
+      _info3,
+      _args = arguments;
 
-  // opt: {reverse, exclude}
-  if (!opt.reverse) {
-    if (val.length != null) {
-      for (var i = 0; i < val.length; i++) {
-        var info = {
-          value: val[i],
-          index: i
-        };
+  return _regeneratorRuntime.wrap(function iterateAll$(_context) {
+    while (1) {
+      switch (_context.prev = _context.next) {
+        case 0:
+          opt = _args.length > 1 && _args[1] !== undefined ? _args[1] : {};
 
-        if (!opt.exclude || !opt.exclude(info)) {
-          yield info;
-        }
+          if (opt.reverse) {
+            _context.next = 30;
+            break;
+          }
+
+          if (!(val.length != null)) {
+            _context.next = 14;
+            break;
+          }
+
+          i = 0;
+
+        case 4:
+          if (!(i < val.length)) {
+            _context.next = 12;
+            break;
+          }
+
+          info = {
+            value: val[i],
+            index: i
+          };
+
+          if (!(!opt.exclude || !opt.exclude(info))) {
+            _context.next = 9;
+            break;
+          }
+
+          _context.next = 9;
+          return info;
+
+        case 9:
+          i++;
+          _context.next = 4;
+          break;
+
+        case 12:
+          _context.next = 28;
+          break;
+
+        case 14:
+          if (!isObject(val)) {
+            _context.next = 27;
+            break;
+          }
+
+          _i7 = 0, _Object$keys2 = Object.keys(val);
+
+        case 16:
+          if (!(_i7 < _Object$keys2.length)) {
+            _context.next = 25;
+            break;
+          }
+
+          key = _Object$keys2[_i7];
+          _info = {
+            value: val[key],
+            key: key
+          };
+
+          if (!(!opt.exclude || !opt.exclude(_info))) {
+            _context.next = 22;
+            break;
+          }
+
+          _context.next = 22;
+          return _info;
+
+        case 22:
+          _i7++;
+          _context.next = 16;
+          break;
+
+        case 25:
+          _context.next = 28;
+          break;
+
+        case 27:
+          throw 'Unsupported type';
+
+        case 28:
+          _context.next = 58;
+          break;
+
+        case 30:
+          if (!(val.length != null)) {
+            _context.next = 42;
+            break;
+          }
+
+          _i8 = val.length - 1;
+
+        case 32:
+          if (!(_i8 >= 0)) {
+            _context.next = 40;
+            break;
+          }
+
+          _info2 = {
+            value: val[_i8],
+            index: _i8
+          };
+
+          if (!(!opt.exclude || !opt.exclude(_info2))) {
+            _context.next = 37;
+            break;
+          }
+
+          _context.next = 37;
+          return _info2;
+
+        case 37:
+          _i8--;
+          _context.next = 32;
+          break;
+
+        case 40:
+          _context.next = 58;
+          break;
+
+        case 42:
+          if (!isObject(val)) {
+            _context.next = 57;
+            break;
+          }
+
+          keys = Object.keys(val);
+          keys.reverse();
+          _i9 = 0, _keys2 = keys;
+
+        case 46:
+          if (!(_i9 < _keys2.length)) {
+            _context.next = 55;
+            break;
+          }
+
+          _key2 = _keys2[_i9];
+          _info3 = {
+            value: val[_key2],
+            key: _key2
+          };
+
+          if (!(!opt.exclude || !opt.exclude(_info3))) {
+            _context.next = 52;
+            break;
+          }
+
+          _context.next = 52;
+          return _info3;
+
+        case 52:
+          _i9++;
+          _context.next = 46;
+          break;
+
+        case 55:
+          _context.next = 58;
+          break;
+
+        case 57:
+          throw 'Unsupported type';
+
+        case 58:
+        case "end":
+          return _context.stop();
       }
-    } else if (isObject(val)) {
-      for (var key of Object.keys(val)) {
-        var _info = {
-          value: val[key],
-          key
-        };
-
-        if (!opt.exclude || !opt.exclude(_info)) {
-          yield _info;
-        }
-      }
-    } else {
-      throw 'Unsupported type';
     }
-  } else {
-    if (val.length != null) {
-      for (var _i5 = val.length - 1; _i5 >= 0; _i5--) {
-        var _info2 = {
-          value: val[_i5],
-          index: _i5
-        };
-
-        if (!opt.exclude || !opt.exclude(_info2)) {
-          yield _info2;
-        }
-      }
-    } else if (isObject(val)) {
-      var keys = Object.keys(val);
-      keys.reverse();
-
-      for (var _key2 of keys) {
-        var _info3 = {
-          value: val[_key2],
-          key: _key2
-        };
-
-        if (!opt.exclude || !opt.exclude(_info3)) {
-          yield _info3;
-        }
-      }
-    } else {
-      throw 'Unsupported type';
-    }
-  }
+  }, _marked);
 } // Deprecated in next version
 
 var iterateALL = iterateAll; // source: http://stackoverflow.com/questions/8817394/javascript-get-deep-value-from-object-by-passing-path-to-it-as-string
@@ -464,8 +637,18 @@ function objectGet(obj, path, throwError) {
   var current = obj;
 
   try {
-    for (var key of paths) {
-      current = current[key];
+    var _iterator2 = _createForOfIteratorHelper(paths),
+        _step2;
+
+    try {
+      for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+        var key = _step2.value;
+        current = current[key];
+      }
+    } catch (err) {
+      _iterator2.e(err);
+    } finally {
+      _iterator2.f();
     }
   } catch (e) {
     if (throwError) {
@@ -495,7 +678,7 @@ function unset(obj, prop) {
 } // exclude: array or function
 
 function cloneObj(obj, exclude) {
-  var type = typeof obj;
+  var type = _typeof(obj);
 
   switch (type) {
     case 'undefined':
@@ -516,13 +699,25 @@ function cloneObj(obj, exclude) {
       if (isArray(obj)) {
         r = [];
 
-        for (var item of obj) {
-          r.push(cloneObj(item, exclude));
+        var _iterator3 = _createForOfIteratorHelper(obj),
+            _step3;
+
+        try {
+          for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+            var item = _step3.value;
+            r.push(cloneObj(item, exclude));
+          }
+        } catch (err) {
+          _iterator3.e(err);
+        } finally {
+          _iterator3.f();
         }
       } else {
         r = {};
 
-        for (var key of Object.keys(obj)) {
+        for (var _i10 = 0, _Object$keys3 = Object.keys(obj); _i10 < _Object$keys3.length; _i10++) {
+          var key = _Object$keys3[_i10];
+
           if (!exclude || isArray(exclude) && !exclude.includes(key) || !exclude(key, obj[key], obj)) {
             r[key] = cloneObj(obj[key], exclude);
           }
@@ -568,15 +763,16 @@ function mapObjectTree(obj, handler) {
     }
 
     count++;
-    var {
-      value,
-      key,
-      parent,
-      newParent
-    } = stack.shift();
+
+    var _stack$shift = stack.shift(),
+        value = _stack$shift.value,
+        key = _stack$shift.key,
+        parent = _stack$shift.parent,
+        newParent = _stack$shift.newParent;
+
     var t = handler(value, key, parent, newParent);
 
-    var assign = (value, key, canPush) => {
+    var assign = function assign(value, key, canPush) {
       if (isArray(value)) {
         value = [];
       } else if (isObject(value)) {
@@ -608,10 +804,8 @@ function mapObjectTree(obj, handler) {
       val = value;
       newVal = assign(value, key);
     } else {
-      var {
-        key: key2,
-        value: _value
-      } = t;
+      var key2 = t.key,
+          _value = t.value;
       val = _value;
 
       if (t.delete || key2 === false) {
@@ -624,10 +818,8 @@ function mapObjectTree(obj, handler) {
         newVal = assign(_value, key2);
       }
 
-      ({
-        stop,
-        skip
-      } = t);
+      stop = t.stop;
+      skip = t.skip;
     }
 
     if (toDelete) {
@@ -654,10 +846,10 @@ function mapObjectTree(obj, handler) {
         });
       }
     } else if (isObject(val)) {
-      Object.keys(val).forEach(key => {
+      Object.keys(val).forEach(function (key) {
         stack.push({
           value: val[key],
-          key,
+          key: key,
           parent: val,
           newParent: newVal
         });
@@ -699,19 +891,23 @@ function pairRows(rows1, rows2, key1, key2) {
   }
 
   var map = mapObjects(rows2, key2);
-  return rows1.map(row1 => [row1, map[row1[key1]]]);
+  return rows1.map(function (row1) {
+    return [row1, map[row1[key1]]];
+  });
 } // 深度优先遍历
 // Depth-First-Search
-// todo change args in next version
+// TODO change args in next version
 
 function depthFirstSearch(obj, handler) {
   var childrenKey = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'children';
   var reverse = arguments.length > 3 ? arguments[3] : undefined;
   var rootChildren = isArray(obj) ? obj : [obj]; //
 
-  class StopException {}
+  var StopException = function StopException() {
+    _classCallCheck(this, StopException);
+  };
 
-  var func = (children, parent, parentPath) => {
+  var func = function func(children, parent, parentPath) {
     if (reverse) {
       children = children.slice();
       children.reverse();
@@ -722,7 +918,7 @@ function depthFirstSearch(obj, handler) {
     for (var i = 0; i < len; i++) {
       var item = children[i];
       var index = reverse ? len - i - 1 : i;
-      var path = parentPath ? [...parentPath, index] : []; // todo change args in next version
+      var path = parentPath ? [].concat(_toConsumableArray(parentPath), [index]) : []; // TODO change args in next version
 
       var r = handler(item, index, parent, path);
 
@@ -750,175 +946,283 @@ function depthFirstSearch(obj, handler) {
   }
 }
 var walkTreeData = depthFirstSearch;
-class TreeData {
+var TreeData = /*#__PURE__*/function () {
   // data = null;
-  constructor(data) {
+  function TreeData(data) {
+    _classCallCheck(this, TreeData);
+
     this.childrenKey = 'children';
     this.data = data;
   }
 
-  get rootChildren() {
-    var {
-      childrenKey
-    } = this;
-
-    if (!this.data) {
-      this.data = [];
-    }
-
-    var {
-      data
-    } = this;
-    return isArray(data) ? data : data[childrenKey];
-  }
-
-  *iteratePath(path) {
-    var opt = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-    var {
-      childrenKey,
-      rootChildren
-    } = this;
-
-    if (!opt.reverse) {
-      var prevPath = [];
-      var prevChildren = rootChildren;
-
-      for (var index of path) {
-        var currentPath = [...prevPath, index];
-        var currentNode = prevChildren[index];
-        yield {
-          path: currentPath,
-          node: currentNode
-        };
-        prevPath = currentPath;
-        prevChildren = currentNode[childrenKey];
-      }
-    } else {
-      var list = [...this.iteratePath(path, _objectSpread({}, opt, {
-        reverse: false
-      }))];
-      list.reverse();
-
-      for (var {
-        path: _path,
-        node
-      } of list) {
-        yield {
-          path: _path,
-          node
-        };
-      }
-    }
-  }
-
-  getAllNodes(path) {
-    var all = [];
-
-    for (var {
-      node
-    } of this.iteratePath(path)) {
-      all.push(node);
-    }
-
-    return all;
-  }
-
-  getNode(path) {
-    return arrayLast(this.getAllNodes(path));
-  }
-
-  getNodeIndexAndParent(path) {
-    var parentPath = path.slice();
-    var index = parentPath.pop();
-    return {
-      parent: this.getNode(parentPath),
-      index,
-      parentPath
-    };
-  }
-
-  getNodeParent(path) {
-    return this.getNodeIndexAndParent(path).parent;
-  }
-
-  setPathNode(path, node) {
-    if (path == null || path.length === 0) {
-      this.data = node;
-    } else {
-      var {
-        childrenKey,
-        rootChildren
-      } = this;
-      var {
-        parent,
-        index
-      } = this.getNodeIndexAndParent(path);
-      var parentChildren = path.length === 1 ? rootChildren : parent[childrenKey];
-      parentChildren[index] = node;
-    }
-  }
-
-  removeNode(path) {
-    var {
-      childrenKey,
-      rootChildren
-    } = this;
-    var {
-      parent,
-      index
-    } = this.getNodeIndexAndParent(path);
-    var parentChildren = path.length === 1 ? rootChildren : parent[childrenKey];
-    var node = parentChildren[index];
-    parentChildren.splice(index, 1);
-    return node;
-  }
-
-  walk(handler) {
-    var opt = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-    var {
-      childrenKey,
-      data
-    } = this; // todo change args in next version
-
-    return walkTreeData(data, handler, childrenKey, opt.reverse);
-  }
-
-  clone() {
-    var opt = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    // opt.afterNodeCreated(newNode, {oldNode: node, index, parent, path})
-    // todo change args in next version
-    var {
-      childrenKey
-    } = this;
-    var td = new TreeData();
-    this.walk((node, index, parent, path) => {
-      var newNode = Object.assign({}, node);
-
-      if (newNode[childrenKey]) {
-        newNode[childrenKey] = [];
-      }
-
-      if (opt.afterNodeCreated) {
-        opt.afterNodeCreated(newNode, {
-          oldNode: node,
+  _createClass(TreeData, [{
+    key: "iteratePath",
+    value: /*#__PURE__*/_regeneratorRuntime.mark(function iteratePath(path) {
+      var opt,
+          childrenKey,
+          rootChildren,
+          prevPath,
+          prevChildren,
+          _iterator4,
+          _step4,
           index,
-          parent,
-          path
-        });
+          currentPath,
+          currentNode,
+          list,
+          _iterator5,
+          _step5,
+          _step5$value,
+          _path,
+          node,
+          _args2 = arguments;
+
+      return _regeneratorRuntime.wrap(function iteratePath$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              opt = _args2.length > 1 && _args2[1] !== undefined ? _args2[1] : {};
+              childrenKey = this.childrenKey, rootChildren = this.rootChildren;
+
+              if (opt.reverse) {
+                _context2.next = 29;
+                break;
+              }
+
+              prevPath = [];
+              prevChildren = rootChildren;
+              _iterator4 = _createForOfIteratorHelper(path);
+              _context2.prev = 6;
+
+              _iterator4.s();
+
+            case 8:
+              if ((_step4 = _iterator4.n()).done) {
+                _context2.next = 19;
+                break;
+              }
+
+              index = _step4.value;
+              currentPath = [].concat(_toConsumableArray(prevPath), [index]);
+              currentNode = prevChildren[index];
+              _context2.next = 14;
+              return {
+                path: currentPath,
+                node: currentNode
+              };
+
+            case 14:
+              prevPath = currentPath;
+              prevChildren = currentNode[childrenKey];
+
+            case 17:
+              _context2.next = 8;
+              break;
+
+            case 19:
+              _context2.next = 24;
+              break;
+
+            case 21:
+              _context2.prev = 21;
+              _context2.t0 = _context2["catch"](6);
+
+              _iterator4.e(_context2.t0);
+
+            case 24:
+              _context2.prev = 24;
+
+              _iterator4.f();
+
+              return _context2.finish(24);
+
+            case 27:
+              _context2.next = 48;
+              break;
+
+            case 29:
+              list = _toConsumableArray(this.iteratePath(path, _objectSpread({}, opt, {
+                reverse: false
+              })));
+              list.reverse();
+              _iterator5 = _createForOfIteratorHelper(list);
+              _context2.prev = 32;
+
+              _iterator5.s();
+
+            case 34:
+              if ((_step5 = _iterator5.n()).done) {
+                _context2.next = 40;
+                break;
+              }
+
+              _step5$value = _step5.value, _path = _step5$value.path, node = _step5$value.node;
+              _context2.next = 38;
+              return {
+                path: _path,
+                node: node
+              };
+
+            case 38:
+              _context2.next = 34;
+              break;
+
+            case 40:
+              _context2.next = 45;
+              break;
+
+            case 42:
+              _context2.prev = 42;
+              _context2.t1 = _context2["catch"](32);
+
+              _iterator5.e(_context2.t1);
+
+            case 45:
+              _context2.prev = 45;
+
+              _iterator5.f();
+
+              return _context2.finish(45);
+
+            case 48:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, iteratePath, this, [[6, 21, 24, 27], [32, 42, 45, 48]]);
+    })
+  }, {
+    key: "getAllNodes",
+    value: function getAllNodes(path) {
+      var all = [];
+
+      var _iterator6 = _createForOfIteratorHelper(this.iteratePath(path)),
+          _step6;
+
+      try {
+        for (_iterator6.s(); !(_step6 = _iterator6.n()).done;) {
+          var node = _step6.value.node;
+          all.push(node);
+        }
+      } catch (err) {
+        _iterator6.e(err);
+      } finally {
+        _iterator6.f();
       }
 
-      td.setPathNode(path, newNode);
-    });
-    return td.data;
-  }
+      return all;
+    }
+  }, {
+    key: "getNode",
+    value: function getNode(path) {
+      return arrayLast(this.getAllNodes(path));
+    }
+  }, {
+    key: "getNodeIndexAndParent",
+    value: function getNodeIndexAndParent(path) {
+      var parentPath = path.slice();
+      var index = parentPath.pop();
+      return {
+        parent: this.getNode(parentPath),
+        index: index,
+        parentPath: parentPath
+      };
+    }
+  }, {
+    key: "getNodeParent",
+    value: function getNodeParent(path) {
+      return this.getNodeIndexAndParent(path).parent;
+    }
+  }, {
+    key: "setPathNode",
+    value: function setPathNode(path, node) {
+      if (path == null || path.length === 0) {
+        this.data = node;
+      } else {
+        var childrenKey = this.childrenKey,
+            rootChildren = this.rootChildren;
 
-} // function helper | method helper ============================
+        var _this$getNodeIndexAnd = this.getNodeIndexAndParent(path),
+            parent = _this$getNodeIndexAnd.parent,
+            index = _this$getNodeIndexAnd.index;
+
+        var parentChildren = path.length === 1 ? rootChildren : parent[childrenKey];
+        parentChildren[index] = node;
+      }
+    }
+  }, {
+    key: "removeNode",
+    value: function removeNode(path) {
+      var childrenKey = this.childrenKey,
+          rootChildren = this.rootChildren;
+
+      var _this$getNodeIndexAnd2 = this.getNodeIndexAndParent(path),
+          parent = _this$getNodeIndexAnd2.parent,
+          index = _this$getNodeIndexAnd2.index;
+
+      var parentChildren = path.length === 1 ? rootChildren : parent[childrenKey];
+      var node = parentChildren[index];
+      parentChildren.splice(index, 1);
+      return node;
+    }
+  }, {
+    key: "walk",
+    value: function walk(handler) {
+      var opt = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+      var childrenKey = this.childrenKey,
+          data = this.data; // TODO change args in next version
+
+      return walkTreeData(data, handler, childrenKey, opt.reverse);
+    }
+  }, {
+    key: "clone",
+    value: function clone() {
+      var opt = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+      // opt.afterNodeCreated(newNode, {oldNode: node, index, parent, path})
+      // TODO change args in next version
+      var childrenKey = this.childrenKey;
+      var td = new TreeData();
+      this.walk(function (node, index, parent, path) {
+        var newNode = Object.assign({}, node);
+
+        if (newNode[childrenKey]) {
+          newNode[childrenKey] = [];
+        }
+
+        if (opt.afterNodeCreated) {
+          opt.afterNodeCreated(newNode, {
+            oldNode: node,
+            index: index,
+            parent: parent,
+            path: path
+          });
+        }
+
+        td.setPathNode(path, newNode);
+      });
+      return td.data;
+    }
+  }, {
+    key: "rootChildren",
+    get: function get() {
+      var childrenKey = this.childrenKey;
+
+      if (!this.data) {
+        this.data = [];
+      }
+
+      var data = this.data;
+      return isArray(data) ? data : data[childrenKey];
+    }
+  }]);
+
+  return TreeData;
+}(); // function helper | method helper ============================
 
 function resolveValueOrGettter(valueOrGetter) {
   var args = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
 
   if (isFunction(valueOrGetter)) {
-    return valueOrGetter(...args);
+    return valueOrGetter.apply(void 0, _toConsumableArray(args));
   } else {
     return valueOrGetter;
   }
@@ -930,7 +1234,7 @@ function executeWithCount(func) {
       args[_key3] = arguments[_key3];
     }
 
-    return func.call(this, count++, ...args);
+    return func.call.apply(func, [this, count++].concat(args));
   };
 }
 function watchChange(getVal, handler) {
@@ -941,10 +1245,10 @@ function watchChange(getVal, handler) {
       args[_key4] = arguments[_key4];
     }
 
-    var newVal = getVal(...args);
+    var newVal = getVal.apply(void 0, args);
 
     if (oldVal !== newVal) {
-      handler(newVal, ...args);
+      handler.apply(void 0, [newVal].concat(args));
     }
 
     oldVal = newVal;
@@ -961,12 +1265,12 @@ function executeOnceInScopeByName(name, action) {
   if (!scope[name]) {
     var value = action();
 
-    var destroy = () => {
+    var destroy = function destroy() {
       delete scope[name];
     };
 
     scope[name] = {
-      destroy
+      destroy: destroy
     };
 
     if (storeResult) {
@@ -986,11 +1290,13 @@ function debounceTrailing(action) {
   var rejects = [];
 
   var wrappedAction = function wrappedAction() {
+    var _this = this;
+
     for (var _len3 = arguments.length, args = new Array(_len3), _key5 = 0; _key5 < _len3; _key5++) {
       args[_key5] = arguments[_key5];
     }
 
-    return new Promise((resolve, reject) => {
+    return new Promise(function (resolve, reject) {
       resolves.push(resolve);
       rejects.push(reject); //
 
@@ -998,11 +1304,13 @@ function debounceTrailing(action) {
 
       if (!delaying) {
         delaying = true;
-        t = setTimeout(() => {
-          var result = action.call(this, ...lastArgs);
+        t = setTimeout(function () {
+          var result = action.call.apply(action, [_this].concat(_toConsumableArray(lastArgs)));
           t = null;
           delaying = false;
-          resolves.forEach(resolve => resolve(result));
+          resolves.forEach(function (resolve) {
+            return resolve(result);
+          });
           resolves = [];
           rejects = [];
         }, wait);
@@ -1010,7 +1318,7 @@ function debounceTrailing(action) {
     });
   };
 
-  wrappedAction.stop = () => {
+  wrappedAction.stop = function () {
     if (t) {
       clearTimeout(t);
       t = null;
@@ -1018,7 +1326,9 @@ function debounceTrailing(action) {
 
     delaying = false;
     resolves = [];
-    rejects.forEach(reject => reject());
+    rejects.forEach(function (reject) {
+      return reject();
+    });
     rejects = [];
   };
 
@@ -1031,14 +1341,16 @@ function debounceImmediate(action) {
   var result;
 
   var wrappedAction = function wrappedAction() {
-    return new Promise((resolve, reject) => {
+    var _this2 = this;
+
+    return new Promise(function (resolve, reject) {
       if (delaying) {
         resolve(result);
       } else {
         delaying = true;
-        result = action.call(this, ...lastArgs);
+        result = action.call.apply(action, [_this2].concat(_toConsumableArray(lastArgs)));
         resolve(result);
-        t = setTimeout(() => {
+        t = setTimeout(function () {
           t = null;
           delaying = false;
           result = null;
@@ -1047,7 +1359,7 @@ function debounceImmediate(action) {
     });
   };
 
-  wrappedAction.stop = () => {
+  wrappedAction.stop = function () {
     if (t) {
       clearTimeout(t);
       t = null;
@@ -1079,24 +1391,34 @@ function joinMethods(methods) {
   var mode = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'value';
   var simpleJoinedMethod;
 
-  var _loop3 = function _loop3(method) {
-    var old = simpleJoinedMethod;
+  var _iterator7 = _createForOfIteratorHelper(methods),
+      _step7;
 
-    if (old) {
-      simpleJoinedMethod = function simpleJoinedMethod() {
-        for (var _len4 = arguments.length, args = new Array(_len4), _key6 = 0; _key6 < _len4; _key6++) {
-          args[_key6] = arguments[_key6];
-        }
+  try {
+    var _loop3 = function _loop3() {
+      var method = _step7.value;
+      var old = simpleJoinedMethod;
 
-        return method.call(this, mode === 'value' ? old.call(this, ...args) : old, ...args);
-      };
-    } else {
-      simpleJoinedMethod = method;
+      if (old) {
+        simpleJoinedMethod = function simpleJoinedMethod() {
+          for (var _len4 = arguments.length, args = new Array(_len4), _key6 = 0; _key6 < _len4; _key6++) {
+            args[_key6] = arguments[_key6];
+          }
+
+          return method.call.apply(method, [this, mode === 'value' ? old.call.apply(old, [this].concat(args)) : old].concat(args));
+        };
+      } else {
+        simpleJoinedMethod = method;
+      }
+    };
+
+    for (_iterator7.s(); !(_step7 = _iterator7.n()).done;) {
+      _loop3();
     }
-  };
-
-  for (var method of methods) {
-    _loop3(method);
+  } catch (err) {
+    _iterator7.e(err);
+  } finally {
+    _iterator7.f();
   }
 
   return simpleJoinedMethod;
@@ -1121,15 +1443,23 @@ function joinFunctionsByResult(funcs) {
 } // must pass arguments to `next` manually
 
 function joinFunctionsByNext(funcs) {
-  var next = () => {};
+  var next = function next() {};
 
-  for (var {
-    value: func
-  } of iterateAll(funcs, {
+  var _iterator8 = _createForOfIteratorHelper(iterateAll(funcs, {
     reverse: true
-  })) {
-    var currentNext = next;
-    next = wrapFuncWithNext(func, currentNext);
+  })),
+      _step8;
+
+  try {
+    for (_iterator8.s(); !(_step8 = _iterator8.n()).done;) {
+      var func = _step8.value.value;
+      var currentNext = next;
+      next = wrapFuncWithNext(func, currentNext);
+    }
+  } catch (err) {
+    _iterator8.e(err);
+  } finally {
+    _iterator8.f();
   }
 
   return next;
@@ -1140,7 +1470,7 @@ function joinFunctionsByNext(funcs) {
         args[_key7] = arguments[_key7];
       }
 
-      return func(next, ...args);
+      return func.apply(void 0, [next].concat(args));
     };
   }
 } // promise
@@ -1153,46 +1483,46 @@ function executePromiseGetters(getters) {
     var r = [];
     var chunks = splitArray(getters, concurrent);
     var promise = Promise.resolve();
-    chunks.forEach(chunk => {
-      promise = promise.then(result => {
+    chunks.forEach(function (chunk) {
+      promise = promise.then(function (result) {
         if (result) {
-          r.push(...result);
+          r.push.apply(r, _toConsumableArray(result));
         }
 
         if (stopped) {
           reject('stopped');
         } else {
-          return Promise.all(chunk.map(v => v()));
+          return Promise.all(chunk.map(function (v) {
+            return v();
+          }));
         }
       });
     });
-    promise.then(result => {
-      r.push(...result);
+    promise.then(function (result) {
+      r.push.apply(r, _toConsumableArray(result));
       resolve(r);
     });
   });
   return {
-    promise,
-
-    destroy() {
+    promise: promise,
+    destroy: function destroy() {
       stopped = true;
     }
-
   };
 }
 function promiseTimeout(promise, timeout) {
-  return new Promise((resolve, reject) => {
+  return new Promise(function (resolve, reject) {
     var t, rejected;
     promise.then(function () {
       clearTimeout(t);
-      resolve(...arguments);
+      resolve.apply(void 0, arguments);
     }, function () {
       if (!rejected) {
         clearTimeout(t);
-        reject(...arguments);
+        reject.apply(void 0, arguments);
       }
     });
-    t = setTimeout(() => {
+    t = setTimeout(function () {
       rejected = true;
       var e = new Error('Promise timeout!');
       e.name = 'timeout';
@@ -1355,17 +1685,17 @@ function getBoundingClientRect(el) {
   var x = left;
   var y = top;
   return {
-    top,
-    right,
-    bottom,
-    left,
-    width,
-    height,
-    x,
-    y
+    top: top,
+    right: right,
+    bottom: bottom,
+    left: left,
+    width: width,
+    height: height,
+    x: x,
+    y: y
   };
 }
-var getViewportPosition = getBoundingClientRect; // todo not tested
+var getViewportPosition = getBoundingClientRect; // TODO not tested
 
 function viewportPositionToOffset(position) {
   var body = document.body;
@@ -1375,7 +1705,7 @@ function viewportPositionToOffset(position) {
     x: position.x + bodyOf.x - bodyVP.x,
     y: position.y + bodyOf.y - bodyVP.y
   };
-} // todo not tested
+} // TODO not tested
 
 function offsetToViewportPosition(offset) {
   var body = document.body;
@@ -1434,7 +1764,7 @@ function removeClass(el, className) {
   } else {
     el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
   }
-} // todo rename to getElSizeEvenInvisible in next version
+} // TODO rename to getElSizeEvenInvisible in next version
 
 function getElSize(el) {
   backupAttr(el, 'style');
@@ -1462,7 +1792,9 @@ function isOffsetInEl(x, y, el) {
 
 function getBorder(el) {
   var body = document.body;
-  var workArea = findParent(el, v => hasClass(v, 'work-area'));
+  var workArea = findParent(el, function (v) {
+    return hasClass(v, 'work-area');
+  });
   var of = getOffset(workArea);
   return {
     left: of.x,
@@ -1480,13 +1812,12 @@ function setElChildByIndex(el, index, child) {
   } else if (index === 0) {
     el.insertBefore(child, el.childNodes[0]);
   } else {
-    var {
-      index: nearestIndex,
-      value: nearest,
-      bigger
-    } = binarySearch(el.childNodes, el => {
+    var _binarySearch = binarySearch(el.childNodes, function (el) {
       return el.childComponentIndex - index;
-    }, 0, max(index, len - 1), true);
+    }, 0, max(index, len - 1), true),
+        nearestIndex = _binarySearch.index,
+        nearest = _binarySearch.value,
+        bigger = _binarySearch.bigger;
 
     if (bigger) {
       el.insertBefore(child, nearest);
@@ -1544,10 +1875,10 @@ function onDOM(el, name, handler) {
 
   if (el.addEventListener) {
     // 所有主流浏览器，除了 IE 8 及更早 IE版本
-    el.addEventListener(name, handler, ...args);
+    el.addEventListener.apply(el, [name, handler].concat(args));
   } else if (el.attachEvent) {
     // IE 8 及更早 IE 版本
-    el.attachEvent("on".concat(name), handler, ...args);
+    el.attachEvent.apply(el, ["on".concat(name), handler].concat(args));
   }
 }
 function offDOM(el, name, handler) {
@@ -1557,10 +1888,10 @@ function offDOM(el, name, handler) {
 
   if (el.removeEventListener) {
     // 所有主流浏览器，除了 IE 8 及更早 IE版本
-    el.removeEventListener(name, handler, ...args);
+    el.removeEventListener.apply(el, [name, handler].concat(args));
   } else if (el.detachEvent) {
     // IE 8 及更早 IE 版本
-    el.detachEvent("on".concat(name), handler, ...args);
+    el.detachEvent.apply(el, ["on".concat(name), handler].concat(args));
   }
 }
 function onDOMMany(els, names, handler) {
@@ -1571,17 +1902,59 @@ function onDOMMany(els, names, handler) {
     args[_key10 - 3] = arguments[_key10];
   }
 
-  for (var el of els) {
-    for (var name of names) {
-      onDOM(el, name, handler, ...args);
+  var _iterator9 = _createForOfIteratorHelper(els),
+      _step9;
+
+  try {
+    for (_iterator9.s(); !(_step9 = _iterator9.n()).done;) {
+      var el = _step9.value;
+
+      var _iterator12 = _createForOfIteratorHelper(names),
+          _step12;
+
+      try {
+        for (_iterator12.s(); !(_step12 = _iterator12.n()).done;) {
+          var name = _step12.value;
+          onDOM.apply(void 0, [el, name, handler].concat(args));
+        }
+      } catch (err) {
+        _iterator12.e(err);
+      } finally {
+        _iterator12.f();
+      }
     }
+  } catch (err) {
+    _iterator9.e(err);
+  } finally {
+    _iterator9.f();
   }
 
-  var destroy = () => {
-    for (var _el of els) {
-      for (var _name of names) {
-        offDOM(_el, _name, handler);
+  var destroy = function destroy() {
+    var _iterator10 = _createForOfIteratorHelper(els),
+        _step10;
+
+    try {
+      for (_iterator10.s(); !(_step10 = _iterator10.n()).done;) {
+        var el = _step10.value;
+
+        var _iterator11 = _createForOfIteratorHelper(names),
+            _step11;
+
+        try {
+          for (_iterator11.s(); !(_step11 = _iterator11.n()).done;) {
+            var name = _step11.value;
+            offDOM(el, name, handler);
+          }
+        } catch (err) {
+          _iterator11.e(err);
+        } finally {
+          _iterator11.f();
+        }
       }
+    } catch (err) {
+      _iterator10.e(err);
+    } finally {
+      _iterator10.f();
     }
   };
 
@@ -1590,13 +1963,13 @@ function onDOMMany(els, names, handler) {
 function getImageSizeByUrl(url) {
   var image = document.createElement('img');
   return new Promise(function (resolve, reject) {
-    onDOM(image, 'load', () => {
+    onDOM(image, 'load', function () {
       resolve({
         width: image.width,
         height: image.height
       });
     });
-    onDOM(image, 'error', e => {
+    onDOM(image, 'error', function (e) {
       reject(e);
     });
     image.src = url;
@@ -1608,13 +1981,23 @@ function findNodeList(list, callback) {
     reverse: opt.reverse
   });
 
-  for (var {
-    value,
-    index
-  } of iterator) {
-    if (callback(value, index)) {
-      return value;
+  var _iterator13 = _createForOfIteratorHelper(iterator),
+      _step13;
+
+  try {
+    for (_iterator13.s(); !(_step13 = _iterator13.n()).done;) {
+      var _step13$value = _step13.value,
+          value = _step13$value.value,
+          index = _step13$value.index;
+
+      if (callback(value, index)) {
+        return value;
+      }
     }
+  } catch (err) {
+    _iterator13.e(err);
+  } finally {
+    _iterator13.f();
   }
 }
 function findNodeListReverse(list, callback) {
@@ -1669,7 +2052,7 @@ function getOuterAttachedHeight(el) {
     arr.push('border-top-width', 'border-bottom-width');
   }
 
-  arr.forEach(key => {
+  arr.forEach(function (key) {
     r += parseFloat(stl[key]);
   });
   return r;
@@ -1692,7 +2075,7 @@ function getOuterAttachedWidth(el) {
     arr.push('border-left-width', 'border-right-width');
   }
 
-  arr.forEach(key => {
+  arr.forEach(function (key) {
     r += parseFloat(stl[key]);
   });
   return r;
@@ -1783,8 +2166,8 @@ function getCalendar(year, month) {
   var monthEnd = getMonthEnd(date);
   var monthEndtDate = monthEnd.getDate();
 
-  for (var _i6 = 1; _i6 <= monthEndtDate; _i6++) {
-    var _date2 = _i6;
+  for (var _i11 = 1; _i11 <= monthEndtDate; _i11++) {
+    var _date2 = _i11;
     results.push({
       year: year,
       month: month,
@@ -1805,7 +2188,7 @@ function getCalendar(year, month) {
 
     var _month2 = nextMonth.getMonth() + 1;
 
-    for (var _i7 = monthEndDay + 1, _date3 = 1; _i7 <= endWeekDay; _i7++, _date3++) {
+    for (var _i12 = monthEndDay + 1, _date3 = 1; _i12 <= endWeekDay; _i12++, _date3++) {
       results.push({
         year: _year2,
         month: _month2,
@@ -1826,18 +2209,33 @@ function isIsoFormat(str) {
 } // timestamp eg: 2018-09-07T03:38:37.888Z
 
 function parseISO(timestamp) {
-  var [datePart, timePart] = timestamp.split('T');
+  var _timestamp$split = timestamp.split('T'),
+      _timestamp$split2 = _slicedToArray(_timestamp$split, 2),
+      datePart = _timestamp$split2[0],
+      timePart = _timestamp$split2[1];
+
   var y,
       m,
       d,
       h = 0,
       min = 0,
       s = 0;
-  [y, m, d] = datePart.split('-').map(v => parseInt(v));
+
+  var _datePart$split$map = datePart.split('-').map(function (v) {
+    return parseInt(v);
+  });
+
+  var _datePart$split$map2 = _slicedToArray(_datePart$split$map, 3);
+
+  y = _datePart$split$map2[0];
+  m = _datePart$split$map2[1];
+  d = _datePart$split$map2[2];
   m = m - 1;
 
   if (timePart) {
-    var t = timePart.split('-').map(v => parseFloat(v));
+    var t = timePart.split('-').map(function (v) {
+      return parseFloat(v);
+    });
     h = t[0];
 
     if (t[1] != null) {
@@ -1992,10 +2390,10 @@ function retry(func) {
   return doFunc;
 
   function doFunc(arg1, arg2, arg3) {
-    return func(arg1, arg2, arg3).then(data => {
+    return func(arg1, arg2, arg3).then(function (data) {
       delete counters[name];
       return data;
-    }).catch(e => {
+    }).catch(function (e) {
       counters[name]++;
 
       if (counters[name] >= limitTimes) {
@@ -2069,6 +2467,12 @@ function copyTextToClipboard(text) {
   }
 
   document.body.removeChild(textArea);
+}
+function isNode() {
+  return Boolean(typeof global.module !== 'undefined' && global.module.exports);
+}
+function isIE() {
+  return Boolean(window.ActiveXObject || "ActiveXObject" in window);
 } // jquery
 
 function jqFixedSize(sel) {
@@ -2128,7 +2532,7 @@ function jqMakeCarousel(wrapperSel, listSel, itemSel) {
     width: width * 3 + 'px',
     height: height + 'px',
     left: 0,
-    top
+    top: top
   });
   lists.append(list).append(list2).append(list3);
   wrapper.append(lists);
@@ -2143,7 +2547,7 @@ function jqMakeCarousel(wrapperSel, listSel, itemSel) {
 
     lists.animate({
       left: "".concat(left, "px")
-    }, speed, 'linear', () => {
+    }, speed, 'linear', function () {
       if (Math.abs(left) > width) {
         if (dir === 'left') {
           left += width;
@@ -2166,53 +2570,67 @@ function jqMakeCarousel(wrapperSel, listSel, itemSel) {
 
 function openWindow(url, name) {
   var opt = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-  glb().open(url, name, Object.keys(opt).map(k => "".concat(k, "=").concat(opt[k])).join(','));
+  glb().open(url, name, Object.keys(opt).map(function (k) {
+    return "".concat(k, "=").concat(opt[k]);
+  }).join(','));
 }
 function openCenterWindow(url, name, width, height) {
   var opt = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : {};
   var t = {
-    width,
-    height,
+    width: width,
+    height: height,
     top: (glb().screen.availHeight - 30 - height) / 2,
     left: (glb().screen.availWidth - 30 - width) / 2
   };
   Object.assign(t, opt);
   openWindow(url, name, t);
 }
-class URLHelper {
+var URLHelper = /*#__PURE__*/function () {
   // protocol, hostname, port, pastname
-  constructor(baseUrl) {
+  function URLHelper(baseUrl) {
+    var _this3 = this;
+
+    _classCallCheck(this, URLHelper);
+
     this.baseUrl = '';
     this.search = {};
     var t = decodeURI(baseUrl).split('?');
     this.baseUrl = t[0];
 
     if (t[1]) {
-      t[1].split('&').forEach(v => {
+      t[1].split('&').forEach(function (v) {
         var t2 = v.split('=');
-        this.search[t2[0]] = t2[1] == null ? '' : decodeURIComponent(t2[1]);
+        _this3.search[t2[0]] = t2[1] == null ? '' : decodeURIComponent(t2[1]);
       });
     }
   }
 
-  getHref() {
-    var t = [this.baseUrl];
-    var searchStr = Object.keys(this.search).map(k => "".concat(k, "=").concat(encodeURIComponent(this.search[k]))).join('&');
+  _createClass(URLHelper, [{
+    key: "getHref",
+    value: function getHref() {
+      var _this4 = this;
 
-    if (searchStr) {
-      t.push(searchStr);
+      var t = [this.baseUrl];
+      var searchStr = Object.keys(this.search).map(function (k) {
+        return "".concat(k, "=").concat(encodeURIComponent(_this4.search[k]));
+      }).join('&');
+
+      if (searchStr) {
+        t.push(searchStr);
+      }
+
+      return t.join('?');
     }
+  }]);
 
-    return t.join('?');
-  }
-
-} // 解析函数参数, 帮助重载
+  return URLHelper;
+}(); // 解析函数参数, 帮助重载
 // types eg: ['Object', (i) => i > 3, ['Number', default], null ]
 // null represent all types of argument
 
 function resolveArgsByType(args, types) {
   var argIndex = 0;
-  return types.map(v => {
+  return types.map(function (v) {
     // make rule
     var rule, dft;
 
@@ -2226,11 +2644,15 @@ function resolveArgsByType(args, types) {
 
     if (!isFunction(rule)) {
       if (rule == null) {
-        rule = () => true;
+        rule = function rule() {
+          return true;
+        };
       } else {
         var t = rule;
 
-        rule = x => Object.prototype.toString.call(x) === "[object ".concat(t, "]");
+        rule = function rule(x) {
+          return Object.prototype.toString.call(x) === "[object ".concat(t, "]");
+        };
       }
     }
 
@@ -2247,20 +2669,18 @@ function resolveArgsByType(args, types) {
 
 function makeStorageHelper(storage) {
   return {
-    storage,
-
-    set(name, value, minutes) {
+    storage: storage,
+    set: function set(name, value, minutes) {
       if (value == null) {
         this.storage.removeItem(name);
       } else {
         this.storage.setItem(name, JSON.stringify({
-          value,
+          value: value,
           expired_at: minutes ? new Date().getTime() + minutes * 60 * 1000 : null
         }));
       }
     },
-
-    get(name) {
+    get: function get(name) {
       var t = this.storage.getItem(name);
 
       if (t) {
@@ -2275,11 +2695,9 @@ function makeStorageHelper(storage) {
 
       return null;
     },
-
-    clear() {
+    clear: function clear() {
       this.storage.clear();
     }
-
   };
 }
 function getLocalStorage2() {
@@ -2297,242 +2715,294 @@ function getSessionStorage2() {
   return store.sessionStorage2;
 } // 事件处理
 
-class EventProcessor {
-  constructor() {
+var EventProcessor = /*#__PURE__*/function () {
+  function EventProcessor() {
+    _classCallCheck(this, EventProcessor);
+
     this.eventStore = [];
   }
 
-  on(name, handler) {
-    this.eventStore.push({
-      name,
-      handler
-    });
-  }
+  _createClass(EventProcessor, [{
+    key: "on",
+    value: function on(name, handler) {
+      this.eventStore.push({
+        name: name,
+        handler: handler
+      });
+    }
+  }, {
+    key: "once",
+    value: function once(name, handler) {
+      var _this5 = this;
 
-  once(name, handler) {
-    var off = () => {
-      this.off(name, wrappedHandler);
-    };
-
-    var wrappedHandler = function wrappedHandler() {
-      handler(...arguments);
-      off();
-    };
-
-    this.on(name, wrappedHandler);
-    return off;
-  }
-
-  onceTimeout(name, handler, timeout) {
-    var off;
-    var promise = new Promise((resolve, reject) => {
-      var wrappedHandler = function wrappedHandler() {
-        handler(...arguments);
-        resolve();
+      var off = function off() {
+        _this5.off(name, wrappedHandler);
       };
 
-      off = this.once(name, wrappedHandler);
-      waitTime(timeout).then(() => {
+      var wrappedHandler = function wrappedHandler() {
+        handler.apply(void 0, arguments);
         off();
-        reject();
+      };
+
+      this.on(name, wrappedHandler);
+      return off;
+    }
+  }, {
+    key: "onceTimeout",
+    value: function onceTimeout(name, handler, timeout) {
+      var _this6 = this;
+
+      var off;
+      var promise = new Promise(function (resolve, reject) {
+        var wrappedHandler = function wrappedHandler() {
+          handler.apply(void 0, arguments);
+          resolve();
+        };
+
+        off = _this6.once(name, wrappedHandler);
+        waitTime(timeout).then(function () {
+          off();
+          reject();
+        });
       });
-    });
 
-    var off2 = () => {
-      off && off();
-    };
+      var off2 = function off2() {
+        off && off();
+      };
 
-    return {
-      off: off2,
-      promise
-    };
-  }
+      return {
+        off: off2,
+        promise: promise
+      };
+    }
+  }, {
+    key: "off",
+    value: function off(name, handler) {
+      var indexes = []; // to remove indexes; reverse; 倒序的
 
-  off(name, handler) {
-    var indexes = []; // to remove indexes; reverse; 倒序的
+      var len = this.eventStore.length;
 
-    var len = this.eventStore.length;
+      for (var i = 0; i < len; i++) {
+        var item = this.eventStore[i];
 
-    for (var i = 0; i < len; i++) {
-      var item = this.eventStore[i];
+        if (item.name === name && item.handler === handler) {
+          indexes.unshift(i);
+        }
+      }
 
-      if (item.name === name && item.handler === handler) {
-        indexes.unshift(i);
+      for (var _i13 = 0, _indexes = indexes; _i13 < _indexes.length; _i13++) {
+        var index = _indexes[_i13];
+        this.eventStore.splice(index, 1);
       }
     }
+  }, {
+    key: "emit",
+    value: function emit(name) {
+      // 重要: 先找到要执行的项放在新数组里, 因为执行项会改变事件项存储数组
+      var items = [];
 
-    for (var index of indexes) {
-      this.eventStore.splice(index, 1);
-    }
-  }
+      var _iterator14 = _createForOfIteratorHelper(this.eventStore),
+          _step14;
 
-  emit(name) {
-    // 重要: 先找到要执行的项放在新数组里, 因为执行项会改变事件项存储数组
-    var items = [];
+      try {
+        for (_iterator14.s(); !(_step14 = _iterator14.n()).done;) {
+          var _item = _step14.value;
 
-    for (var item of this.eventStore) {
-      if (item.name === name) {
-        items.push(item);
+          if (_item.name === name) {
+            items.push(_item);
+          }
+        }
+      } catch (err) {
+        _iterator14.e(err);
+      } finally {
+        _iterator14.f();
+      }
+
+      for (var _len10 = arguments.length, args = new Array(_len10 > 1 ? _len10 - 1 : 0), _key12 = 1; _key12 < _len10; _key12++) {
+        args[_key12 - 1] = arguments[_key12];
+      }
+
+      for (var _i14 = 0, _items = items; _i14 < _items.length; _i14++) {
+        var item = _items[_i14];
+        item.handler.apply(item, args);
       }
     }
+  }]);
 
-    for (var _len10 = arguments.length, args = new Array(_len10 > 1 ? _len10 - 1 : 0), _key12 = 1; _key12 < _len10; _key12++) {
-      args[_key12 - 1] = arguments[_key12];
-    }
+  return EventProcessor;
+}();
+var CrossWindowEventProcessor = /*#__PURE__*/function (_EventProcessor) {
+  _inherits(CrossWindowEventProcessor, _EventProcessor);
 
-    for (var _item of items) {
-      _item.handler(...args);
-    }
-  }
+  var _super = _createSuper(CrossWindowEventProcessor);
 
-}
-class CrossWindowEventProcessor extends EventProcessor {
   // id
-  constructor(opt) {
-    super();
-    this.storageName = '_crossWindow';
-    this.windows = [];
-    this.timeout = 200;
-    this.BROADCAST = '__BROADCAST__';
+  function CrossWindowEventProcessor(opt) {
+    var _this7;
+
+    _classCallCheck(this, CrossWindowEventProcessor);
+
+    _this7 = _super.call(this);
+    _this7.storageName = '_crossWindow';
+    _this7.windows = [];
+    _this7.timeout = 200;
+    _this7.BROADCAST = '__BROADCAST__';
 
     if (opt) {
-      Object.assign(this, opt);
+      Object.assign(_assertThisInitialized(_this7), opt);
     }
 
-    onDOM(window, 'storage', ev => {
-      if (ev.key === this.storageName) {
+    onDOM(window, 'storage', function (ev) {
+      if (ev.key === _this7.storageName) {
         var event = JSON.parse(ev.newValue);
 
-        if (!event.targets || event.targets.includes(this.id)) {
-          this.emitLocal(event.name, ...event.args);
+        if (!event.targets || event.targets.includes(_this7.id)) {
+          var _this8;
+
+          (_this8 = _this7).emitLocal.apply(_this8, [event.name].concat(_toConsumableArray(event.args)));
         }
       }
     }); // social parts 集体部分
     // join
 
-    this.id = strRand();
-    this.windows = [this.id];
-    this.ready = new Promise((resolve, reject) => {
-      this.onceTimeout('_windows_updated', (_ref) => {
-        var {
-          windows
-        } = _ref;
-        this.windows = windows;
-      }, this.timeout).promise.then(() => {
+    _this7.id = strRand();
+    _this7.windows = [_this7.id];
+    _this7.ready = new Promise(function (resolve, reject) {
+      _this7.onceTimeout('_windows_updated', function (_ref) {
+        var windows = _ref.windows;
+        _this7.windows = windows;
+      }, _this7.timeout).promise.then(function () {
         resolve(); // responsed 被响应
-      }, () => {
+      }, function () {
         // no response 无响应
         resolve();
       });
-      this.broadcast('_join', this.id);
-    });
-    this.ready.then(() => {
-      // on join
-      this.on('_join', id => {
-        this.windows.push(id);
 
-        if (this.isMain()) {
-          this.broadcast('_windows_updated', {
-            windows: this.windows,
+      _this7.broadcast('_join', _this7.id);
+    });
+
+    _this7.ready.then(function () {
+      // on join
+      _this7.on('_join', function (id) {
+        _this7.windows.push(id);
+
+        if (_this7.isMain()) {
+          _this7.broadcast('_windows_updated', {
+            windows: _this7.windows,
             type: 'join',
-            id
+            id: id
           });
         }
       }); // on _windows_updated
 
-      this.on('_windows_updated', (_ref2) => {
-        var {
-          windows
-        } = _ref2;
-        this.windows = windows;
+
+      _this7.on('_windows_updated', function (_ref2) {
+        var windows = _ref2.windows;
+        _this7.windows = windows;
       }); // on exit
 
-      this.on('_exit', id => {
-        var oldMain = this.windows[0];
-        arrayRemove(this.windows, id);
 
-        if (this.isMain()) {
-          this.emit('_windows_updated', {
-            windows: this.windows,
+      _this7.on('_exit', function (id) {
+        var oldMain = _this7.windows[0];
+        arrayRemove(_this7.windows, id);
+
+        if (_this7.isMain()) {
+          _this7.emit('_windows_updated', {
+            windows: _this7.windows,
             type: 'exit',
-            id
+            id: id
           });
 
-          if (oldMain != this.id) {
-            this.emit('_main_updated', {
-              windows: this.windows,
+          if (oldMain != _this7.id) {
+            _this7.emit('_main_updated', {
+              windows: _this7.windows,
               old: oldMain,
-              'new': this.id
+              'new': _this7.id
             });
           }
         }
       });
-      onDOM(window, 'beforeunload', () => {
-        this.exitGroup();
+
+      onDOM(window, 'beforeunload', function () {
+        _this7.exitGroup();
       });
     });
+
+    return _this7;
   }
 
-  isMain() {
-    return this.id === this.windows[0];
-  }
-
-  emitTo(name, targets) {
-    for (var _len11 = arguments.length, args = new Array(_len11 > 2 ? _len11 - 2 : 0), _key13 = 2; _key13 < _len11; _key13++) {
-      args[_key13 - 2] = arguments[_key13];
+  _createClass(CrossWindowEventProcessor, [{
+    key: "isMain",
+    value: function isMain() {
+      return this.id === this.windows[0];
     }
-
-    if (targets === this.BROADCAST) {
-      targets = null;
-    } else {
-      if (targets && !isArray(targets)) {
-        targets = [targets];
+  }, {
+    key: "emitTo",
+    value: function emitTo(name, targets) {
+      for (var _len11 = arguments.length, args = new Array(_len11 > 2 ? _len11 - 2 : 0), _key13 = 2; _key13 < _len11; _key13++) {
+        args[_key13 - 2] = arguments[_key13];
       }
 
-      if (targets.includes(this.id)) {
-        super.emit(name, ...args); // emit to current window
+      if (targets === this.BROADCAST) {
+        targets = null;
+      } else {
+        if (targets && !isArray(targets)) {
+          targets = [targets];
+        }
+
+        if (targets.includes(this.id)) {
+          var _get2;
+
+          (_get2 = _get(_getPrototypeOf(CrossWindowEventProcessor.prototype), "emit", this)).call.apply(_get2, [this, name].concat(args)); // emit to current window
+
+        }
       }
+
+      glb().localStorage.setItem(this.storageName, JSON.stringify({
+        name: name,
+        targets: targets,
+        args: args,
+        // use random make storage event triggered every time
+        // 加入随机保证触发storage事件
+        random: Math.random()
+      }));
     }
+  }, {
+    key: "emitLocal",
+    value: function emitLocal(name) {
+      for (var _len12 = arguments.length, args = new Array(_len12 > 1 ? _len12 - 1 : 0), _key14 = 1; _key14 < _len12; _key14++) {
+        args[_key14 - 1] = arguments[_key14];
+      }
 
-    glb().localStorage.setItem(this.storageName, JSON.stringify({
-      name,
-      targets,
-      args,
-      // use random make storage event triggered every time
-      // 加入随机保证触发storage事件
-      random: Math.random()
-    }));
-  }
-
-  emitLocal(name) {
-    for (var _len12 = arguments.length, args = new Array(_len12 > 1 ? _len12 - 1 : 0), _key14 = 1; _key14 < _len12; _key14++) {
-      args[_key14 - 1] = arguments[_key14];
+      this.emitTo.apply(this, [name, this.id].concat(args));
     }
+  }, {
+    key: "broadcast",
+    value: function broadcast(name) {
+      for (var _len13 = arguments.length, args = new Array(_len13 > 1 ? _len13 - 1 : 0), _key15 = 1; _key15 < _len13; _key15++) {
+        args[_key15 - 1] = arguments[_key15];
+      }
 
-    this.emitTo(name, this.id, ...args);
-  }
-
-  broadcast(name) {
-    for (var _len13 = arguments.length, args = new Array(_len13 > 1 ? _len13 - 1 : 0), _key15 = 1; _key15 < _len13; _key15++) {
-      args[_key15 - 1] = arguments[_key15];
+      this.emitTo.apply(this, [name, this.BROADCAST].concat(args));
     }
+  }, {
+    key: "emit",
+    value: function emit(name) {
+      for (var _len14 = arguments.length, args = new Array(_len14 > 1 ? _len14 - 1 : 0), _key16 = 1; _key16 < _len14; _key16++) {
+        args[_key16 - 1] = arguments[_key16];
+      }
 
-    this.emitTo(name, this.BROADCAST, ...args);
-  }
-
-  emit(name) {
-    for (var _len14 = arguments.length, args = new Array(_len14 > 1 ? _len14 - 1 : 0), _key16 = 1; _key16 < _len14; _key16++) {
-      args[_key16 - 1] = arguments[_key16];
+      this.emitTo.apply(this, [name, this.windows].concat(args));
     }
+  }, {
+    key: "exitGroup",
+    value: function exitGroup() {
+      this.broadcast('_exit', this.id);
+    }
+  }]);
 
-    this.emitTo(name, this.windows, ...args);
-  }
-
-  exitGroup() {
-    this.broadcast('_exit', this.id);
-  }
-
-} // Deprecated in next version
+  return CrossWindowEventProcessor;
+}(EventProcessor); // Deprecated in next version
 
 var CrossWindow = CrossWindowEventProcessor;
 function onQuickKeydown(handler) {
@@ -2543,7 +3013,7 @@ function onQuickKeydown(handler) {
   var input = '';
   var timeoutId;
 
-  var keydownHandler = e => {
+  var keydownHandler = function keydownHandler(e) {
     if (e.key && e.key.length === 1) {
       input = "".concat(input).concat(e.key);
       handler(input);
@@ -2553,50 +3023,58 @@ function onQuickKeydown(handler) {
         timeoutId = null;
       }
 
-      timeoutId = setTimeout(() => {
+      timeoutId = setTimeout(function () {
         input = '';
       }, opt.timeout);
     }
   };
 
   onDOM(document, 'keydown', keydownHandler);
-  return () => {
+  return function () {
     offDOM(document, 'keydown', keydownHandler);
   };
 }
 function getUserLanguage() {
   return navigator.language || navigator.userLanguage;
 }
-class Cache {
-  constructor() {
+var Cache = /*#__PURE__*/function () {
+  function Cache() {
+    _classCallCheck(this, Cache);
+
     this.store = {};
   }
 
-  has(name) {
-    return this.store.hasOwnProperty(name);
-  }
-
-  remember(name, getter) {
-    if (!this.has(name)) {
-      this.store[name] = {
-        value: getter()
-      };
+  _createClass(Cache, [{
+    key: "has",
+    value: function has(name) {
+      return this.store.hasOwnProperty(name);
     }
-
-    return this.store[name].value;
-  }
-
-  forget(name) {
-    if (name) {
-      if (this.has(name)) {
-        delete this.store[name];
+  }, {
+    key: "remember",
+    value: function remember(name, getter) {
+      if (!this.has(name)) {
+        this.store[name] = {
+          value: getter()
+        };
       }
-    } else {
-      this.store = {};
-    }
-  }
 
-} // attach cached getters to an object; can attach to self
+      return this.store[name].value;
+    }
+  }, {
+    key: "forget",
+    value: function forget(name) {
+      if (name) {
+        if (this.has(name)) {
+          delete this.store[name];
+        }
+      } else {
+        this.store = {};
+      }
+    }
+  }]);
+
+  return Cache;
+}(); // attach cached getters to an object; can attach to self
 
 function attachCache(obj, toCache) {
   var cache = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : new Cache();
@@ -2604,10 +3082,13 @@ function attachCache(obj, toCache) {
   var _loop4 = function _loop4(key) {
     var getter = toCache[key];
     Object.defineProperty(obj, key, {
-      get() {
-        return cache.remember(key, () => getter.call(this));
-      }
+      get: function get() {
+        var _this9 = this;
 
+        return cache.remember(key, function () {
+          return getter.call(_this9);
+        });
+      }
     });
   };
 
@@ -2616,4 +3097,4 @@ function attachCache(obj, toCache) {
   }
 }
 
-export { Cache, CrossWindow, CrossWindowEventProcessor, EventProcessor, TreeData, URLHelper, addClass, addDate, appendTo, arrayAt, arrayDiff, arrayDistinct, arrayFirst, arrayGet, arrayLast, arrayRemove, arrayRemoveBySortedIndexes, arraySibling, arrayWithoutEnd, assignIfDifferent, attachCache, backupAttr, binarySearch, camelCase, camelToWords, cloneDate, cloneObj, copyTextToClipboard, createElementFromHTML, debounce, debounceImmediate, debounceTrailing, depthFirstSearch, elementsFromPoint, empty, executeOnceInScopeByName, executePromiseGetters, executeWithCount, findNodeList, findNodeListReverse, findParent, forAll, getBorder, getBoundingClientRect, getCalendar, getCss3Prefix, getElSize, getElSizeEvenInvisible, getImageSizeByUrl, getLocalStorage2, getMonthEnd, getMonthStart, getOffset, getOffsetParent, getOuterAttachedHeight, getOuterAttachedWidth, getPosition, getPositionFromOffset, getScroll, getSessionStorage2, getUrlParam, getUserLanguage, getViewportPosition, glb, groupArray, hasClass, insertAfter, insertBefore, isArray, isBool, isDescendantOf, isDocumentExisted, isFunction, isIsoFormat, isNumber, isNumeric, isObject, isOffsetInEl, isPromise, isString, isset, iterateALL, iterateAll, joinFunctionsByNext, joinFunctionsByResult, joinMethods, jqFixedSize, jqMakeCarousel, kebabCase, makeStorageHelper, mapObjectTree, mapObjects, max, min, newArrayRemoveAt, numPad, numRand, objectExcept, objectGet, objectMap, objectMerge, objectOnly, objectSet, offDOM, offsetToViewportPosition, onDOM, onDOMMany, onQuickKeydown, openCenterWindow, openWindow, pairRows, parseISO, prependTo, promiseTimeout, removeClass, removeEl, replaceMultiple, resolveArgsByType, resolveValueOrGettter, restoreAttr, retry, setElChildByIndex, snakeCase, splitArray, store, store_executeOnceInScopeByName, strRand, studlyCase, titleCase, toArrayIfNot, uniqueId, unset, viewportPositionToOffset, waitFor, waitTime, walkTreeData, watchChange, windowLoaded };
+export { Cache, CrossWindow, CrossWindowEventProcessor, EventProcessor, TreeData, URLHelper, addClass, addDate, appendTo, arrayAt, arrayDiff, arrayDistinct, arrayFirst, arrayGet, arrayLast, arrayRemove, arrayRemoveBySortedIndexes, arraySibling, arrayWithoutEnd, assignIfDifferent, attachCache, backupAttr, binarySearch, camelCase, camelToWords, cloneDate, cloneObj, copyTextToClipboard, createElementFromHTML, debounce, debounceImmediate, debounceTrailing, depthFirstSearch, elementsFromPoint, empty, executeOnceInScopeByName, executePromiseGetters, executeWithCount, findNodeList, findNodeListReverse, findParent, forAll, getBorder, getBoundingClientRect, getCalendar, getCss3Prefix, getElSize, getElSizeEvenInvisible, getImageSizeByUrl, getLocalStorage2, getMonthEnd, getMonthStart, getOffset, getOffsetParent, getOuterAttachedHeight, getOuterAttachedWidth, getPosition, getPositionFromOffset, getScroll, getSessionStorage2, getUrlParam, getUserLanguage, getViewportPosition, glb, groupArray, hasClass, insertAfter, insertBefore, isArray, isBool, isDescendantOf, isDocumentExisted, isFunction, isIE, isIsoFormat, isNode, isNumber, isNumeric, isObject, isOffsetInEl, isPromise, isString, isset, iterateALL, iterateAll, joinFunctionsByNext, joinFunctionsByResult, joinMethods, jqFixedSize, jqMakeCarousel, kebabCase, makeStorageHelper, mapObjectTree, mapObjects, max, min, newArrayRemoveAt, numPad, numRand, objectExcept, objectGet, objectMap, objectMerge, objectOnly, objectSet, offDOM, offsetToViewportPosition, onDOM, onDOMMany, onQuickKeydown, openCenterWindow, openWindow, pairRows, parseISO, prependTo, promiseTimeout, removeClass, removeEl, replaceMultiple, resolveArgsByType, resolveValueOrGettter, restoreAttr, retry, setElChildByIndex, snakeCase, splitArray, store, store_executeOnceInScopeByName, strRand, studlyCase, titleCase, toArrayIfNot, uniqueId, unset, viewportPositionToOffset, waitFor, waitTime, walkTreeData, watchChange, windowLoaded };

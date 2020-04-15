@@ -1,6 +1,6 @@
 {
   "name": "helper-js",
-  "version": "1.4.33",
+  "version": "1.4.34",
   "description": "",
   "main": "dist/helper-js.cjs.js",
   "module": "dist/helper-js.esm.js",
@@ -8,7 +8,8 @@
     "dist"
   ],
   "scripts": {
-    "build": "rogo"
+    "compile-scripts": "tsc --target ES6 --module CommonJS scripts/build.ts",
+    "build": "rollup -c scripts/build.js & node scripts/build.js --report"
   },
   "author": "phphe <phphe@outlook.com> (https://github.com/phphe)",
   "unpkg": "dist/helper-js.js",
@@ -20,7 +21,7 @@
     "url": "https://github.com/phphe/helper-js.git"
   },
   "devDependencies": {
-    "rogo": "^1.0.4"
+    "rogo": "^2.0.1"
   },
   "dependencies": {
     "@babel/runtime": "^7.7.7"
