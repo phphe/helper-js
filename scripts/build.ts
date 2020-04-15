@@ -19,6 +19,7 @@ const getBabelConfig = () => ({
   presets: [
     ['@babel/preset-env', {
       useBuiltIns: false,
+      targets: 'defaults', // default browsers, coverage 90%
     }],
   ],
   plugins: [
@@ -41,14 +42,11 @@ const getBabelConfig = () => ({
 })
 
 const esmBabelConfig = <any>getBabelConfig()
-esmBabelConfig.presets[0][1]['targets'] = 'defaults'
 
 const cjsBabelConfig = <any>getBabelConfig()
-cjsBabelConfig.presets[0][1]['targets'] = {node: 6}
 cjsBabelConfig.plugins.push(['module-extension', {mjs: 'js'}]) // replace .mjs to .js
 
 const umdBabelConfig = <any>getBabelConfig()
-umdBabelConfig.presets[0][1]['targets'] = 'defaults' // default browsers, coverage 90%
 
 export default <rollup.RollupOptions[]>[
   // esm
