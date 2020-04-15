@@ -1671,9 +1671,18 @@ export function copyTextToClipboard(text) {
   document.body.removeChild(textArea)
 }
 
-export function isNode() {
-  return Boolean(typeof global.module !== 'undefined' && global.module.exports)
+export function isWindowDefined() {
+  try {
+    return window && true
+  } catch (error) {
+    return false
+  }
 }
+
+export function isNode() {
+  return Boolean(typeof glb().module !== 'undefined' && glb().module.exports)
+}
+
 export function isIE() {
   return Boolean(window.ActiveXObject || "ActiveXObject" in window)
 }

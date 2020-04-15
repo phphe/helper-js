@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.4.36
+ * helper-js v1.4.37
  * (c) phphe <phphe@outlook.com> (https://github.com/phphe)
  * Homepage: undefined
  * Released under the MIT License.
@@ -3451,8 +3451,15 @@
 
     document.body.removeChild(textArea);
   }
+  function isWindowDefined() {
+    try {
+      return window && true;
+    } catch (error) {
+      return false;
+    }
+  }
   function isNode() {
-    return Boolean(typeof global.module !== 'undefined' && global.module.exports);
+    return Boolean(typeof glb().module !== 'undefined' && glb().module.exports);
   }
   function isIE() {
     return Boolean(window.ActiveXObject || "ActiveXObject" in window);
@@ -4162,6 +4169,7 @@
   exports.isOffsetInEl = isOffsetInEl;
   exports.isPromise = isPromise;
   exports.isString = isString;
+  exports.isWindowDefined = isWindowDefined;
   exports.isset = isset;
   exports.iterateALL = iterateALL;
   exports.iterateAll = iterateAll;

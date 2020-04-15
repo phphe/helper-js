@@ -214,6 +214,7 @@ addDate(now, -1, 'hour')
 ###### waitFor   (name, condition, time = 100, maxCount = 1000)
 ###### retry   (func, limitTimes = 3)
 ###### copyTextToClipboard   (text) // tested in chrome
+###### isWindowDefined() // is global variable 'window' defined, can be check if the environment is browser
 ###### isNode()
 ###### isIE()
 ### jquery
