@@ -261,9 +261,22 @@ export function arrayGet(arr, index, endIndex) {
   }
 }
 
-
 export function arrayWithoutEnd(arr, len) {
   return arr.slice(0, arr.length - len)
+}
+export function arrayFlat(arr, depth=10) {
+  const r = [];
+  const rec = (arr, curentDepth) => {
+    for (const item of arr) {
+      if (isArray(item) && curentDepth < depth) {
+        rec(item, curentDepth + 1)
+      } else {
+        r.push(item)
+      }
+    }
+  }
+  rec(arr, 0)
+  return r
 }
 // object
 export function assignIfDifferent(obj, key, val) {

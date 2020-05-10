@@ -1,5 +1,5 @@
 /*!
- * helper-js v1.4.37
+ * helper-js v1.4.38
  * (c) phphe <phphe@outlook.com> (https://github.com/phphe)
  * Homepage: undefined
  * Released under the MIT License.
@@ -1316,6 +1316,34 @@
   }
   function arrayWithoutEnd(arr, len) {
     return arr.slice(0, arr.length - len);
+  }
+  function arrayFlat(arr) {
+    var depth = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 10;
+    var r = [];
+
+    var rec = function rec(arr, curentDepth) {
+      var _iterator2 = _createForOfIteratorHelper(arr),
+          _step2;
+
+      try {
+        for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+          var item = _step2.value;
+
+          if (isArray(item) && curentDepth < depth) {
+            rec(item, curentDepth + 1);
+          } else {
+            r.push(item);
+          }
+        }
+      } catch (err) {
+        _iterator2.e(err);
+      } finally {
+        _iterator2.f();
+      }
+    };
+
+    rec(arr, 0);
+    return r;
   } // object
 
   function assignIfDifferent(obj, key, val) {
@@ -1620,18 +1648,18 @@
     var current = obj;
 
     try {
-      var _iterator2 = _createForOfIteratorHelper(paths),
-          _step2;
+      var _iterator3 = _createForOfIteratorHelper(paths),
+          _step3;
 
       try {
-        for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
-          var key = _step2.value;
+        for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+          var key = _step3.value;
           current = current[key];
         }
       } catch (err) {
-        _iterator2.e(err);
+        _iterator3.e(err);
       } finally {
-        _iterator2.f();
+        _iterator3.f();
       }
     } catch (e) {
       if (throwError) {
@@ -1682,18 +1710,18 @@
         if (isArray(obj)) {
           r = [];
 
-          var _iterator3 = _createForOfIteratorHelper(obj),
-              _step3;
+          var _iterator4 = _createForOfIteratorHelper(obj),
+              _step4;
 
           try {
-            for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
-              var item = _step3.value;
+            for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
+              var item = _step4.value;
               r.push(cloneObj(item, exclude));
             }
           } catch (err) {
-            _iterator3.e(err);
+            _iterator4.e(err);
           } finally {
-            _iterator3.f();
+            _iterator4.f();
           }
         } else {
           r = {};
@@ -1946,15 +1974,15 @@
             rootChildren,
             prevPath,
             prevChildren,
-            _iterator4,
-            _step4,
+            _iterator5,
+            _step5,
             index,
             currentPath,
             currentNode,
             list,
-            _iterator5,
-            _step5,
-            _step5$value,
+            _iterator6,
+            _step6,
+            _step6$value,
             _path,
             node,
             _args2 = arguments;
@@ -1973,18 +2001,18 @@
 
                 prevPath = [];
                 prevChildren = rootChildren;
-                _iterator4 = _createForOfIteratorHelper(path);
+                _iterator5 = _createForOfIteratorHelper(path);
                 _context2.prev = 6;
 
-                _iterator4.s();
+                _iterator5.s();
 
               case 8:
-                if ((_step4 = _iterator4.n()).done) {
+                if ((_step5 = _iterator5.n()).done) {
                   _context2.next = 19;
                   break;
                 }
 
-                index = _step4.value;
+                index = _step5.value;
                 currentPath = [].concat(toConsumableArray(prevPath), [index]);
                 currentNode = prevChildren[index];
                 _context2.next = 14;
@@ -2009,12 +2037,12 @@
                 _context2.prev = 21;
                 _context2.t0 = _context2["catch"](6);
 
-                _iterator4.e(_context2.t0);
+                _iterator5.e(_context2.t0);
 
               case 24:
                 _context2.prev = 24;
 
-                _iterator4.f();
+                _iterator5.f();
 
                 return _context2.finish(24);
 
@@ -2027,18 +2055,18 @@
                   reverse: false
                 })));
                 list.reverse();
-                _iterator5 = _createForOfIteratorHelper(list);
+                _iterator6 = _createForOfIteratorHelper(list);
                 _context2.prev = 32;
 
-                _iterator5.s();
+                _iterator6.s();
 
               case 34:
-                if ((_step5 = _iterator5.n()).done) {
+                if ((_step6 = _iterator6.n()).done) {
                   _context2.next = 40;
                   break;
                 }
 
-                _step5$value = _step5.value, _path = _step5$value.path, node = _step5$value.node;
+                _step6$value = _step6.value, _path = _step6$value.path, node = _step6$value.node;
                 _context2.next = 38;
                 return {
                   path: _path,
@@ -2057,12 +2085,12 @@
                 _context2.prev = 42;
                 _context2.t1 = _context2["catch"](32);
 
-                _iterator5.e(_context2.t1);
+                _iterator6.e(_context2.t1);
 
               case 45:
                 _context2.prev = 45;
 
-                _iterator5.f();
+                _iterator6.f();
 
                 return _context2.finish(45);
 
@@ -2078,18 +2106,18 @@
       value: function getAllNodes(path) {
         var all = [];
 
-        var _iterator6 = _createForOfIteratorHelper(this.iteratePath(path)),
-            _step6;
+        var _iterator7 = _createForOfIteratorHelper(this.iteratePath(path)),
+            _step7;
 
         try {
-          for (_iterator6.s(); !(_step6 = _iterator6.n()).done;) {
-            var node = _step6.value.node;
+          for (_iterator7.s(); !(_step7 = _iterator7.n()).done;) {
+            var node = _step7.value.node;
             all.push(node);
           }
         } catch (err) {
-          _iterator6.e(err);
+          _iterator7.e(err);
         } finally {
-          _iterator6.f();
+          _iterator7.f();
         }
 
         return all;
@@ -2374,12 +2402,12 @@
     var mode = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'value';
     var simpleJoinedMethod;
 
-    var _iterator7 = _createForOfIteratorHelper(methods),
-        _step7;
+    var _iterator8 = _createForOfIteratorHelper(methods),
+        _step8;
 
     try {
       var _loop3 = function _loop3() {
-        var method = _step7.value;
+        var method = _step8.value;
         var old = simpleJoinedMethod;
 
         if (old) {
@@ -2395,13 +2423,13 @@
         }
       };
 
-      for (_iterator7.s(); !(_step7 = _iterator7.n()).done;) {
+      for (_iterator8.s(); !(_step8 = _iterator8.n()).done;) {
         _loop3();
       }
     } catch (err) {
-      _iterator7.e(err);
+      _iterator8.e(err);
     } finally {
-      _iterator7.f();
+      _iterator8.f();
     }
 
     return simpleJoinedMethod;
@@ -2428,21 +2456,21 @@
   function joinFunctionsByNext(funcs) {
     var next = function next() {};
 
-    var _iterator8 = _createForOfIteratorHelper(iterateAll(funcs, {
+    var _iterator9 = _createForOfIteratorHelper(iterateAll(funcs, {
       reverse: true
     })),
-        _step8;
+        _step9;
 
     try {
-      for (_iterator8.s(); !(_step8 = _iterator8.n()).done;) {
-        var func = _step8.value.value;
+      for (_iterator9.s(); !(_step9 = _iterator9.n()).done;) {
+        var func = _step9.value.value;
         var currentNext = next;
         next = wrapFuncWithNext(func, currentNext);
       }
     } catch (err) {
-      _iterator8.e(err);
+      _iterator9.e(err);
     } finally {
-      _iterator8.f();
+      _iterator9.f();
     }
 
     return next;
@@ -2885,59 +2913,59 @@
       args[_key10 - 3] = arguments[_key10];
     }
 
-    var _iterator9 = _createForOfIteratorHelper(els),
-        _step9;
+    var _iterator10 = _createForOfIteratorHelper(els),
+        _step10;
 
     try {
-      for (_iterator9.s(); !(_step9 = _iterator9.n()).done;) {
-        var el = _step9.value;
+      for (_iterator10.s(); !(_step10 = _iterator10.n()).done;) {
+        var el = _step10.value;
 
-        var _iterator12 = _createForOfIteratorHelper(names),
-            _step12;
+        var _iterator13 = _createForOfIteratorHelper(names),
+            _step13;
 
         try {
-          for (_iterator12.s(); !(_step12 = _iterator12.n()).done;) {
-            var name = _step12.value;
+          for (_iterator13.s(); !(_step13 = _iterator13.n()).done;) {
+            var name = _step13.value;
             onDOM.apply(void 0, [el, name, handler].concat(args));
           }
         } catch (err) {
-          _iterator12.e(err);
+          _iterator13.e(err);
         } finally {
-          _iterator12.f();
+          _iterator13.f();
         }
       }
     } catch (err) {
-      _iterator9.e(err);
+      _iterator10.e(err);
     } finally {
-      _iterator9.f();
+      _iterator10.f();
     }
 
     var destroy = function destroy() {
-      var _iterator10 = _createForOfIteratorHelper(els),
-          _step10;
+      var _iterator11 = _createForOfIteratorHelper(els),
+          _step11;
 
       try {
-        for (_iterator10.s(); !(_step10 = _iterator10.n()).done;) {
-          var el = _step10.value;
+        for (_iterator11.s(); !(_step11 = _iterator11.n()).done;) {
+          var el = _step11.value;
 
-          var _iterator11 = _createForOfIteratorHelper(names),
-              _step11;
+          var _iterator12 = _createForOfIteratorHelper(names),
+              _step12;
 
           try {
-            for (_iterator11.s(); !(_step11 = _iterator11.n()).done;) {
-              var name = _step11.value;
+            for (_iterator12.s(); !(_step12 = _iterator12.n()).done;) {
+              var name = _step12.value;
               offDOM(el, name, handler);
             }
           } catch (err) {
-            _iterator11.e(err);
+            _iterator12.e(err);
           } finally {
-            _iterator11.f();
+            _iterator12.f();
           }
         }
       } catch (err) {
-        _iterator10.e(err);
+        _iterator11.e(err);
       } finally {
-        _iterator10.f();
+        _iterator11.f();
       }
     };
 
@@ -2964,23 +2992,23 @@
       reverse: opt.reverse
     });
 
-    var _iterator13 = _createForOfIteratorHelper(iterator),
-        _step13;
+    var _iterator14 = _createForOfIteratorHelper(iterator),
+        _step14;
 
     try {
-      for (_iterator13.s(); !(_step13 = _iterator13.n()).done;) {
-        var _step13$value = _step13.value,
-            value = _step13$value.value,
-            index = _step13$value.index;
+      for (_iterator14.s(); !(_step14 = _iterator14.n()).done;) {
+        var _step14$value = _step14.value,
+            value = _step14$value.value,
+            index = _step14$value.index;
 
         if (callback(value, index)) {
           return value;
         }
       }
     } catch (err) {
-      _iterator13.e(err);
+      _iterator14.e(err);
     } finally {
-      _iterator13.f();
+      _iterator14.f();
     }
   }
   function findNodeListReverse(list, callback) {
@@ -3791,21 +3819,21 @@
         // 重要: 先找到要执行的项放在新数组里, 因为执行项会改变事件项存储数组
         var items = [];
 
-        var _iterator14 = _createForOfIteratorHelper(this.eventStore),
-            _step14;
+        var _iterator15 = _createForOfIteratorHelper(this.eventStore),
+            _step15;
 
         try {
-          for (_iterator14.s(); !(_step14 = _iterator14.n()).done;) {
-            var _item = _step14.value;
+          for (_iterator15.s(); !(_step15 = _iterator15.n()).done;) {
+            var _item = _step15.value;
 
             if (_item.name === name) {
               items.push(_item);
             }
           }
         } catch (err) {
-          _iterator14.e(err);
+          _iterator15.e(err);
         } finally {
-          _iterator14.f();
+          _iterator15.f();
         }
 
         for (var _len10 = arguments.length, args = new Array(_len10 > 1 ? _len10 - 1 : 0), _key12 = 1; _key12 < _len10; _key12++) {
@@ -4100,6 +4128,7 @@
   exports.arrayDiff = arrayDiff;
   exports.arrayDistinct = arrayDistinct;
   exports.arrayFirst = arrayFirst;
+  exports.arrayFlat = arrayFlat;
   exports.arrayGet = arrayGet;
   exports.arrayLast = arrayLast;
   exports.arrayRemove = arrayRemove;

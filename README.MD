@@ -60,6 +60,7 @@ helloWorldNice => Hello World Nice
 ###### arrayDistinct(arr)
 ###### arrayGet(arr, index, endIndex) // index can be negative number; 索引可为负
 ###### arrayWithoutEnd(arr, len)
+###### arrayFlat(arr, depth=10)
 ###### assignIfDifferent(obj, key, val)   
 ###### objectMerge (obj1, obj2) // merge obj2 to obj1, and merge obj2 chldren to obj1 if it is object
 ###### objectMap   (obj, func)
