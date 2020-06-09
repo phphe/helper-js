@@ -1126,7 +1126,12 @@ export function backupAttr(el, name) {
 
 export function restoreAttr(el, name) {
   const key = `original_${name}`
-  el.setAttribute(name, el[key])
+  const value = el[key]
+  if (el[key] == null) {
+    el.removeAttribute(name)
+  } else {
+    el.setAttribute(name, )
+  }
 }
 
 // source: http://youmightnotneedjquery.com/
