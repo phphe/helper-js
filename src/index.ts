@@ -995,7 +995,7 @@ export function uniqueId (prefix = 'id_'):string {
   }
 }
 
-export function isDescendantOf (el:HTMLElement, parent:HTMLElement) {
+export function isDescendantOf (el:Element, parent:Element) {
   while (true) {
     if (el.parentElement == null) {
       return false
@@ -1007,7 +1007,7 @@ export function isDescendantOf (el:HTMLElement, parent:HTMLElement) {
   }
 }
 
-export function removeEl(el:HTMLElement) {
+export function removeEl(el:Element) {
   if (el.parentNode !== null) {
     return el.parentNode.removeChild(el)
   }
@@ -1034,7 +1034,7 @@ export function getScroll(){
 }
 
 // refer: https://gist.github.com/aderaaij/89547e34617b95ac29d1
-export function getOffset(el: HTMLElement) {
+export function getOffset(el: Element) {
   const rect = getBoundingClientRect(el)
   const scroll = getScroll()
 
@@ -1076,7 +1076,7 @@ export function getPosition(el: HTMLElement) {
 // like jQuery.offset(x, y), but it just return cmputed position, don't update style
 // 类似 jQuery.offset的设置功能, 但是它只返回计算的position, 不改变元素样式.
 export function getPositionFromOffset(el:HTMLElement, of:{x:number, y:number}) {
-  const offsetParent = getOffsetParent(el) as HTMLElement
+  const offsetParent = getOffsetParent(el) as Element
   const parentOf = getOffset(offsetParent)
   return {
     x: of.x - parentOf.x,
@@ -1084,7 +1084,7 @@ export function getPositionFromOffset(el:HTMLElement, of:{x:number, y:number}) {
   }
 }
 
-export function getBoundingClientRect(el:HTMLElement){
+export function getBoundingClientRect(el:Element){
   // refer: http://www.51xuediannao.com/javascript/getBoundingClientRect.html
   const xy = el.getBoundingClientRect()
   const top = xy.top-document.documentElement.clientTop,//document.documentElement.clientTop 在IE67中始终为2，其他高级点的浏览器为0
@@ -1117,7 +1117,7 @@ export function offsetToViewportPosition(offset:{x:number, y:number}){
   return {x: offset.x + bodyVP.x - bodyOf.x, y: offset.y + bodyVP.y - bodyOf.y}
 }
 
-type findParent_Callback = (parentEl: HTMLElement) => boolean|'break'
+type findParent_Callback = (parentEl: Element) => boolean|'break'
 export function findParent(el:HTMLElement, callback:findParent_Callback, opt:{withSelf?:boolean}={}) {
   let cur = (opt && opt.withSelf) ? el : el.parentElement
   while (cur) {
@@ -1132,12 +1132,12 @@ export function findParent(el:HTMLElement, callback:findParent_Callback, opt:{wi
   }
 }
 
-export function backupAttr(el:HTMLElement, name:string) {
+export function backupAttr(el:Element, name:string) {
   const key = `original_${name}`
   el[key] = el.getAttribute(name)
 }
 
-export function restoreAttr(el:HTMLElement, name:string) {
+export function restoreAttr(el:Element, name:string) {
   const key = `original_${name}`
   const value = el[key]
   if (value == null) {
@@ -1148,7 +1148,7 @@ export function restoreAttr(el:HTMLElement, name:string) {
 }
 
 // source: http://youmightnotneedjquery.com/
-export function hasClass(el:HTMLElement, className:string) {
+export function hasClass(el:Element, className:string) {
   if (el.classList) {
     return el.classList.contains(className)
   } else {
@@ -1157,7 +1157,7 @@ export function hasClass(el:HTMLElement, className:string) {
 }
 
 // source: http://youmightnotneedjquery.com/
-export function addClass(el:HTMLElement, className:string) {
+export function addClass(el:Element, className:string) {
   if (!hasClass(el, className)) {
     if (el.classList)
     { el.classList.add(className) }
@@ -1167,7 +1167,7 @@ export function addClass(el:HTMLElement, className:string) {
 }
 
 // source: http://youmightnotneedjquery.com/
-export function removeClass(el:HTMLElement, className:string) {
+export function removeClass(el:Element, className:string) {
   if (el.classList)
   { el.classList.remove(className) }
   else
@@ -1210,7 +1210,7 @@ export function getBorder(el:HTMLElement) {
   }
 }
 
-export function setElChildByIndex(el:HTMLElement, child:HTMLElement, index:number) {
+export function setElChildByIndex(el:Element, child:Element, index:number) {
   // @ts-ignore
   child.childComponentIndex = index
   const len = el.childNodes.length
@@ -1240,7 +1240,7 @@ export function setElChildByIndex(el:HTMLElement, child:HTMLElement, index:numbe
 }
 
 type EventHandler = (Event) => void
-export function onDOM(el:HTMLElement|Window|Document, name:string, handler:EventHandler, ...args:any[]) {
+export function onDOM(el:Element|Window|Document, name:string, handler:EventHandler, ...args:any[]) {
   if (el.addEventListener) { // 所有主流浏览器，除了 IE 8 及更早 IE版本
     el.addEventListener(name, handler, ...args)
     // @ts-ignore
@@ -1250,7 +1250,7 @@ export function onDOM(el:HTMLElement|Window|Document, name:string, handler:Event
   }
 }
 
-export function offDOM(el:HTMLElement|Window|Document, name:string, handler:EventHandler, ...args:any[]) {
+export function offDOM(el:Element|Window|Document, name:string, handler:EventHandler, ...args:any[]) {
   if (el.removeEventListener) { // 所有主流浏览器，除了 IE 8 及更早 IE版本
     el.removeEventListener(name, handler, ...args)
     // @ts-ignore
@@ -1260,7 +1260,7 @@ export function offDOM(el:HTMLElement|Window|Document, name:string, handler:Even
   }
 }
 
-export function onDOMMany(els:(HTMLElement|Window|Document)[], names:string[], handler:EventHandler, ...args:any[]) {
+export function onDOMMany(els:(Element|Window|Document)[], names:string[], handler:EventHandler, ...args:any[]) {
   for (const el of els) {
     for (const name of names) {
       onDOM(el, name, handler, ...args)
@@ -1289,14 +1289,14 @@ export function getImageSizeByUrl(url:string) {
   })
 }
 
-type findNodeList_Callback = (el: HTMLElement, index: number) => void|boolean
+type findNodeList_Callback = (el: Element, index: number) => void|boolean
 export function findNodeList(list:NodeList, callback:findNodeList_Callback, opt:{reverse?:boolean} = {}) {
   const iterator = iterateAll(list, {
     reverse: opt.reverse
   })
   for (const {value, index} of iterator) {
     if (callback(value, index)) {
-      return value as HTMLElement
+      return value as Element
     }
   }
 }
