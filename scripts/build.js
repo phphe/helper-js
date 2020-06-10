@@ -7,9 +7,10 @@ const node = require("@rollup/plugin-node-resolve");
 const cjs = require("@rollup/plugin-commonjs");
 const json = require("@rollup/plugin-json");
 const rollup_plugin_terser_1 = require("rollup-plugin-terser"); // to minify bundle
+const typescript = require("rollup-plugin-typescript2");
 const pkg = require("../package.json");
 // quick config
-const input = 'src/index.js';
+const input = 'src/index.ts';
 const outDir = 'dist';
 const outputName = pkg.name; // the built file name is outDir/outputName.format.js
 const moduleName = rogo_1.camelize(pkg.name); // for umd, amd
@@ -49,8 +50,9 @@ exports.default = [
         input,
         external: (source) => rogo_1.belongsTo(source, Object.keys(pkg.dependencies || {})) || rogo_1.belongsTo(source, Object.keys(pkg.peerDependencies || {})),
         plugins: [
-            babel(esmBabelConfig),
             node(), cjs(), json(),
+            typescript(),
+            babel(esmBabelConfig),
         ],
         output: {
             file: path.resolve(outDir, `${outputName}.esm.js`),
@@ -64,8 +66,9 @@ exports.default = [
         input,
         external: (source) => rogo_1.belongsTo(source, Object.keys(pkg.dependencies || {})) || rogo_1.belongsTo(source, Object.keys(pkg.peerDependencies || {})),
         plugins: [
-            babel(cjsBabelConfig),
             node(), cjs(), json(),
+            typescript(),
+            babel(cjsBabelConfig),
         ],
         output: {
             file: path.resolve(outDir, `${outputName}.cjs.js`),
@@ -79,8 +82,9 @@ exports.default = [
         input,
         external: (source) => rogo_1.belongsTo(source, Object.keys(pkg.peerDependencies || {})),
         plugins: [
-            babel(umdBabelConfig),
             node(), cjs(), json(),
+            typescript(),
+            babel(umdBabelConfig),
         ],
         output: {
             file: path.resolve(outDir, `${outputName}.js`),
@@ -95,8 +99,9 @@ exports.default = [
         input,
         external: (source) => rogo_1.belongsTo(source, Object.keys(pkg.peerDependencies || {})),
         plugins: [
-            babel(umdBabelConfig),
             node(), cjs(), json(),
+            typescript(),
+            babel(umdBabelConfig),
             rollup_plugin_terser_1.terser(),
         ],
         output: {
