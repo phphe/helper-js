@@ -872,7 +872,7 @@ export function debounceImmediate<T>(action:T, wait = 0) {
 }
 
 // the returned function only accept one argument
-export function joinFunctionsByResult(funcs) {
+export function joinFunctionsByResult(funcs:any[]) {
   let wrappedFunc = funcs[0]
   for (let i = 1; i < funcs.length; i++) {
     wrappedFunc = join2func(wrappedFunc, funcs[i])
@@ -887,7 +887,7 @@ export function joinFunctionsByResult(funcs) {
 }
 
 // must pass arguments to `next` manually
-export function joinFunctionsByNext(funcs) {
+export function joinFunctionsByNext(funcs:any[]) {
   let next = () => {}
   for (const {value: func} of iterateAll(funcs, {reverse: true})) {
     const currentNext = next
@@ -952,7 +952,7 @@ export function promiseTimeout(promise, timeout:number) {
 
 // ## url
 
-export function getUrlParam(par) {
+export function getUrlParam(par:string) {
     // 获取当前URL
   var local_url = document.location.href
     // 获取要取得的get参数位置

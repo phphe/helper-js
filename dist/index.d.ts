@@ -132,14 +132,14 @@ export declare function debounceImmediate<T>(action: T, wait?: number): {
     action: T;
     stop: () => void;
 };
-export declare function joinFunctionsByResult(funcs: any): any;
-export declare function joinFunctionsByNext(funcs: any): () => void;
+export declare function joinFunctionsByResult(funcs: any[]): any;
+export declare function joinFunctionsByNext(funcs: any[]): () => void;
 export declare function executePromiseGetters(getters: (() => any)[], concurrent?: number): {
     promise: Promise<unknown>;
     stop(): void;
 };
 export declare function promiseTimeout(promise: any, timeout: number): Promise<unknown>;
-export declare function getUrlParam(par: any): string | false;
+export declare function getUrlParam(par: string): string | false;
 export declare function createElementFromHTML(htmlString: string): ChildNode | NodeListOf<ChildNode>;
 export declare function uniqueId(prefix?: string): string;
 export declare function isDescendantOf(el: HTMLElement, parent: HTMLElement): boolean;
