@@ -59,10 +59,10 @@ export function isString (v): v is string {
 export function isObject (v): v is object {
   return Object.prototype.toString.call(v) === '[object Object]'
 }
-export function isFunction (v) {
+export function isFunction (v): v is Function {
   return typeof v === 'function'
 }
-export function isPromise (v) {
+export function isPromise (v): v is Promise<any> {
   return Object.prototype.toString.call(v) === '[object Promise]'
 }
 // detect if argumrnt is null, undefined, empty array, empty string, false, NaN, empty object
