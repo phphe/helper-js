@@ -1007,7 +1007,7 @@ export function isDescendantOf (el:HTMLElement, parent:HTMLElement) {
   }
 }
 
-export function removeEl(el:HTMLElement) {
+export function removeEl(el:HTMLElement|Node) {
   if (el.parentNode !== null) {
     return el.parentNode.removeChild(el)
   }
@@ -1569,7 +1569,7 @@ export function parseISO(timestamp:string) {
   [y, m, d] = datePart.split('-').map(v => parseInt(v))
   m = m - 1
   if (timePart) {
-    const t = timePart.split('-').map(v => parseFloat(v))
+    const t = timePart.split(':').map(v => parseFloat(v))
     h = t[0]
     if (t[1] != null) {
       min = t[1]
@@ -1578,9 +1578,13 @@ export function parseISO(timestamp:string) {
       s = t[2]
     }
   }
-  const dt = new Date(y, m, d, h, min, s)
-  // the dt timezone is current, so reset hour with setUTCHours
+  const dt = new Date()
+  dt.setUTCFullYear(y)
+  dt.setUTCMonth(m)
+  dt.setUTCDate(d)
   dt.setUTCHours(h)
+  dt.setUTCMinutes(min)
+  dt.setUTCSeconds(s)
   return dt
 }
 
