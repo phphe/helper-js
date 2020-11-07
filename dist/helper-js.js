@@ -1,5 +1,5 @@
 /*!
- * helper-js v2.0.1
+ * helper-js v2.0.2
  * (c) phphe <phphe@outlook.com> (https://github.com/phphe)
  * Homepage: undefined
  * Released under the MIT License.
@@ -3187,7 +3187,7 @@
     m = m - 1;
 
     if (timePart) {
-      var t = timePart.split('-').map(function (v) {
+      var t = timePart.split(':').map(function (v) {
         return parseFloat(v);
       });
       h = t[0];
@@ -3201,9 +3201,13 @@
       }
     }
 
-    var dt = new Date(y, m, d, h, min, s); // the dt timezone is current, so reset hour with setUTCHours
-
+    var dt = new Date();
+    dt.setUTCFullYear(y);
+    dt.setUTCMonth(m);
+    dt.setUTCDate(d);
     dt.setUTCHours(h);
+    dt.setUTCMinutes(min);
+    dt.setUTCSeconds(s);
     return dt;
   }
   function binarySearch(arr, callback) {
