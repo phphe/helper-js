@@ -1,5 +1,5 @@
 /*!
- * helper-js v2.0.2
+ * helper-js v2.0.3
  * (c) phphe <phphe@outlook.com> (https://github.com/phphe)
  * Homepage: undefined
  * Released under the MIT License.
@@ -1232,7 +1232,6 @@ function watchChange(getVal, handler) {
 function debounceTrailing(action) {
   var wait = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
   var t;
-  var delaying;
   var lastArgs; // when trailing, use last args
 
   var resolves = [];
@@ -1251,20 +1250,20 @@ function debounceTrailing(action) {
 
       lastArgs = args;
 
-      if (!delaying) {
-        delaying = true;
-        t = setTimeout(function () {
-          // @ts-ignore
-          var result = action.call.apply(action, [_this].concat(_toConsumableArray(lastArgs)));
-          t = null;
-          delaying = false;
-          resolves.forEach(function (resolve) {
-            return resolve(result);
-          });
-          resolves = [];
-          rejects = [];
-        }, wait);
+      if (t) {
+        clearTimeout(t);
       }
+
+      t = setTimeout(function () {
+        // @ts-ignore
+        var result = action.call.apply(action, [_this].concat(_toConsumableArray(lastArgs)));
+        t = null;
+        resolves.forEach(function (resolve) {
+          return resolve(result);
+        });
+        resolves = [];
+        rejects = [];
+      }, wait);
     });
   };
 
@@ -1274,7 +1273,6 @@ function debounceTrailing(action) {
       t = null;
     }
 
-    delaying = false;
     resolves = [];
     rejects.forEach(function (reject) {
       return reject();
