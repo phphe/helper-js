@@ -801,7 +801,6 @@ export function watchChange<T>(getVal:ReplaceReturnType<OmitFirstArg<T>, any>, h
 
 export function debounceTrailing<T>(action:T, wait = 0) {
   let t
-  let delaying
   let lastArgs // when trailing, use last args
   let resolves = []
   let rejects = []
@@ -811,18 +810,17 @@ export function debounceTrailing<T>(action:T, wait = 0) {
       rejects.push(reject)
       //
       lastArgs = args
-      if (!delaying) {
-        delaying = true
-        t = setTimeout(() => {
-          // @ts-ignore
-          const result = action.call(this, ...lastArgs)
-          t = null
-          delaying = false
-          resolves.forEach(resolve => resolve(result))
-          resolves = []
-          rejects = []
-        }, wait)
+      if (t) {
+        clearTimeout(t)
       }
+      t = setTimeout(() => {
+        // @ts-ignore
+        const result = action.call(this, ...lastArgs)
+        t = null
+        resolves.forEach(resolve => resolve(result))
+        resolves = []
+        rejects = []
+      }, wait)
     })
   }
   const stop = () => {
@@ -830,7 +828,6 @@ export function debounceTrailing<T>(action:T, wait = 0) {
       clearTimeout(t)
       t = null
     }
-    delaying = false
     resolves = []
     rejects.forEach(reject => reject())
     rejects = []
