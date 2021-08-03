@@ -1,5 +1,5 @@
 /*!
- * helper-js v2.0.3
+ * helper-js v2.0.4
  * (c) phphe <phphe@outlook.com> (https://github.com/phphe)
  * Homepage: undefined
  * Released under the MIT License.
@@ -2118,6 +2118,7 @@
         // opt.afterNodeCreated(newNode, {oldNode: node, index, parent, path})
         var childrenKey = this.childrenKey;
         var td = new TreeData();
+        td.childrenKey = childrenKey;
         this.walk(function (node, index, parent, path) {
           var newNode = Object.assign({}, node);
 

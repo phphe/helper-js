@@ -1,5 +1,5 @@
 /*!
- * helper-js v2.0.3
+ * helper-js v2.0.4
  * (c) phphe <phphe@outlook.com> (https://github.com/phphe)
  * Homepage: undefined
  * Released under the MIT License.
@@ -14,39 +14,7 @@ import _createClass from '@babel/runtime/helpers/createClass';
 import _classCallCheck from '@babel/runtime/helpers/classCallCheck';
 import _regeneratorRuntime from '@babel/runtime/regenerator';
 import _toConsumableArray from '@babel/runtime/helpers/toConsumableArray';
-import '@babel/runtime/helpers/typeof';
-
-function __awaiter(thisArg, _arguments, P, generator) {
-  function adopt(value) {
-    return value instanceof P ? value : new P(function (resolve) {
-      resolve(value);
-    });
-  }
-
-  return new (P || (P = Promise))(function (resolve, reject) {
-    function fulfilled(value) {
-      try {
-        step(generator.next(value));
-      } catch (e) {
-        reject(e);
-      }
-    }
-
-    function rejected(value) {
-      try {
-        step(generator["throw"](value));
-      } catch (e) {
-        reject(e);
-      }
-    }
-
-    function step(result) {
-      result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
-    }
-
-    step((generator = generator.apply(thisArg, _arguments || [])).next());
-  });
-}
+import { __awaiter } from 'tslib';
 
 function _createSuper(Derived) { return function () { var Super = _getPrototypeOf(Derived), result; if (_isNativeReflectConstruct()) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
@@ -1151,6 +1119,7 @@ var TreeData = /*#__PURE__*/function () {
       // opt.afterNodeCreated(newNode, {oldNode: node, index, parent, path})
       var childrenKey = this.childrenKey;
       var td = new TreeData();
+      td.childrenKey = childrenKey;
       this.walk(function (node, index, parent, path) {
         var newNode = Object.assign({}, node);
 

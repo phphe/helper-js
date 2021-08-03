@@ -1,5 +1,5 @@
 /*!
- * helper-js v2.0.3
+ * helper-js v2.0.4
  * (c) phphe <phphe@outlook.com> (https://github.com/phphe)
  * Homepage: undefined
  * Released under the MIT License.
@@ -20,39 +20,7 @@ var _createClass = _interopDefault(require('@babel/runtime/helpers/createClass')
 var _classCallCheck = _interopDefault(require('@babel/runtime/helpers/classCallCheck'));
 var _regeneratorRuntime = _interopDefault(require('@babel/runtime/regenerator'));
 var _toConsumableArray = _interopDefault(require('@babel/runtime/helpers/toConsumableArray'));
-require('@babel/runtime/helpers/typeof');
-
-function __awaiter(thisArg, _arguments, P, generator) {
-  function adopt(value) {
-    return value instanceof P ? value : new P(function (resolve) {
-      resolve(value);
-    });
-  }
-
-  return new (P || (P = Promise))(function (resolve, reject) {
-    function fulfilled(value) {
-      try {
-        step(generator.next(value));
-      } catch (e) {
-        reject(e);
-      }
-    }
-
-    function rejected(value) {
-      try {
-        step(generator["throw"](value));
-      } catch (e) {
-        reject(e);
-      }
-    }
-
-    function step(result) {
-      result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
-    }
-
-    step((generator = generator.apply(thisArg, _arguments || [])).next());
-  });
-}
+var tslib = require('tslib');
 
 function _createSuper(Derived) { return function () { var Super = _getPrototypeOf(Derived), result; if (_isNativeReflectConstruct()) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
@@ -1157,6 +1125,7 @@ var TreeData = /*#__PURE__*/function () {
       // opt.afterNodeCreated(newNode, {oldNode: node, index, parent, path})
       var childrenKey = this.childrenKey;
       var td = new TreeData();
+      td.childrenKey = childrenKey;
       this.walk(function (node, index, parent, path) {
         var newNode = Object.assign({}, node);
 
@@ -1389,7 +1358,7 @@ function executePromiseGetters(getters) {
   var concurrent = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
   var stopped;
   var promise = new Promise(function (resolve, reject) {
-    return __awaiter(this, void 0, void 0, /*#__PURE__*/_regeneratorRuntime.mark(function _callee() {
+    return tslib.__awaiter(this, void 0, void 0, /*#__PURE__*/_regeneratorRuntime.mark(function _callee() {
       var chunks, promises, _iterator8, _step8, chunk, chunkPromises;
 
       return _regeneratorRuntime.wrap(function _callee$(_context3) {
@@ -2362,7 +2331,7 @@ function waitFor(condition) {
 }
 function retry(action) {
   var limitTimes = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 3;
-  return __awaiter(this, void 0, void 0, /*#__PURE__*/_regeneratorRuntime.mark(function _callee2() {
+  return tslib.__awaiter(this, void 0, void 0, /*#__PURE__*/_regeneratorRuntime.mark(function _callee2() {
     var index;
     return _regeneratorRuntime.wrap(function _callee2$(_context4) {
       while (1) {
