@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const rogo_1 = require("rogo");
 const path = require("path");
-const babel = require('rollup-plugin-babel');
+const babel = require("rollup-plugin-babel");
 const node = require("@rollup/plugin-node-resolve");
 const cjs = require("@rollup/plugin-commonjs");
 const json = require("@rollup/plugin-json");
@@ -10,53 +10,61 @@ const rollup_plugin_terser_1 = require("rollup-plugin-terser"); // to minify bun
 const typescript = require("rollup-plugin-typescript2");
 const pkg = require("../package.json");
 // quick config
-const input = 'src/index.ts';
-const outDir = 'dist';
+const input = "src/index.ts";
+const outDir = "dist";
 const outputName = pkg.name; // the built file name is outDir/outputName.format.js
 const moduleName = rogo_1.camelize(pkg.name); // for umd, amd
+const external = ["tslib"];
 const getBabelConfig = () => ({
     // .babelrc
     presets: [
-        ['@babel/preset-env', {
+        [
+            "@babel/preset-env",
+            {
                 useBuiltIns: false,
-                targets: 'defaults',
-            }],
+                targets: "defaults",
+            },
+        ],
     ],
     plugins: [
-        '@babel/plugin-transform-runtime',
+        "@babel/plugin-transform-runtime",
         // Stage 1
-        ['@babel/plugin-proposal-optional-chaining', { 'loose': false }],
+        ["@babel/plugin-proposal-optional-chaining", { loose: false }],
         // Stage 2
-        '@babel/plugin-proposal-export-namespace-from',
+        "@babel/plugin-proposal-export-namespace-from",
         // Stage 3
-        '@babel/plugin-syntax-dynamic-import',
-        '@babel/plugin-syntax-import-meta',
-        ['@babel/plugin-proposal-class-properties', { 'loose': true }],
-        '@babel/plugin-proposal-json-strings',
+        "@babel/plugin-syntax-dynamic-import",
+        "@babel/plugin-syntax-import-meta",
+        ["@babel/plugin-proposal-class-properties", { loose: true }],
+        "@babel/plugin-proposal-json-strings",
     ],
     // for rollup babel plugin
     runtimeHelpers: true,
     exclude: [/@babel\/runtime/, /@babel\\runtime/, /regenerator-runtime/],
-    extensions: ['.js', '.jsx', '.es6', '.es', '.mjs', '.vue', '.ts', '.tsx'],
+    extensions: [".js", ".jsx", ".es6", ".es", ".mjs", ".vue", ".ts", ".tsx"],
     babelrc: false,
 });
 const esmBabelConfig = getBabelConfig();
 const cjsBabelConfig = getBabelConfig();
-cjsBabelConfig.plugins.push(['module-extension', { mjs: 'js' }]); // replace .mjs to .js
+cjsBabelConfig.plugins.push(["module-extension", { mjs: "js" }]); // replace .mjs to .js
 const umdBabelConfig = getBabelConfig();
 exports.default = [
     // esm
     {
         input,
-        external: (source) => rogo_1.belongsTo(source, Object.keys(pkg.dependencies || {})) || rogo_1.belongsTo(source, Object.keys(pkg.peerDependencies || {})),
+        external: (source) => rogo_1.belongsTo(source, Object.keys(pkg.dependencies || {})) ||
+            rogo_1.belongsTo(source, Object.keys(pkg.peerDependencies || {})) ||
+            rogo_1.belongsTo(source, external),
         plugins: [
-            node(), cjs(), json(),
+            node(),
+            cjs(),
+            json(),
             typescript(),
             babel(esmBabelConfig),
         ],
         output: {
             file: path.resolve(outDir, `${outputName}.esm.js`),
-            format: 'esm',
+            format: "esm",
             banner: getBanner(pkg),
             sourcemap: false,
         },
@@ -64,15 +72,19 @@ exports.default = [
     // cjs
     {
         input,
-        external: (source) => rogo_1.belongsTo(source, Object.keys(pkg.dependencies || {})) || rogo_1.belongsTo(source, Object.keys(pkg.peerDependencies || {})),
+        external: (source) => rogo_1.belongsTo(source, Object.keys(pkg.dependencies || {})) ||
+            rogo_1.belongsTo(source, Object.keys(pkg.peerDependencies || {})) ||
+            rogo_1.belongsTo(source, external),
         plugins: [
-            node(), cjs(), json(),
+            node(),
+            cjs(),
+            json(),
             typescript(),
             babel(cjsBabelConfig),
         ],
         output: {
             file: path.resolve(outDir, `${outputName}.cjs.js`),
-            format: 'cjs',
+            format: "cjs",
             banner: getBanner(pkg),
             sourcemap: false,
         },
@@ -82,13 +94,15 @@ exports.default = [
         input,
         external: (source) => rogo_1.belongsTo(source, Object.keys(pkg.peerDependencies || {})),
         plugins: [
-            node(), cjs(), json(),
+            node(),
+            cjs(),
+            json(),
             typescript(),
             babel(umdBabelConfig),
         ],
         output: {
             file: path.resolve(outDir, `${outputName}.js`),
-            format: 'umd',
+            format: "umd",
             banner: getBanner(pkg),
             sourcemap: false,
             name: moduleName,
@@ -99,21 +113,23 @@ exports.default = [
         input,
         external: (source) => rogo_1.belongsTo(source, Object.keys(pkg.peerDependencies || {})),
         plugins: [
-            node(), cjs(), json(),
+            node(),
+            cjs(),
+            json(),
             typescript(),
             babel(umdBabelConfig),
             rollup_plugin_terser_1.terser(),
         ],
         output: {
             file: path.resolve(outDir, `${outputName}.min.js`),
-            format: 'umd',
+            format: "umd",
             banner: getBanner(pkg),
             sourcemap: false,
             name: moduleName,
         },
     },
 ];
-if (process.argv.includes('--report')) {
+if (process.argv.includes("--report")) {
     rogo_1.report(outDir);
 }
 function getBanner(pkg) {
