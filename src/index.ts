@@ -744,6 +744,7 @@ export class TreeData<Node> {
     // opt.afterNodeCreated(newNode, {oldNode: node, index, parent, path})
     const {childrenKey} = this
     const td = new TreeData()
+    td.childrenKey = childrenKey
     this.walk((node, index, parent, path) => {
       const newNode = Object.assign({}, node)
       if (newNode[childrenKey]) {
