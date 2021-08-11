@@ -1,5 +1,5 @@
 /*!
- * helper-js v2.0.5
+ * helper-js v2.0.6
  * (c) phphe <phphe@outlook.com> (https://github.com/phphe)
  * Homepage: null
  * Released under the MIT License.
@@ -82,28 +82,28 @@ function isDocumentExisted() {
   return true;
 }
 function isArray(v) {
-  return Object.prototype.toString.call(v) === '[object Array]';
+  return Object.prototype.toString.call(v) === "[object Array]";
 }
 function isBool(v) {
-  return Object.prototype.toString.call(v) === '[object Boolean]';
+  return Object.prototype.toString.call(v) === "[object Boolean]";
 }
 function isNumber(v) {
-  return Object.prototype.toString.call(v) === '[object Number]';
+  return Object.prototype.toString.call(v) === "[object Number]";
 }
 function isNumeric(v) {
   return isFinite(v) && !isNaN(parseFloat(v));
 }
 function isString(v) {
-  return Object.prototype.toString.call(v) === '[object String]';
+  return Object.prototype.toString.call(v) === "[object String]";
 }
 function isObject(v) {
-  return Object.prototype.toString.call(v) === '[object Object]';
+  return Object.prototype.toString.call(v) === "[object Object]";
 }
 function isFunction(v) {
-  return typeof v === 'function';
+  return typeof v === "function";
 }
 function isPromise(v) {
-  return Object.prototype.toString.call(v) === '[object Promise]';
+  return Object.prototype.toString.call(v) === "[object Promise]";
 } // detect if argumrnt is null, undefined, empty array, empty string, false, NaN, empty object
 // 检查是否是null, undefined, 空数组, 空字符串, false, NaN, 空对象
 
@@ -133,7 +133,7 @@ function randChoice(arr) {
 // 左边补充指定字符, 使其达到指定长度
 
 function strPad(str, n) {
-  var padString = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '0';
+  var padString = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "0";
   var r = str.toString();
   var len = str.toString().length;
 
@@ -166,11 +166,11 @@ function studlyCase(str) {
 } // To lower case and use `-` as delimiter. example: '-ABC abc_def camelCase-- helloMyFriend' to 'a-b-c-abc-def-camel-case-hello-my-friend'
 
 function kebabCase(str) {
-  return str.replace(/ /g, '-').replace(/_/g, '-').replace(/([A-Z])/g, '-$1').replace(/--+/g, '-').replace(/^-|-$|/g, '').toLowerCase();
+  return str.replace(/ /g, "-").replace(/_/g, "-").replace(/([A-Z])/g, "-$1").replace(/--+/g, "-").replace(/^-|-$|/g, "").toLowerCase();
 } // To lower case and use `_` as delimiter.
 
 function snakeCase(str) {
-  return kebabCase(str).replace(/-/g, '_');
+  return kebabCase(str).replace(/-/g, "_");
 } // 'abc-abc-abc_abc' to 'AbcAbcAbcAbc'
 
 function camelCase(str) {
@@ -180,7 +180,7 @@ function camelCase(str) {
     temp[i] = studlyCase(temp[i]);
   }
 
-  return temp.join('');
+  return temp.join("");
 } // 'AbcAbcAbcAbc' to ['Abc', 'Abc', 'Abc', 'Abc']
 
 function camelToWords(str) {
@@ -188,14 +188,14 @@ function camelToWords(str) {
 } // 'abcAbc' to 'Abc Abc'
 
 function titleCase(str) {
-  return camelToWords(studlyCase(camelCase(str))).join(' ').replace(/\bid\b/ig, 'ID');
+  return camelToWords(studlyCase(camelCase(str))).join(" ").replace(/\bid\b/gi, "ID");
 } // generate random string
 // 随机字符串
 
 function randString() {
   var len = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 8;
-  var seeds = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  var r = '';
+  var seeds = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  var r = "";
 
   for (var i = 0; i < len; i++) {
     r += randChoice(seeds);
@@ -295,7 +295,7 @@ function getArrayItemSiblings(arr, item, offsets) {
   var index = arr.indexOf(item);
 
   if (index === -1) {
-    throw 'item is not in array';
+    throw "item is not in array";
   }
 
   return offsets.map(function (v) {
@@ -557,7 +557,7 @@ function iterateAll(val) {
           break;
 
         case 27:
-          throw 'Unsupported type';
+          throw "Unsupported type";
 
         case 28:
           _context.next = 58;
@@ -639,7 +639,7 @@ function iterateAll(val) {
           break;
 
         case 57:
-          throw 'Unsupported type';
+          throw "Unsupported type";
 
         case 58:
         case "end":
@@ -651,7 +651,7 @@ function iterateAll(val) {
 // 例: objectGet(window, 'document.body.children.0') . 参考: http://stackoverflow.com/questions/8817394/javascript-get-deep-value-from-object-by-passing-path-to-it-as-string
 
 function objectGet(obj, path, throwError) {
-  var paths = isArray(path) ? path : path.split('.');
+  var paths = isArray(path) ? path : path.split(".");
   var current = obj;
 
   try {
@@ -678,7 +678,7 @@ function objectGet(obj, path, throwError) {
 } // refer [objectGet](#objectGet)
 
 function objectSet(obj, path, value) {
-  var paths = isArray(path) ? path : path.split('.');
+  var paths = isArray(path) ? path : path.split(".");
   var lastKey = arrayLast(paths);
   var parent = objectGet(obj, paths.slice(0, paths.length - 1));
 
@@ -769,7 +769,7 @@ function mapObjectTree(obj, handler) {
       } else if (key2 == null) {
         // don't change key
         newVal = assign(_value, key, true);
-      } else if (t.hasOwnProperty('value')) {
+      } else if (t.hasOwnProperty("value")) {
         // @ts-ignore
         newVal = assign(_value, key2);
       }
@@ -846,7 +846,7 @@ function pairRows(rows1, rows2, key1) {
   });
 }
 function depthFirstSearch(obj, handler) {
-  var childrenKey = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'children';
+  var childrenKey = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "children";
   var opt = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
   var rootChildren = isArray(obj) ? obj : [obj]; //
 
@@ -871,9 +871,9 @@ function depthFirstSearch(obj, handler) {
       if (r === false) {
         // stop
         throw new StopException();
-      } else if (r === 'skip children') {
+      } else if (r === "skip children") {
         continue;
-      } else if (r === 'skip siblings') {
+      } else if (r === "skip siblings") {
         break;
       }
 
@@ -901,7 +901,7 @@ var TreeData = /*#__PURE__*/function () {
 
     _classCallCheck__default['default'](this, TreeData);
 
-    this.childrenKey = 'children';
+    this.childrenKey = "children";
     this.data = data;
   }
 
@@ -1455,8 +1455,8 @@ function promiseTimeout(promise, timeout) {
     });
     t = setTimeout(function () {
       rejected = true;
-      var e = new Error('Promise timeout!');
-      e.name = 'timeout';
+      var e = new Error("Promise timeout!");
+      e.name = "timeout";
       reject(e);
     }, timeout);
   });
@@ -1466,7 +1466,7 @@ function getUrlParam(par) {
   // 获取当前URL
   var local_url = document.location.href; // 获取要取得的get参数位置
 
-  var get = local_url.indexOf(par + '=');
+  var get = local_url.indexOf(par + "=");
 
   if (get == -1) {
     return false;
@@ -1475,7 +1475,7 @@ function getUrlParam(par) {
 
   var get_par = local_url.slice(par.length + get + 1); // 判断截取后的字符串是否还有其他get参数
 
-  var nextPar = get_par.indexOf('&');
+  var nextPar = get_par.indexOf("&");
 
   if (nextPar != -1) {
     get_par = get_par.slice(0, nextPar);
@@ -1486,7 +1486,7 @@ function getUrlParam(par) {
 // return NodeList if there are multiple top-level nodes
 
 function createElementFromHTML(htmlString) {
-  var div = document.createElement('div');
+  var div = document.createElement("div");
   div.innerHTML = htmlString.trim();
 
   if (div.childNodes.length > 1) {
@@ -1496,7 +1496,7 @@ function createElementFromHTML(htmlString) {
   }
 }
 function uniqueId() {
-  var prefix = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'id_';
+  var prefix = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "id_";
   var id = prefix + randString();
   if (!store.uniqueId) store.uniqueId = {};
   var generatedIds = store.uniqueId;
@@ -1526,7 +1526,7 @@ function removeEl(el) {
 } // refer: https://stackoverflow.com/questions/871399/cross-browser-method-for-detecting-the-scrolltop-of-the-browser-window
 
 function getScroll() {
-  if (typeof pageYOffset != 'undefined') {
+  if (typeof pageYOffset != "undefined") {
     //most browsers except IE before #9
     return {
       top: pageYOffset,
@@ -1557,7 +1557,7 @@ function getOffset(el) {
 function getOffsetParent(el) {
   var offsetParent = el.offsetParent;
 
-  if (!offsetParent || offsetParent === document.body && getComputedStyle(document.body).position === 'static') {
+  if (!offsetParent || offsetParent === document.body && getComputedStyle(document.body).position === "static") {
     offsetParent = document.body.parentElement;
   }
 
@@ -1650,7 +1650,7 @@ function findParent(el, callback) {
   while (cur) {
     var r = callback(cur);
 
-    if (r === 'break') {
+    if (r === "break") {
       return;
     } else if (r) {
       return cur;
@@ -1678,7 +1678,7 @@ function hasClass(el, className) {
   if (el.classList) {
     return el.classList.contains(className);
   } else {
-    return new RegExp('(^| )' + className + '( |$)', 'gi').test(el.className);
+    return new RegExp("(^| )" + className + "( |$)", "gi").test(el.className);
   }
 } // source: http://youmightnotneedjquery.com/
 
@@ -1687,7 +1687,7 @@ function addClass(el, className) {
     if (el.classList) {
       el.classList.add(className);
     } else {
-      el.className += ' ' + className;
+      el.className += " " + className;
     }
   }
 } // source: http://youmightnotneedjquery.com/
@@ -1696,18 +1696,18 @@ function removeClass(el, className) {
   if (el.classList) {
     el.classList.remove(className);
   } else {
-    el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+    el.className = el.className.replace(new RegExp("(^|\\b)" + className.split(" ").join("|") + "(\\b|$)", "gi"), " ");
   }
 }
 function getElSizeEvenInvisible(el) {
-  backupAttr(el, 'style');
-  el.style.display = 'block';
+  backupAttr(el, "style");
+  el.style.display = "block";
   var t = getBoundingClientRect(el);
   var size = {
     width: t.width,
     height: t.height
   };
-  restoreAttr(el, 'style');
+  restoreAttr(el, "style");
   return size;
 }
 /**
@@ -1725,7 +1725,7 @@ function isOffsetInEl(x, y, el) {
 function getBorder(el) {
   var body = document.body;
   var workArea = findParent(el, function (v) {
-    return hasClass(v, 'work-area');
+    return hasClass(v, "work-area");
   });
   var of = getOffset(workArea);
   return {
@@ -1861,15 +1861,15 @@ function onDOMMany(els, names, handler) {
   return destroy;
 }
 function getImageSizeByUrl(url) {
-  var image = document.createElement('img');
+  var image = document.createElement("img");
   return new Promise(function (resolve, reject) {
-    onDOM(image, 'load', function () {
+    onDOM(image, "load", function () {
       resolve({
         width: image.width,
         height: image.height
       });
     });
-    onDOM(image, 'error', function (e) {
+    onDOM(image, "error", function (e) {
       reject(e);
     });
     image.src = url;
@@ -1906,9 +1906,9 @@ function findNodeListReverse(list, callback) {
   });
 }
 function elementsFromPoint(x, y) {
-  var args = [x, y]; // @ts-ignore
-
-  var func = document.elementsFromPoint || document.msElementsFromPoint || elementsFromPoint;
+  var args = [x, y];
+  var func = document.elementsFromPoint || // @ts-ignore
+  document.msElementsFromPoint || elementsFromPoint;
   return func.apply(document, args);
 
   function elementsFromPoint(x, y) {
@@ -1919,14 +1919,14 @@ function elementsFromPoint(x, y) {
       if (parent !== document.elementFromPoint(x, y)) {
         parent = document.elementFromPoint(x, y);
         parents.push(parent);
-        parent.style.pointerEvents = 'none';
+        parent.style.pointerEvents = "none";
       } else {
         parent = false;
       }
     } while (parent);
 
     parents.forEach(function (parent) {
-      return parent.style.pointerEvents = 'all';
+      return parent.style.pointerEvents = "all";
     });
     return parents;
   }
@@ -1942,11 +1942,11 @@ function getOuterAttachedHeight(el) {
   var arr = [];
 
   if (opt.margin) {
-    arr.push('margin-top', 'margin-bottom');
+    arr.push("margin-top", "margin-bottom");
   }
 
   if (opt.border) {
-    arr.push('border-top-width', 'border-bottom-width');
+    arr.push("border-top-width", "border-bottom-width");
   }
 
   arr.forEach(function (key) {
@@ -1965,11 +1965,11 @@ function getOuterAttachedWidth(el) {
   var arr = [];
 
   if (opt.margin) {
-    arr.push('margin-left', 'margin-right');
+    arr.push("margin-left", "margin-right");
   }
 
   if (opt.border) {
-    arr.push('border-left-width', 'border-right-width');
+    arr.push("border-left-width", "border-right-width");
   }
 
   arr.forEach(function (key) {
@@ -2072,18 +2072,18 @@ function cloneDate(dateObj) {
 } // day and date is same
 
 function addDate(dateObj, n, type) {
-  if (!['year', 'month', 'day', 'date'].includes(type)) {
-    type += 's';
+  if (!["year", "month", "day", "date"].includes(type)) {
+    type += "s";
   }
 
   var type2 = studlyCase(type);
 
-  if (type2 === 'Day') {
-    type2 = 'Date';
+  if (type2 === "Day") {
+    type2 = "Date";
   }
 
-  var setFuncName = 'set' + type2;
-  var getFuncName = 'get' + type2;
+  var setFuncName = "set" + type2;
+  var getFuncName = "get" + type2;
   dateObj[setFuncName](dateObj[getFuncName]() + n);
   return dateObj;
 }
@@ -2094,7 +2094,7 @@ function getMonthStart(dateObj) {
 }
 function getMonthEnd(dateObj) {
   var r = cloneDate(dateObj);
-  addDate(r, 1, 'month');
+  addDate(r, 1, "month");
   r.setDate(0);
   return r;
 }
@@ -2106,7 +2106,7 @@ function getCalendar(year, month) {
   month = date.getMonth() + 1;
   var monthStart = getMonthStart(date);
   var monthStartDay = monthStart.getDay();
-  var calendarStart = addDate(cloneDate(monthStart), -(monthStartDay + startWeekDay), 'day');
+  var calendarStart = addDate(cloneDate(monthStart), -(monthStartDay + startWeekDay), "day");
 
   if (monthStartDay > startWeekDay) {
     var startDate = calendarStart.getDate();
@@ -2148,7 +2148,7 @@ function getCalendar(year, month) {
   var endWeekDay = 6 - startWeekDay;
 
   if (monthEndDay < endWeekDay) {
-    var nextMonth = addDate(cloneDate(date), 1, 'month');
+    var nextMonth = addDate(cloneDate(date), 1, "month");
 
     var _year2 = nextMonth.getFullYear();
 
@@ -2175,7 +2175,7 @@ function isIsoFormat(str) {
 } // timestamp eg: 2018-09-07T03:38:37.888Z
 
 function parseISO(timestamp) {
-  var _timestamp$split = timestamp.split('T'),
+  var _timestamp$split = timestamp.split("T"),
       _timestamp$split2 = _slicedToArray__default['default'](_timestamp$split, 2),
       datePart = _timestamp$split2[0],
       timePart = _timestamp$split2[1];
@@ -2187,7 +2187,7 @@ function parseISO(timestamp) {
       min = 0,
       s = 0;
 
-  var _datePart$split$map = datePart.split('-').map(function (v) {
+  var _datePart$split$map = datePart.split("-").map(function (v) {
     return parseInt(v);
   });
 
@@ -2199,7 +2199,7 @@ function parseISO(timestamp) {
   m = m - 1;
 
   if (timePart) {
-    var t = timePart.split(':').map(function (v) {
+    var t = timePart.split(":").map(function (v) {
       return parseFloat(v);
     });
     h = t[0];
@@ -2282,12 +2282,12 @@ function binarySearch(arr, callback) {
 
 function windowLoaded() {
   return new Promise(function (resolve, reject) {
-    if (document && document.readyState === 'complete') {
+    if (document && document.readyState === "complete") {
       resolve();
     } else {
-      glb().addEventListener('load', function once() {
+      glb().addEventListener("load", function once() {
         resolve();
-        glb().removeEventListener('load', once);
+        glb().removeEventListener("load", once);
       });
     }
   });
@@ -2315,7 +2315,7 @@ function waitFor(condition) {
         }
       } else {
         stop();
-        reject(new Error('waitFor: Limit is reached'));
+        reject(new Error("waitFor: Limit is reached"));
       }
 
       count++;
@@ -2391,7 +2391,7 @@ function copyTextToClipboard(text) {
     return;
   } catch (e) {}
 
-  var textArea = document.createElement('textarea'); //
+  var textArea = document.createElement("textarea"); //
   // *** This styling is an extra step which is likely not required. ***
   //
   // Why is it here? To ensure:
@@ -2407,31 +2407,31 @@ function copyTextToClipboard(text) {
   //
   // Place in top-left corner of screen regardless of scroll position.
 
-  textArea.style.position = 'fixed';
-  textArea.style.top = '0';
-  textArea.style.left = '0'; // Ensure it has a small width and height. Setting to 1px / 1em
+  textArea.style.position = "fixed";
+  textArea.style.top = "0";
+  textArea.style.left = "0"; // Ensure it has a small width and height. Setting to 1px / 1em
   // doesn't work as this gives a negative w/h on some browsers.
 
-  textArea.style.width = '2em';
-  textArea.style.height = '2em'; // We don't need padding, reducing the size if it does flash render.
+  textArea.style.width = "2em";
+  textArea.style.height = "2em"; // We don't need padding, reducing the size if it does flash render.
 
-  textArea.style.padding = '0'; // Clean up any borders.
+  textArea.style.padding = "0"; // Clean up any borders.
 
-  textArea.style.border = 'none';
-  textArea.style.outline = 'none';
-  textArea.style.boxShadow = 'none'; // Avoid flash of white box if rendered for any reason.
+  textArea.style.border = "none";
+  textArea.style.outline = "none";
+  textArea.style.boxShadow = "none"; // Avoid flash of white box if rendered for any reason.
 
-  textArea.style.background = 'transparent';
+  textArea.style.background = "transparent";
   textArea.value = text;
   document.body.appendChild(textArea);
   textArea.select();
 
   try {
-    var successful = document.execCommand('copy');
-    var msg = successful ? 'successful' : 'unsuccessful';
-    console.log('Copying text command was ' + msg);
+    var successful = document.execCommand("copy");
+    var msg = successful ? "successful" : "unsuccessful";
+    console.log("Copying text command was " + msg);
   } catch (err) {
-    console.log('Oops, unable to copy');
+    console.log("Oops, unable to copy");
   }
 
   document.body.removeChild(textArea);
@@ -2445,7 +2445,7 @@ function isWindowDefined() {
 }
 function isNode() {
   // @ts-ignore
-  return Boolean(typeof glb().module !== 'undefined' && glb().module.exports);
+  return Boolean(typeof glb().module !== "undefined" && glb().module.exports);
 }
 function isIE() {
   // @ts-ignore
@@ -2460,7 +2460,7 @@ function openWindow(url, name) {
   var opt = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
   glb().open(url, name, Object.keys(opt).map(function (k) {
     return "".concat(k, "=").concat(opt[k]);
-  }).join(','));
+  }).join(","));
 }
 function openCenterWindow(url, name, width, height) {
   var opt = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : {};
@@ -2479,16 +2479,16 @@ var URLHelper = /*#__PURE__*/function () {
 
     _classCallCheck__default['default'](this, URLHelper);
 
-    this.baseUrl = ''; // protocol, hostname, port, pastname
+    this.baseUrl = ""; // protocol, hostname, port, pastname
 
     this.search = {};
-    var t = decodeURI(baseUrl).split('?');
+    var t = decodeURI(baseUrl).split("?");
     this.baseUrl = t[0];
 
     if (t[1]) {
-      t[1].split('&').forEach(function (v) {
-        var t2 = v.split('=');
-        _this3.search[t2[0]] = t2[1] == null ? '' : decodeURIComponent(t2[1]);
+      t[1].split("&").forEach(function (v) {
+        var t2 = v.split("=");
+        _this3.search[t2[0]] = t2[1] == null ? "" : decodeURIComponent(t2[1]);
       });
     }
   }
@@ -2501,13 +2501,13 @@ var URLHelper = /*#__PURE__*/function () {
       var t = [this.baseUrl];
       var searchStr = Object.keys(this.search).map(function (k) {
         return "".concat(k, "=").concat(encodeURIComponent(_this4.search[k]));
-      }).join('&');
+      }).join("&");
 
       if (searchStr) {
         t.push(searchStr);
       }
 
-      return t.join('?');
+      return t.join("?");
     }
   }]);
 
@@ -2737,16 +2737,16 @@ var CrossWindowEventProcessor = /*#__PURE__*/function (_EventProcessor) {
     _classCallCheck__default['default'](this, CrossWindowEventProcessor);
 
     _this7 = _super.call(this);
-    _this7.storageName = '_crossWindow';
+    _this7.storageName = "_crossWindow";
     _this7.windows = [];
     _this7.timeout = 200;
-    _this7.BROADCAST = '__BROADCAST__';
+    _this7.BROADCAST = "__BROADCAST__";
 
     if (opt) {
       Object.assign(_assertThisInitialized__default['default'](_this7), opt);
     }
 
-    onDOM(window, 'storage', function (ev) {
+    onDOM(window, "storage", function (ev) {
       if (ev.key === _this7.storageName) {
         var event = JSON.parse(ev.newValue);
 
@@ -2762,7 +2762,7 @@ var CrossWindowEventProcessor = /*#__PURE__*/function (_EventProcessor) {
     _this7.id = randString();
     _this7.windows = [_this7.id];
     _this7.ready = new Promise(function (resolve, reject) {
-      _this7.onceTimeout('_windows_updated', function (_ref) {
+      _this7.onceTimeout("_windows_updated", function (_ref) {
         var windows = _ref.windows;
         _this7.windows = windows;
       }, _this7.timeout).promise.then(function () {
@@ -2772,52 +2772,52 @@ var CrossWindowEventProcessor = /*#__PURE__*/function (_EventProcessor) {
         resolve();
       });
 
-      _this7.broadcast('_join', _this7.id);
+      _this7.broadcast("_join", _this7.id);
     });
 
     _this7.ready.then(function () {
       // on join
-      _this7.on('_join', function (id) {
+      _this7.on("_join", function (id) {
         _this7.windows.push(id);
 
         if (_this7.isMain()) {
-          _this7.broadcast('_windows_updated', {
+          _this7.broadcast("_windows_updated", {
             windows: _this7.windows,
-            type: 'join',
+            type: "join",
             id: id
           });
         }
       }); // on _windows_updated
 
 
-      _this7.on('_windows_updated', function (_ref2) {
+      _this7.on("_windows_updated", function (_ref2) {
         var windows = _ref2.windows;
         _this7.windows = windows;
       }); // on exit
 
 
-      _this7.on('_exit', function (id) {
+      _this7.on("_exit", function (id) {
         var oldMain = _this7.windows[0];
         arrayRemove(_this7.windows, id);
 
         if (_this7.isMain()) {
-          _this7.emit('_windows_updated', {
+          _this7.emit("_windows_updated", {
             windows: _this7.windows,
-            type: 'exit',
+            type: "exit",
             id: id
           });
 
           if (oldMain != _this7.id) {
-            _this7.emit('_main_updated', {
+            _this7.emit("_main_updated", {
               windows: _this7.windows,
               old: oldMain,
-              'new': _this7.id
+              new: _this7.id
             });
           }
         }
       });
 
-      onDOM(window, 'beforeunload', function () {
+      onDOM(window, "beforeunload", function () {
         _this7.exitGroup();
       });
     });
@@ -2891,7 +2891,7 @@ var CrossWindowEventProcessor = /*#__PURE__*/function (_EventProcessor) {
   }, {
     key: "exitGroup",
     value: function exitGroup() {
-      this.broadcast('_exit', this.id);
+      this.broadcast("_exit", this.id);
     }
   }]);
 
@@ -2906,7 +2906,7 @@ function onContinuousInput(handler) {
   opt = Object.assign({
     timeout: 1000
   }, opt);
-  var input = '';
+  var input = "";
   var timeoutId;
 
   var keydownHandler = function keydownHandler(e) {
@@ -2920,14 +2920,14 @@ function onContinuousInput(handler) {
       }
 
       timeoutId = setTimeout(function () {
-        input = '';
+        input = "";
       }, opt.timeout);
     }
   };
 
-  onDOM(document, 'keydown', keydownHandler);
+  onDOM(document, "keydown", keydownHandler);
   return function () {
-    offDOM(document, 'keydown', keydownHandler);
+    offDOM(document, "keydown", keydownHandler);
   };
 } // refer [onContinuousInput](#onContinuousInput)
 

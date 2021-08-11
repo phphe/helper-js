@@ -82,7 +82,7 @@ declare type mapObjects_idKey_function = (item: any, index: number) => string;
 export declare function mapObjects(arr: any[], idKey: string | mapObjects_idKey_function): object;
 export declare function pairRows(rows1: any[], rows2: any[], key1: string, key2?: string): [any, any][];
 declare type TreeDataPath = number[];
-declare type depthFirstSearch_Handler = (item: any, index: number, parent: null | any, path: TreeDataPath) => void | false | 'skip children' | 'skip siblings';
+declare type depthFirstSearch_Handler = (item: any, index: number, parent: null | any, path: TreeDataPath) => void | false | "skip children" | "skip siblings";
 declare type depthFirstSearch_Options = {
     reverse?: boolean;
 };
@@ -138,7 +138,7 @@ export declare function executePromiseGetters(getters: (() => any)[], concurrent
     promise: Promise<unknown>;
     stop(): void;
 };
-export declare function promiseTimeout(promise: any, timeout: number): Promise<unknown>;
+export declare function promiseTimeout<T>(promise: Promise<T>, timeout: number): Promise<unknown>;
 export declare function getUrlParam(par: string): string | false;
 export declare function createElementFromHTML(htmlString: string): ChildNode | NodeListOf<ChildNode>;
 export declare function uniqueId(prefix?: string): string;
@@ -189,7 +189,7 @@ export declare function offsetToViewportPosition(offset: {
     x: number;
     y: number;
 };
-declare type findParent_Callback = (parentEl: HTMLElement) => boolean | 'break';
+declare type findParent_Callback = (parentEl: HTMLElement) => boolean | "break";
 export declare function findParent(el: HTMLElement, callback: findParent_Callback, opt?: {
     withSelf?: boolean;
 }): HTMLElement;
@@ -250,7 +250,7 @@ export declare function insertAfter(el: Element, target: Element): void;
 export declare function prependTo(el: Element, target: Element): void;
 export declare function appendTo(el: Element, target: Element): void;
 export declare function cloneDate(dateObj: Date): Date;
-export declare function addDate(dateObj: Date, n: number, type: 'year' | 'month' | 'day' | 'date' | 'hour' | 'minute' | 'second' | 'millisecond'): Date;
+export declare function addDate(dateObj: Date, n: number, type: "year" | "month" | "day" | "date" | "hour" | "minute" | "second" | "millisecond"): Date;
 export declare function getMonthStart(dateObj: Date): Date;
 export declare function getMonthEnd(dateObj: Date): Date;
 declare type getCalendar_Day = {
@@ -280,10 +280,10 @@ declare type binarySearch_Options = {
     maxTimes?: number;
 };
 export declare function binarySearch(arr: any[] | NodeList, callback: binarySearch_Callback, opt?: binarySearch_Options): binarySearch_Return;
-export declare function windowLoaded(): Promise<unknown>;
-export declare function waitTime(milliseconds: number, callback?: () => void): Promise<unknown>;
+export declare function windowLoaded(): Promise<void>;
+export declare function waitTime(milliseconds: number, callback?: () => void): Promise<void>;
 export declare function waitFor(condition: () => boolean, time?: number, maxTimes?: number): {
-    promise: Promise<unknown>;
+    promise: Promise<void>;
     stop: () => void;
 };
 export declare function retry(action: any, limitTimes?: number): Promise<any>;
@@ -326,7 +326,7 @@ export declare class EventProcessor {
     once(name: string, handler: any): () => void;
     onceTimeout(name: string, handler: any, timeout: number): {
         off: () => void;
-        promise: Promise<unknown>;
+        promise: Promise<void>;
     };
     off(name: string, handler: any): void;
     emit(name: string, ...args: any[]): void;

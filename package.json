@@ -1,6 +1,6 @@
 {
   "name": "helper-js",
-  "version": "2.0.5",
+  "version": "2.0.6",
   "description": "",
   "main": "dist/helper-js.cjs.js",
   "module": "dist/helper-js.esm.js",
@@ -10,8 +10,8 @@
     "types"
   ],
   "scripts": {
-    "compile-scripts": "tsc --target ES6 --module CommonJS scripts/build.ts",
-    "build": "rollup -c scripts/build.js & node scripts/build.js --report"
+    "build": "rollup -c scripts/build.js & node scripts/build.js --report",
+    "watch-lib": "rollup -c scripts/build.js --watch"
   },
   "author": "phphe <phphe@outlook.com> (https://github.com/phphe)",
   "unpkg": "dist/helper-js.js",
@@ -25,7 +25,7 @@
   "devDependencies": {
     "@rollup-use/core": "^0",
     "@rollup-use/ts": "^0",
-    "typescript": "^3.9.5"
+    "typescript": "^4"
   },
   "dependencies": {
     "@babel/runtime": "^7.7.7",
