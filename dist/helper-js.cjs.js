@@ -1,36 +1,47 @@
 /*!
- * helper-js v2.0.4
+ * helper-js v2.0.5
  * (c) phphe <phphe@outlook.com> (https://github.com/phphe)
- * Homepage: undefined
+ * Homepage: null
  * Released under the MIT License.
  */
 'use strict';
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
-
-var _assertThisInitialized = _interopDefault(require('@babel/runtime/helpers/assertThisInitialized'));
-var _get = _interopDefault(require('@babel/runtime/helpers/get'));
-var _inherits = _interopDefault(require('@babel/runtime/helpers/inherits'));
-var _possibleConstructorReturn = _interopDefault(require('@babel/runtime/helpers/possibleConstructorReturn'));
-var _getPrototypeOf = _interopDefault(require('@babel/runtime/helpers/getPrototypeOf'));
-var _slicedToArray = _interopDefault(require('@babel/runtime/helpers/slicedToArray'));
-var _createClass = _interopDefault(require('@babel/runtime/helpers/createClass'));
-var _classCallCheck = _interopDefault(require('@babel/runtime/helpers/classCallCheck'));
-var _regeneratorRuntime = _interopDefault(require('@babel/runtime/regenerator'));
-var _toConsumableArray = _interopDefault(require('@babel/runtime/helpers/toConsumableArray'));
+var _assertThisInitialized = require('@babel/runtime/helpers/assertThisInitialized');
+var _get = require('@babel/runtime/helpers/get');
+var _inherits = require('@babel/runtime/helpers/inherits');
+var _possibleConstructorReturn = require('@babel/runtime/helpers/possibleConstructorReturn');
+var _getPrototypeOf = require('@babel/runtime/helpers/getPrototypeOf');
+var _slicedToArray = require('@babel/runtime/helpers/slicedToArray');
+var _createClass = require('@babel/runtime/helpers/createClass');
+var _classCallCheck = require('@babel/runtime/helpers/classCallCheck');
+var _toConsumableArray = require('@babel/runtime/helpers/toConsumableArray');
+var _regeneratorRuntime = require('@babel/runtime/regenerator');
 var tslib = require('tslib');
 
-function _createSuper(Derived) { return function () { var Super = _getPrototypeOf(Derived), result; if (_isNativeReflectConstruct()) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+var _assertThisInitialized__default = /*#__PURE__*/_interopDefaultLegacy(_assertThisInitialized);
+var _get__default = /*#__PURE__*/_interopDefaultLegacy(_get);
+var _inherits__default = /*#__PURE__*/_interopDefaultLegacy(_inherits);
+var _possibleConstructorReturn__default = /*#__PURE__*/_interopDefaultLegacy(_possibleConstructorReturn);
+var _getPrototypeOf__default = /*#__PURE__*/_interopDefaultLegacy(_getPrototypeOf);
+var _slicedToArray__default = /*#__PURE__*/_interopDefaultLegacy(_slicedToArray);
+var _createClass__default = /*#__PURE__*/_interopDefaultLegacy(_createClass);
+var _classCallCheck__default = /*#__PURE__*/_interopDefaultLegacy(_classCallCheck);
+var _toConsumableArray__default = /*#__PURE__*/_interopDefaultLegacy(_toConsumableArray);
+var _regeneratorRuntime__default = /*#__PURE__*/_interopDefaultLegacy(_regeneratorRuntime);
 
-var _marked = /*#__PURE__*/_regeneratorRuntime.mark(iterateAll);
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf__default['default'](Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf__default['default'](this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn__default['default'](this, result); }; }
 
-function _createForOfIteratorHelper(o) { if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (o = _unsupportedIterableToArray(o))) { var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var it, normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(n); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+var _marked = /*#__PURE__*/_regeneratorRuntime__default['default'].mark(iterateAll);
+
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 // 为此库有需要的方法存储信息
@@ -343,7 +354,7 @@ function groupArray(arr, getMark) {
 function arrayDistinct(arr) {
   // @ts-ignore
   if (glb().Set) {
-    return _toConsumableArray(new Set(arr));
+    return _toConsumableArray__default['default'](new Set(arr));
   } else {
     return arr.filter(function (v, i, a) {
       return a.indexOf(v) === i;
@@ -462,7 +473,7 @@ function iterateAll(val) {
       _info3,
       _args = arguments;
 
-  return _regeneratorRuntime.wrap(function iterateAll$(_context) {
+  return _regeneratorRuntime__default['default'].wrap(function iterateAll$(_context) {
     while (1) {
       switch (_context.prev = _context.next) {
         case 0:
@@ -700,7 +711,7 @@ function mapObjectTree(obj, handler) {
     value: obj
   }];
 
-  var _loop2 = function _loop2() {
+  var _loop = function _loop() {
     if (count >= limit) {
       throw "mapObjectTree: limit(".concat(limit, ") reached, object may has circular reference");
     }
@@ -804,16 +815,11 @@ function mapObjectTree(obj, handler) {
     }
   };
 
-  _loop: while (stack.length > 0) {
-    var _ret = _loop2();
+  while (stack.length > 0) {
+    var _ret = _loop();
 
-    switch (_ret) {
-      case "continue":
-        continue;
-
-      case "break":
-        break _loop;
-    }
+    if (_ret === "continue") continue;
+    if (_ret === "break") break;
   }
 
   return r;
@@ -845,7 +851,7 @@ function depthFirstSearch(obj, handler) {
   var rootChildren = isArray(obj) ? obj : [obj]; //
 
   var StopException = function StopException() {
-    _classCallCheck(this, StopException);
+    _classCallCheck__default['default'](this, StopException);
   };
 
   var func = function func(children, parent, parentPath) {
@@ -859,7 +865,7 @@ function depthFirstSearch(obj, handler) {
     for (var i = 0; i < len; i++) {
       var item = children[i];
       var index = opt.reverse ? len - i - 1 : i;
-      var path = parentPath ? [].concat(_toConsumableArray(parentPath), [index]) : [];
+      var path = parentPath ? [].concat(_toConsumableArray__default['default'](parentPath), [index]) : [];
       var r = handler(item, index, parent, path);
 
       if (r === false) {
@@ -893,15 +899,22 @@ var TreeData = /*#__PURE__*/function () {
   function TreeData() {
     var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
 
-    _classCallCheck(this, TreeData);
+    _classCallCheck__default['default'](this, TreeData);
 
     this.childrenKey = 'children';
     this.data = data;
   }
 
-  _createClass(TreeData, [{
+  _createClass__default['default'](TreeData, [{
+    key: "rootChildren",
+    get: function get() {
+      var childrenKey = this.childrenKey;
+      var data = this.data;
+      return isArray(data) ? data : data[childrenKey];
+    }
+  }, {
     key: "iteratePath",
-    value: /*#__PURE__*/_regeneratorRuntime.mark(function iteratePath(path) {
+    value: /*#__PURE__*/_regeneratorRuntime__default['default'].mark(function iteratePath(path) {
       var opt,
           childrenKey,
           rootChildren,
@@ -921,7 +934,7 @@ var TreeData = /*#__PURE__*/function () {
           _path,
           _args2 = arguments;
 
-      return _regeneratorRuntime.wrap(function iteratePath$(_context2) {
+      return _regeneratorRuntime__default['default'].wrap(function iteratePath$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
@@ -947,7 +960,7 @@ var TreeData = /*#__PURE__*/function () {
               }
 
               index = _step4.value;
-              currentPath = [].concat(_toConsumableArray(prevPath), [index]);
+              currentPath = [].concat(_toConsumableArray__default['default'](prevPath), [index]);
               currentNode = prevChildren[index];
               _context2.next = 14;
               return {
@@ -985,7 +998,7 @@ var TreeData = /*#__PURE__*/function () {
               break;
 
             case 29:
-              list = _toConsumableArray(this.iteratePath(path, Object.assign(Object.assign({}, opt), {
+              list = _toConsumableArray__default['default'](this.iteratePath(path, Object.assign(Object.assign({}, opt), {
                 reverse: false
               })));
               list.reverse();
@@ -1146,13 +1159,6 @@ var TreeData = /*#__PURE__*/function () {
       });
       return td.data;
     }
-  }, {
-    key: "rootChildren",
-    get: function get() {
-      var childrenKey = this.childrenKey;
-      var data = this.data;
-      return isArray(data) ? data : data[childrenKey];
-    }
   }]);
 
   return TreeData;
@@ -1164,7 +1170,7 @@ function resolveValueOrGettter(valueOrGetter) {
   var args = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
 
   if (isFunction(valueOrGetter)) {
-    return valueOrGetter.apply(void 0, _toConsumableArray(args));
+    return valueOrGetter.apply(void 0, _toConsumableArray__default['default'](args));
   } else {
     return valueOrGetter;
   }
@@ -1231,7 +1237,7 @@ function debounceTrailing(action) {
 
       t = setTimeout(function () {
         // @ts-ignore
-        var result = action.call.apply(action, [_this].concat(_toConsumableArray(lastArgs)));
+        var result = action.call.apply(action, [_this].concat(_toConsumableArray__default['default'](lastArgs)));
         t = null;
         resolves.forEach(function (resolve) {
           return resolve(result);
@@ -1276,7 +1282,7 @@ function debounceImmediate(action) {
       } else {
         delaying = true; // @ts-ignore
 
-        result = action.call.apply(action, [_this2].concat(_toConsumableArray(lastArgs)));
+        result = action.call.apply(action, [_this2].concat(_toConsumableArray__default['default'](lastArgs)));
         resolve(result);
         t = setTimeout(function () {
           t = null;
@@ -1358,10 +1364,10 @@ function executePromiseGetters(getters) {
   var concurrent = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
   var stopped;
   var promise = new Promise(function (resolve, reject) {
-    return tslib.__awaiter(this, void 0, void 0, /*#__PURE__*/_regeneratorRuntime.mark(function _callee() {
+    return tslib.__awaiter(this, void 0, void 0, /*#__PURE__*/_regeneratorRuntime__default['default'].mark(function _callee() {
       var chunks, promises, _iterator8, _step8, chunk, chunkPromises;
 
-      return _regeneratorRuntime.wrap(function _callee$(_context3) {
+      return _regeneratorRuntime__default['default'].wrap(function _callee$(_context3) {
         while (1) {
           switch (_context3.prev = _context3.next) {
             case 0:
@@ -1382,7 +1388,7 @@ function executePromiseGetters(getters) {
               chunkPromises = chunk.map(function (v) {
                 return v();
               });
-              promises.push.apply(promises, _toConsumableArray(chunkPromises));
+              promises.push.apply(promises, _toConsumableArray__default['default'](chunkPromises));
               _context3.next = 11;
               return Promise.all(chunkPromises);
 
@@ -2170,7 +2176,7 @@ function isIsoFormat(str) {
 
 function parseISO(timestamp) {
   var _timestamp$split = timestamp.split('T'),
-      _timestamp$split2 = _slicedToArray(_timestamp$split, 2),
+      _timestamp$split2 = _slicedToArray__default['default'](_timestamp$split, 2),
       datePart = _timestamp$split2[0],
       timePart = _timestamp$split2[1];
 
@@ -2185,7 +2191,7 @@ function parseISO(timestamp) {
     return parseInt(v);
   });
 
-  var _datePart$split$map2 = _slicedToArray(_datePart$split$map, 3);
+  var _datePart$split$map2 = _slicedToArray__default['default'](_datePart$split$map, 3);
 
   y = _datePart$split$map2[0];
   m = _datePart$split$map2[1];
@@ -2331,9 +2337,9 @@ function waitFor(condition) {
 }
 function retry(action) {
   var limitTimes = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 3;
-  return tslib.__awaiter(this, void 0, void 0, /*#__PURE__*/_regeneratorRuntime.mark(function _callee2() {
+  return tslib.__awaiter(this, void 0, void 0, /*#__PURE__*/_regeneratorRuntime__default['default'].mark(function _callee2() {
     var index;
-    return _regeneratorRuntime.wrap(function _callee2$(_context4) {
+    return _regeneratorRuntime__default['default'].wrap(function _callee2$(_context4) {
       while (1) {
         switch (_context4.prev = _context4.next) {
           case 0:
@@ -2471,7 +2477,7 @@ var URLHelper = /*#__PURE__*/function () {
   function URLHelper(baseUrl) {
     var _this3 = this;
 
-    _classCallCheck(this, URLHelper);
+    _classCallCheck__default['default'](this, URLHelper);
 
     this.baseUrl = ''; // protocol, hostname, port, pastname
 
@@ -2487,7 +2493,7 @@ var URLHelper = /*#__PURE__*/function () {
     }
   }
 
-  _createClass(URLHelper, [{
+  _createClass__default['default'](URLHelper, [{
     key: "getHref",
     value: function getHref() {
       var _this4 = this;
@@ -2605,12 +2611,12 @@ function getSessionStorage2() {
 
 var EventProcessor = /*#__PURE__*/function () {
   function EventProcessor() {
-    _classCallCheck(this, EventProcessor);
+    _classCallCheck__default['default'](this, EventProcessor);
 
     this.eventStore = [];
   }
 
-  _createClass(EventProcessor, [{
+  _createClass__default['default'](EventProcessor, [{
     key: "on",
     value: function on(name, handler) {
       this.eventStore.push({
@@ -2720,7 +2726,7 @@ var EventProcessor = /*#__PURE__*/function () {
   return EventProcessor;
 }();
 var CrossWindowEventProcessor = /*#__PURE__*/function (_EventProcessor) {
-  _inherits(CrossWindowEventProcessor, _EventProcessor);
+  _inherits__default['default'](CrossWindowEventProcessor, _EventProcessor);
 
   var _super = _createSuper(CrossWindowEventProcessor);
 
@@ -2728,7 +2734,7 @@ var CrossWindowEventProcessor = /*#__PURE__*/function (_EventProcessor) {
   function CrossWindowEventProcessor(opt) {
     var _this7;
 
-    _classCallCheck(this, CrossWindowEventProcessor);
+    _classCallCheck__default['default'](this, CrossWindowEventProcessor);
 
     _this7 = _super.call(this);
     _this7.storageName = '_crossWindow';
@@ -2737,7 +2743,7 @@ var CrossWindowEventProcessor = /*#__PURE__*/function (_EventProcessor) {
     _this7.BROADCAST = '__BROADCAST__';
 
     if (opt) {
-      Object.assign(_assertThisInitialized(_this7), opt);
+      Object.assign(_assertThisInitialized__default['default'](_this7), opt);
     }
 
     onDOM(window, 'storage', function (ev) {
@@ -2747,7 +2753,7 @@ var CrossWindowEventProcessor = /*#__PURE__*/function (_EventProcessor) {
         if (!event.targets || event.targets.includes(_this7.id)) {
           var _this8;
 
-          (_this8 = _this7).emitLocal.apply(_this8, [event.name].concat(_toConsumableArray(event.args)));
+          (_this8 = _this7).emitLocal.apply(_this8, [event.name].concat(_toConsumableArray__default['default'](event.args)));
         }
       }
     }); // social parts 集体部分
@@ -2819,7 +2825,7 @@ var CrossWindowEventProcessor = /*#__PURE__*/function (_EventProcessor) {
     return _this7;
   }
 
-  _createClass(CrossWindowEventProcessor, [{
+  _createClass__default['default'](CrossWindowEventProcessor, [{
     key: "isMain",
     value: function isMain() {
       return this.id === this.windows[0];
@@ -2841,7 +2847,7 @@ var CrossWindowEventProcessor = /*#__PURE__*/function (_EventProcessor) {
         if (targets.includes(this.id)) {
           var _get2;
 
-          (_get2 = _get(_getPrototypeOf(CrossWindowEventProcessor.prototype), "emit", this)).call.apply(_get2, [this, name].concat(args)); // emit to current window
+          (_get2 = _get__default['default'](_getPrototypeOf__default['default'](CrossWindowEventProcessor.prototype), "emit", this)).call.apply(_get2, [this, name].concat(args)); // emit to current window
 
         }
       }
@@ -2932,12 +2938,12 @@ function getUserLanguage() {
 }
 var Cache = /*#__PURE__*/function () {
   function Cache() {
-    _classCallCheck(this, Cache);
+    _classCallCheck__default['default'](this, Cache);
 
     this.store = {};
   }
 
-  _createClass(Cache, [{
+  _createClass__default['default'](Cache, [{
     key: "has",
     value: function has(name) {
       return this.store.hasOwnProperty(name);
@@ -2972,7 +2978,7 @@ var Cache = /*#__PURE__*/function () {
 function attachCache(obj, toCache) {
   var cache = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : new Cache();
 
-  var _loop3 = function _loop3(key) {
+  var _loop2 = function _loop2(key) {
     var getter = toCache[key];
     Object.defineProperty(obj, key, {
       get: function get() {
@@ -2986,7 +2992,7 @@ function attachCache(obj, toCache) {
   };
 
   for (var key in toCache) {
-    _loop3(key);
+    _loop2(key);
   }
 } // for animation
 

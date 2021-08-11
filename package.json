@@ -1,12 +1,13 @@
 {
   "name": "helper-js",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "description": "",
   "main": "dist/helper-js.cjs.js",
   "module": "dist/helper-js.esm.js",
-  "types": "dist/index.d.ts",
+  "types": "types/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "types"
   ],
   "scripts": {
     "compile-scripts": "tsc --target ES6 --module CommonJS scripts/build.ts",
