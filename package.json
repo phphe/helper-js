@@ -22,9 +22,8 @@
     "url": "https://github.com/phphe/helper-js.git"
   },
   "devDependencies": {
-    "@babel/preset-typescript": "^7.10.1",
-    "rogo": "^2.0.2",
-    "rollup-plugin-typescript2": "^0.27.1",
+    "@rollup-use/core": "^0",
+    "@rollup-use/ts": "^0",
     "typescript": "^3.9.5"
   },
   "dependencies": {
