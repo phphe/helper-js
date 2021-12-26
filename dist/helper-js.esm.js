@@ -1,5 +1,5 @@
 /*!
- * helper-js v2.0.6
+ * helper-js v2.0.7
  * (c) phphe <phphe@outlook.com> (https://github.com/phphe)
  * Homepage: null
  * Released under the MIT License.
@@ -833,9 +833,9 @@ function depthFirstSearch(obj, handler) {
   var opt = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
   var rootChildren = isArray(obj) ? obj : [obj]; //
 
-  var StopException = function StopException() {
+  var StopException = /*#__PURE__*/_createClass(function StopException() {
     _classCallCheck(this, StopException);
-  };
+  });
 
   var func = function func(children, parent, parentPath) {
     if (opt.reverse) {

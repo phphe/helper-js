@@ -1,6 +1,6 @@
 {
   "name": "helper-js",
-  "version": "2.0.6",
+  "version": "2.0.7",
   "description": "",
   "main": "dist/helper-js.cjs.js",
   "module": "dist/helper-js.esm.js",
@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.7.7",
-    "tslib": "^1.11.2"
+    "tslib": "^2"
   },
   "license": "MIT"
 }
