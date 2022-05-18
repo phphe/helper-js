@@ -1,20 +1,22 @@
 {
   "name": "helper-js",
-  "version": "2.0.7",
+  "version": "3.0.0",
   "description": "",
-  "main": "dist/helper-js.cjs.js",
-  "module": "dist/helper-js.esm.js",
-  "types": "types/index.d.ts",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "jsdelivr": "dist/index.iife.js",
+  "unpkg": "dist/index.iife.js",
   "files": [
     "dist",
-    "types"
+    "src"
   ],
   "scripts": {
-    "build": "rollup -c scripts/build.js & node scripts/build.js --report",
-    "watch-lib": "rollup -c scripts/build.js --watch"
+    "build": "rogo",
+    "watch": "rogo -w",
+    "docs": "typedoc --out docs src/index.ts"
   },
   "author": "phphe <phphe@outlook.com> (https://github.com/phphe)",
-  "unpkg": "dist/helper-js.js",
   "bugs": {
     "url": "https://github.com/phphe/helper-js/issues"
   },
@@ -23,13 +25,12 @@
     "url": "https://github.com/phphe/helper-js.git"
   },
   "devDependencies": {
-    "@rollup-use/core": "^0",
-    "@rollup-use/ts": "^0",
+    "rogo": "^3.1.4",
+    "typedoc": "^0.22.13",
     "typescript": "^4"
   },
   "dependencies": {
-    "@babel/runtime": "^7.7.7",
-    "tslib": "^2"
+    "@babel/runtime": "^7.7.7"
   },
   "license": "MIT"
 }
