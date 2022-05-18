@@ -2,7 +2,7 @@
 
 ## [Unreleased]
 
-## [3.0.0] - 2022-03-08
+## [3.1.0] - 2022-03-08
 
 Complete some functions' type declarations.
 
