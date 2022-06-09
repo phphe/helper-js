@@ -2,6 +2,13 @@
 
 ## [Unreleased]
 
+## [3.1.1] - 2022-06-10
+
+### Added
+
+- add `arrayFilter`
+- add `arrayWithout`
+
 ## [3.1.0] - 2022-03-08
 
 Complete some functions' type declarations.

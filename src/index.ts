@@ -494,6 +494,25 @@ export function arrayFlat<T>(arr: any[], depth = 10): T[] {
   return r;
 }
 
+/**
+ * simplified array.filter()
+ * e.g.: arrayFilter(arr, [null, undefined]) equal to arr.filter(v => v!== null && v!== undefined)
+ * @param arr
+ * @param without
+ * @returns
+ */
+export function arrayFilter<T extends ArrayLike<any>>(
+  arr: T,
+  without: any[]
+): T {
+  // @ts-ignore
+  return arr.filter((v) => without.indexOf(v) > -1);
+}
+/**
+ * alias of arrayFilter
+ */
+export const arrayWithout = arrayFilter;
+
 // ## Object
 // ## 对象
 
