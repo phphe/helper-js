@@ -2,6 +2,13 @@
 
 ## [Unreleased]
 
+## [3.1.2] - 2022-06-10
+
+### Added
+
+- add `reverseString`
+- add `indexesOf`
+
 ## [3.1.1] - 2022-06-10
 
 ### Added

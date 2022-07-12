@@ -244,6 +244,15 @@ export function randString(
   return r;
 }
 
+/**
+ * reverse a string
+ * @param str
+ * @returns
+ */
+export function reverseString(str: string) {
+  return str.split("").reverse().join("");
+}
+
 // ## Array
 // ## 数组
 
@@ -343,6 +352,31 @@ export function arrayDiff<T>(arr1: T[], arr2: T[]): [T[], T[]] {
     }
   });
   return [r1, r2];
+}
+
+/**
+ * like indexOf, get all indexes
+ * @param strOrArr
+ * @param item
+ * @returns
+ */
+export function indexesOf(strOrArr: string | any[], item: any) {
+  let i = 0;
+  const indexes: number[] = [];
+  while (i < strOrArr.length) {
+    const index = strOrArr.indexOf(item, i);
+    if (index === -1) {
+      break;
+    } else {
+      indexes.push(index);
+      if (typeof strOrArr === "string") {
+        i = index + (item + "").length;
+      } else {
+        i = index + 1;
+      }
+    }
+  }
+  return indexes;
 }
 
 /**
