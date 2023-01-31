@@ -1,4 +1,4 @@
-lockfileVersion: 5.3
+lockfileVersion: 5.4
 
 specifiers:
   '@babel/runtime': ^7.7.7
@@ -305,6 +305,8 @@ packages:
     resolution: {integrity: sha512-FLzHmN9V3AJIrWfOpvRlZCeVg/WLdicSnTMsLur6uDj9TT8ymUlG9XxURdW/XvuygK+2CW0poOJABdA4m/YKxA==}
     engines: {node: '>=6.0.0'}
     hasBin: true
+    dependencies:
+      '@babel/types': 7.17.12
     dev: true
 
   /@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression/7.17.12_@babel+core@7.17.12:
@@ -1218,7 +1220,7 @@ packages:
       slash: 3.0.0
     dev: true
 
-  /@rollup/plugin-babel/5.3.1_13b2a7cabd0dd1a92f9221d63fb85fc9:
+  /@rollup/plugin-babel/5.3.1_cozkpsv5bxi2sl4sehld7oc7ze:
     resolution: {integrity: sha512-WFfdLWU/xVWKeRQnKmIAQULUI7Il0gZnBIH/ZFO069wYIfPu+8zrfp/KMW0atmELoRDq8FbiP3VCss9MhCut7Q==}
     engines: {node: '>= 10.0.0'}
     peerDependencies:
@@ -2011,7 +2013,7 @@ packages:
       '@babel/plugin-transform-runtime': 7.17.12_@babel+core@7.17.12
       '@babel/preset-env': 7.17.12_@babel+core@7.17.12
       '@rollup/plugin-alias': 3.1.9_rollup@2.73.0
-      '@rollup/plugin-babel': 5.3.1_13b2a7cabd0dd1a92f9221d63fb85fc9
+      '@rollup/plugin-babel': 5.3.1_cozkpsv5bxi2sl4sehld7oc7ze
       '@rollup/plugin-commonjs': 21.1.0_rollup@2.73.0
       '@rollup/plugin-json': 4.1.0_rollup@2.73.0
       '@rollup/plugin-node-resolve': 13.3.0_rollup@2.73.0
@@ -2020,7 +2022,7 @@ packages:
       helper-js: 3.0.0
       rollup: 2.73.0
       rollup-plugin-terser: 7.0.2_rollup@2.73.0
-      rollup-plugin-typescript2: 0.31.2_rollup@2.73.0+typescript@4.6.4
+      rollup-plugin-typescript2: 0.31.2_anzmtkbpu2qkzgkvydr4fm6zcm
       ts-node: 10.7.0_typescript@4.6.4
     transitivePeerDependencies:
       - '@swc/core'
@@ -2043,7 +2045,7 @@ packages:
       terser: 5.13.1
     dev: true
 
-  /rollup-plugin-typescript2/0.31.2_rollup@2.73.0+typescript@4.6.4:
+  /rollup-plugin-typescript2/0.31.2_anzmtkbpu2qkzgkvydr4fm6zcm:
     resolution: {integrity: sha512-hRwEYR1C8xDGVVMFJQdEVnNAeWRvpaY97g5mp3IeLnzhNXzSVq78Ye/BJ9PAaUfN4DXa/uDnqerifMOaMFY54Q==}
     peerDependencies:
       rollup: '>=1.26.3'

@@ -11,6 +11,7 @@ export function glb(): typeof globalThis {
     // `this` !== global or window because of build tool. So you can't use `this` to get `global`
     return window;
   } catch (error) {
+    // @ts-ignore
     return global;
   }
 }
@@ -540,7 +541,7 @@ export function arrayFilter<T extends ArrayLike<any>>(
   without: any[]
 ): T {
   // @ts-ignore
-  return arr.filter((v) => without.indexOf(v) > -1);
+  return arr.filter((v) => without.indexOf(v) === -1);
 }
 /**
  * alias of arrayFilter
