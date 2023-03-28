@@ -2181,7 +2181,7 @@ export function once<T extends Event>(
 }
 
 /**
- * lisiten multi events, and can stop and resume them
+ * lisiten multi events, and can stop and resume them. start listening by default. start is alias for resume
  * @param info
  * @returns
  */
