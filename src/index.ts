@@ -2219,7 +2219,9 @@ export function extendedListen(
     listening: false,
     stop: destroyAll,
     resume: listenAll,
+    start: listenAll,
   };
+  r.start();
   return r;
 }
 
