@@ -707,13 +707,47 @@ export function dotGet(
  * example: dotSet(window, 'document.body.children.0', vaue)
  */
 export function dotSet(obj: object, path: string | string[], value: any) {
-  const paths = isArray(path) ? path : path.split(".");
-  const lastKey = arrayLast(paths);
-  const parent = dotGet(obj, paths.slice(0, paths.length - 1));
-  if (!parent) {
-    throw "Path does not exist";
+  const parts = isArray(path) ? path : path.split("."); // Split the path string into parts
+  let current = obj; // Current object being processed
+
+  // Iterate through all parts except the last one
+  // 遍历路径的每一部分（除了最后一部分）
+  for (let i = 0; i < parts.length - 1; i++) {
+    const part = parts[i]; // Current path part
+
+    // Prevent prototype pollution by checking sensitive keys
+    // 检查是否尝试污染原型链
+    if (
+      part === "__proto__" ||
+      part === "prototype" ||
+      part === "constructor"
+    ) {
+      throw new Error("Prototype pollution attempt detected"); // Prototype pollution detected
+    }
+
+    // Create nested objects if they do not exist
+    if (!current[part]) {
+      current[part] = {}; // Create a new empty object
+    }
+
+    // Move to the next level
+    current = current[part];
   }
-  parent[lastKey] = value;
+
+  // Handle the last part of the path
+  const lastPart = parts[parts.length - 1];
+  // Check again for prototype pollution in the last part
+  // 再次检查最后一部分是否尝试污染原型链
+  if (
+    lastPart === "__proto__" ||
+    lastPart === "prototype" ||
+    lastPart === "constructor"
+  ) {
+    throw new Error("Prototype pollution attempt detected"); // Prototype pollution detected
+  }
+
+  // Set the final value
+  current[lastPart] = value; // Assign the value to the target path
 }
 
 /**
